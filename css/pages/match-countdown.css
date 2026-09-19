@@ -1,0 +1,123 @@
+/* =========================================
+   Match Countdown 子页面
+   ========================================= */
+
+[data-page="match-countdown"] .mc-layout {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 80px;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* =========================================
+   字体：整页使用思源宋体
+   ========================================= */
+
+[data-page="match-countdown"],
+[data-page="match-countdown"] * {
+  font-family: 'SourceHanSerif', "Songti SC", "SimSun", serif;
+}
+
+/* ---------- 轮次 ---------- */
+
+[data-page="match-countdown"] .mc-round {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #9ec5ff;
+  text-shadow: 0 0 20px rgba(77, 155, 255, .5);
+}
+
+/* ---------- 对阵 ---------- */
+
+[data-page="match-countdown"] .mc-match {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+[data-page="match-countdown"] .mc-team {
+  font-size: 88px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #ffffff;
+  text-shadow:
+    0 0 30px rgba(77, 155, 255, .5),
+    0 4px 20px rgba(0, 0, 0, .6);
+  min-width: 130px;
+}
+
+[data-page="match-countdown"] .mc-vs {
+  font-size: 32px;
+  font-weight: 700;
+  color: #4d9bff;
+  letter-spacing: 3px;
+  opacity: .9;
+  text-shadow: 0 0 20px rgba(77, 155, 255, .6);
+}
+
+/* ---------- 目标时间 ---------- */
+
+[data-page="match-countdown"] .mc-date {
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ffffff;
+  text-shadow:
+    0 0 24px rgba(77, 155, 255, .45),
+    0 4px 16px rgba(0, 0, 0, .6);
+  margin-top: 4px;
+}
+
+/* ---------- 倒计时---------- */
+
+[data-page="match-countdown"] .mc-timer {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+[data-page="match-countdown"] .mc-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 130px;
+}
+
+[data-page="match-countdown"] .mc-value {
+  font-size: 96px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 0 30px rgba(77, 155, 255, .5);
+}
+
+[data-page="match-countdown"] .mc-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #9ec5ff;
+  opacity: .8;
+  text-transform: uppercase;
+}
+
+[data-page="match-countdown"] .mc-sep {
+  font-size: 72px;
+  font-weight: 700;
+  color: #4d9bff;
+  opacity: .6;
+  transform: translateY(-14px);
+  user-select: none;
+}

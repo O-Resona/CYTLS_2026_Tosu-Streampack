@@ -1,0 +1,234 @@
+/* =========================================
+   自定义字体
+   ========================================= */
+
+@font-face {
+  font-family: 'GoogleSansFlex';
+  src: url('../fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SourceHanSerif';
+  src: url('../fonts/SourceHanSerif-VF.ttf.ttc') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================================
+   全局重置
+   ========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #05070b;
+  overflow: hidden;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================
+   舞台 2200 x 1080
+   ========================================= */
+
+.stage {
+  width: 2200px;
+  height: 1080px;
+  flex: 0 0 auto;
+  display: flex;
+  position: relative;
+  background: #0a0d13;
+  transform-origin: center center;
+  overflow: hidden;
+}
+
+/* =========================================
+   左侧导航 280 x 1080
+   ========================================= */
+
+.sidebar {
+  width: 280px;
+  height: 1080px;
+  flex: 0 0 280px;
+  background: linear-gradient(180deg, #10141c 0%, #0b0e14 100%);
+  border-right: 1px solid #1c2230;
+  padding: 28px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-btn {
+  width: 100%;
+  height: 58px;
+  border-radius: 10px;
+  border: 1px solid #232b39;
+  background: #141922;
+  color: #8996a8;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  font-family: inherit;
+  transition: background .22s ease, color .22s ease, border-color .22s ease,
+              box-shadow .22s ease, transform .12s ease;
+}
+
+.nav-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  background: #4d9bff;
+  border-radius: 0 3px 3px 0;
+  transform: translateY(-50%);
+  transition: height .22s ease;
+}
+
+.nav-btn:hover {
+  background: #1a2130;
+  color: #c9d5e6;
+  border-color: #2f3a4d;
+}
+
+.nav-btn:active {
+  transform: scale(0.97);
+}
+
+.nav-btn.active {
+  background: linear-gradient(135deg, #1b3a6b 0%, #14243d 100%);
+  border-color: #3d7dff;
+  color: #f8f8f6;
+  box-shadow: 0 0 22px rgba(61, 125, 255, .35),
+              inset 0 0 18px rgba(61, 125, 255, .12);
+}
+
+.nav-btn.active::before {
+  height: 26px;
+}
+
+/* =========================================
+   右侧主区域 1920 x 1080
+   ========================================= */
+
+.main {
+  width: 1920px;
+  height: 1080px;
+  flex: 1 1 auto;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 1200px 700px at 50% 0%, rgba(61,125,255,.08), transparent 70%),
+    #0a0d13;
+}
+
+/* =========================================
+   全局背景（视频 / 图 / 覆盖层）
+   ========================================= */
+
+.global-bg-video,
+.global-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.global-bg-video {
+  z-index: 0;
+  opacity: 1;
+}
+
+.global-bg-video[data-bg="alt2"] {
+  opacity: 0.5;
+}
+
+.global-bg-image {
+  z-index: 1;
+  opacity: 0.7;
+}
+
+.global-bg-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #f8f8f6;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+
+/* =========================================
+   页面容器
+   ========================================= */
+
+.page {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page.active {
+  visibility: visible;
+  pointer-events: auto;
+  animation: fadeIn .9s ease both;
+}
+
+.page.is-leaving {
+  visibility: visible;
+  pointer-events: none;
+  animation: fadeOut .7s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* =========================================
+   页面 Logo（顶部居中）
+   ========================================= */
+
+.page-logo {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 160px;
+  width: auto;
+  object-fit: contain;
+  z-index: 4;
+  pointer-events: none;
+  user-select: none;
+}

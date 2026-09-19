@@ -1,0 +1,49 @@
+<section class="page" data-page="playing">
+
+  <img class="page-logo" src="src/logo.png" alt="">
+  <div class="pl-stage pl-no-transition">
+
+    <!-- 地图信息卡片：内层类名与 showcase 一致，外层保留 pl- 前缀控制动画 -->
+    <div class="pl-map-card">
+      <div class="map-card__title" data-field="artistTitle">—</div>
+      <div class="map-card__meta">
+        <span class="map-card__meta-item map-card__meta-item--mapper">
+          <span class="label">mapper</span>
+          <strong class="map-card__mapper" data-field="creator">—</strong>
+        </span>
+        <span class="map-card__meta-item map-card__meta-item--diff">
+          <span class="label">difficulty</span>
+          <strong class="map-card__difficulty" data-field="diffName">—</strong>
+        </span>
+      </div>
+
+    <img class="map-card__special" alt="">
+    </div>
+
+    <!-- 四维 / BPM 面板：内容与 Showcase 完全一致 -->
+    <div class="pl-stats-panel">
+      <div class="pl-stats-row">
+        <div class="pl-stats-col pl-stats-col--left">
+          CS <strong data-field="mCS">-</strong> /
+          AR <strong data-field="mAR">-</strong> /
+          OD <strong data-field="mOD">-</strong>
+        </div>
+        <div class="pl-stats-col pl-stats-col--right">
+          Length <strong data-field="totalTime">0:00</strong>
+        </div>
+      </div>
+      <div class="pl-stats-row">
+        <div class="pl-stats-col pl-stats-col--left">
+          Star Rating <strong data-field="mStars">-</strong>
+        </div>
+        <div class="pl-stats-col pl-stats-col--right">
+          BPM <strong data-field="mBpm">-</strong>
+        </div>
+      </div>
+
+      <div class="osu-badge">OSU!</div>
+    </div>
+
+  </div>
+
+</section>

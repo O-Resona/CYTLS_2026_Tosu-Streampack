@@ -1,0 +1,3619 @@
+{
+  "meta": {
+    "version": 1,
+    "title": "CYT 2026: Lazer Scramble",
+    "description": "",
+    "lastUpdated": "2026-09-18T00:00:00+08:00"
+  },
+  "ruleset": {
+    "shortName": "osu",
+    "name": "osu!",
+    "playersPerTeam": 3,
+    "defaultPointsToWin": 5,
+    "autoProgressScreens": true,
+    "splitMapPoolByMods": true
+  },
+  "teams": [
+    {
+      "acronym": "貓鴨",
+      "flagName": "貓鴨",
+      "fullName": "貓咪與鴨子",
+      "seed": "1",
+      "players": [
+        {
+          "username": "misha awa",
+          "rank": 165,
+          "id": 14503423,
+          "pfp": "https://a.ppy.sh/14503423"
+        },
+        {
+          "username": "Ruyaya",
+          "rank": 1371,
+          "id": 16288992,
+          "pfp": "https://a.ppy.sh/16288992"
+        }
+      ]
+    },
+    {
+      "acronym": "泥土玩家",
+      "flagName": "泥土玩家",
+      "fullName": "dirtshop.xyz",
+      "seed": "2",
+      "players": [
+        {
+          "username": "GAO HAO",
+          "rank": 445,
+          "id": 8964050,
+          "pfp": "https://a.ppy.sh/8964050"
+        },
+        {
+          "username": "Flyer",
+          "rank": 1139,
+          "id": 9767342,
+          "pfp": "https://a.ppy.sh/9767342"
+        }
+      ]
+    },
+    {
+      "acronym": "小初",
+      "flagName": "小初",
+      "fullName": "可是小初也.../委屈",
+      "seed": "3",
+      "players": [
+        {
+          "username": "Crystal",
+          "rank": 979,
+          "id": 1646397,
+          "pfp": "https://a.ppy.sh/1646397"
+        },
+        {
+          "username": "pr1mary",
+          "rank": 1263,
+          "id": 15100415,
+          "pfp": "https://a.ppy.sh/15100415"
+        }
+      ]
+    },
+    {
+      "acronym": "WLT",
+      "flagName": "WLT",
+      "fullName": "Fans of WLT",
+      "seed": "4",
+      "players": [
+        {
+          "username": "[SHK]oliwakami",
+          "rank": 2467,
+          "id": 3046750,
+          "pfp": "https://a.ppy.sh/3046750"
+        },
+        {
+          "username": "Ledeau_Fox",
+          "rank": 151,
+          "id": 15816872,
+          "pfp": "https://a.ppy.sh/15816872"
+        }
+      ]
+    },
+    {
+      "acronym": "TJQQ",
+      "flagName": "TJQQ",
+      "fullName": "@yutro 抢老婆",
+      "seed": "5",
+      "players": [
+        {
+          "username": "4K110SH1",
+          "rank": 85,
+          "id": 11375105,
+          "pfp": "https://a.ppy.sh/11375105"
+        },
+        {
+          "username": "yutro",
+          "rank": 2822,
+          "id": 6338477,
+          "pfp": "https://a.ppy.sh/6338477"
+        }
+      ]
+    },
+    {
+      "acronym": "左右手",
+      "flagName": "左右手",
+      "fullName": "左右手",
+      "seed": "6",
+      "players": [
+        {
+          "username": "ming0328ming",
+          "rank": 1457,
+          "id": 2984074,
+          "pfp": "https://a.ppy.sh/2984074"
+        },
+        {
+          "username": "rlsc1109",
+          "rank": 2116,
+          "id": 20285591,
+          "pfp": "https://a.ppy.sh/20285591"
+        }
+      ]
+    },
+    {
+      "acronym": "壓力克絲",
+      "flagName": "壓力克絲",
+      "fullName": "壓力克絲和乖乖買采源",
+      "seed": "7",
+      "players": [
+        {
+          "username": "FakeAlexChio",
+          "rank": 1945,
+          "id": 16656942,
+          "pfp": "https://a.ppy.sh/16656942"
+        },
+        {
+          "username": "Tokirii",
+          "rank": 1996,
+          "id": 11563694,
+          "pfp": "https://a.ppy.sh/11563694"
+        }
+      ]
+    },
+    {
+      "acronym": "3125",
+      "flagName": "3125",
+      "fullName": "Antimemetics div.",
+      "seed": "8",
+      "players": [
+        {
+          "username": "Barometz",
+          "rank": 4747,
+          "id": 9539163,
+          "pfp": "https://a.ppy.sh/9539163"
+        },
+        {
+          "username": "Moonlit111",
+          "rank": 1146,
+          "id": 12215507,
+          "pfp": "https://a.ppy.sh/12215507"
+        }
+      ]
+    },
+    {
+      "acronym": "BB",
+      "flagName": "BB",
+      "fullName": "Boss B corp.",
+      "seed": "9",
+      "players": [
+        {
+          "username": "aaront",
+          "rank": 6694,
+          "id": 4641477,
+          "pfp": "https://a.ppy.sh/4641477"
+        },
+        {
+          "username": "mcy4",
+          "rank": 21,
+          "id": 2165650,
+          "pfp": "https://a.ppy.sh/2165650"
+        }
+      ]
+    },
+    {
+      "acronym": "0倾",
+      "flagName": "0倾",
+      "fullName": "0倾",
+      "seed": "10",
+      "players": [
+        {
+          "username": "nuthing",
+          "rank": 5450,
+          "id": 6386735,
+          "pfp": "https://a.ppy.sh/6386735"
+        },
+        {
+          "username": "Hibiki",
+          "rank": 1550,
+          "id": 5413624,
+          "pfp": "https://a.ppy.sh/5413624"
+        }
+      ]
+    },
+    {
+      "acronym": "什麼",
+      "flagName": "什麼",
+      "fullName": "什麼",
+      "seed": "11",
+      "players": [
+        {
+          "username": "Qualifiers",
+          "rank": 7141,
+          "id": 8186536,
+          "pfp": "https://a.ppy.sh/8186536"
+        },
+        {
+          "username": "Name94",
+          "rank": 1356,
+          "id": 13284882,
+          "pfp": "https://a.ppy.sh/13284882"
+        }
+      ]
+    },
+    {
+      "acronym": "zjb",
+      "flagName": "zjb",
+      "fullName": "z jo bha",
+      "seed": "12",
+      "players": [
+        {
+          "username": "z980838928",
+          "rank": 916,
+          "id": 1355695,
+          "pfp": "https://a.ppy.sh/1355695"
+        },
+        {
+          "username": "MyAngelSora",
+          "rank": 8199,
+          "id": 2987120,
+          "pfp": "https://a.ppy.sh/2987120"
+        }
+      ]
+    },
+    {
+      "acronym": "豪豪",
+      "flagName": "豪豪",
+      "fullName": "猛男茉莉园",
+      "seed": "13",
+      "players": [
+        {
+          "username": "vita",
+          "rank": 3009,
+          "id": 7839397,
+          "pfp": "https://a.ppy.sh/7839397"
+        },
+        {
+          "username": "Molli",
+          "rank": 6259,
+          "id": 8893772,
+          "pfp": "https://a.ppy.sh/8893772"
+        }
+      ]
+    },
+    {
+      "acronym": "zklg",
+      "flagName": "zklg",
+      "fullName": "zkyloge",
+      "seed": "14",
+      "players": [
+        {
+          "username": "Zkyler",
+          "rank": 7389,
+          "id": 15530617,
+          "pfp": "https://a.ppy.sh/15530617"
+        },
+        {
+          "username": "Finloge",
+          "rank": 2697,
+          "id": 15085098,
+          "pfp": "https://a.ppy.sh/15085098"
+        }
+      ]
+    },
+    {
+      "acronym": "ptrk",
+      "flagName": "ptrk",
+      "fullName": "patrick",
+      "seed": "15",
+      "players": [
+        {
+          "username": "Kanabis",
+          "rank": 3045,
+          "id": 15050718,
+          "pfp": "https://a.ppy.sh/15050718"
+        },
+        {
+          "username": "wee",
+          "rank": 8868,
+          "id": 24533726,
+          "pfp": "https://a.ppy.sh/24533726"
+        }
+      ]
+    },
+    {
+      "acronym": "我超威了",
+      "flagName": "我超威了",
+      "fullName": "你問贏了還是輸了，我說我們choke了",
+      "seed": "16",
+      "players": [
+        {
+          "username": "- kouyuu -",
+          "rank": 6697,
+          "id": 3339073,
+          "pfp": "https://a.ppy.sh/3339073"
+        },
+        {
+          "username": "-PSC-",
+          "rank": 10417,
+          "id": 24350045,
+          "pfp": "https://a.ppy.sh/24350045"
+        }
+      ]
+    },
+    {
+      "acronym": "doro",
+      "flagName": "doro",
+      "fullName": "圆头doro",
+      "seed": "17",
+      "players": [
+        {
+          "username": "BurgerKing",
+          "rank": 14635,
+          "id": 13013147,
+          "pfp": "https://a.ppy.sh/13013147"
+        },
+        {
+          "username": "Diaostrophism",
+          "rank": 2485,
+          "id": 2317789,
+          "pfp": "https://a.ppy.sh/2317789"
+        }
+      ]
+    },
+    {
+      "acronym": "2yo",
+      "flagName": "2yo",
+      "fullName": "我只有两岁我要吃汉堡ToT",
+      "seed": "18",
+      "players": [
+        {
+          "username": "Bochi the osu",
+          "rank": 5661,
+          "id": 30284920,
+          "pfp": "https://a.ppy.sh/30284920"
+        },
+        {
+          "username": "fuyukiS",
+          "rank": 13091,
+          "id": 32657919,
+          "pfp": "https://a.ppy.sh/32657919"
+        }
+      ]
+    },
+    {
+      "acronym": "yuri",
+      "flagName": "yuri",
+      "fullName": "welikeyuri",
+      "seed": "19",
+      "players": [
+        {
+          "username": "KanoMahoro",
+          "rank": 17603,
+          "id": 29938752,
+          "pfp": "https://a.ppy.sh/29938752"
+        },
+        {
+          "username": "Stythiii",
+          "rank": 4652,
+          "id": 18467846,
+          "pfp": "https://a.ppy.sh/18467846"
+        }
+      ]
+    },
+    {
+      "acronym": "西巴",
+      "flagName": "西巴",
+      "fullName": "西巴观光团",
+      "seed": "20",
+      "players": [
+        {
+          "username": "JunMoyan",
+          "rank": 20719,
+          "id": 8368247,
+          "pfp": "https://a.ppy.sh/8368247"
+        },
+        {
+          "username": "YRScarlet",
+          "rank": 5487,
+          "id": 24232404,
+          "pfp": "https://a.ppy.sh/24232404"
+        }
+      ]
+    },
+    {
+      "acronym": "NOUM",
+      "flagName": "NOUM",
+      "fullName": "no umemployment",
+      "seed": "21",
+      "players": [
+        {
+          "username": "Pompeijwag",
+          "rank": 19905,
+          "id": 9315589,
+          "pfp": "https://a.ppy.sh/9315589"
+        },
+        {
+          "username": "MogenNotFound",
+          "rank": 10797,
+          "id": 14494010,
+          "pfp": "https://a.ppy.sh/14494010"
+        }
+      ]
+    },
+    {
+      "acronym": "DQ",
+      "flagName": "DQ",
+      "fullName": "DQ小队",
+      "seed": "22",
+      "players": [
+        {
+          "username": "[AE-86]",
+          "rank": 13263,
+          "id": 13869921,
+          "pfp": "https://a.ppy.sh/13869921"
+        },
+        {
+          "username": "annarisa",
+          "rank": 20687,
+          "id": 23110197,
+          "pfp": "https://a.ppy.sh/23110197"
+        }
+      ]
+    },
+    {
+      "acronym": "owoi",
+      "flagName": "owoi",
+      "fullName": "一个上班的一个养病的",
+      "seed": "23",
+      "players": [
+        {
+          "username": "noneght",
+          "rank": 19677,
+          "id": 16801578,
+          "pfp": "https://a.ppy.sh/16801578"
+        },
+        {
+          "username": "Ichijo Meguru",
+          "rank": 19020,
+          "id": 14197654,
+          "pfp": "https://a.ppy.sh/14197654"
+        }
+      ]
+    },
+    {
+      "acronym": "减速带",
+      "flagName": "减速带",
+      "fullName": "减速带",
+      "seed": "24",
+      "players": [
+        {
+          "username": "Dura",
+          "rank": 41412,
+          "id": 5185609,
+          "pfp": "https://a.ppy.sh/5185609"
+        },
+        {
+          "username": "Akisa 18",
+          "rank": 17397,
+          "id": 16134378,
+          "pfp": "https://a.ppy.sh/16134378"
+        }
+      ]
+    },
+    {
+      "acronym": "跑路了",
+      "flagName": "跑路了",
+      "fullName": "我现在在考虑要不要跑路",
+      "seed": "25",
+      "players": [
+        {
+          "username": "[SHK]NekoErika",
+          "rank": 23136,
+          "id": 29037830,
+          "pfp": "https://a.ppy.sh/29037830"
+        },
+        {
+          "username": "[SHK]Mihits",
+          "rank": 40249,
+          "id": 36982137,
+          "pfp": "https://a.ppy.sh/36982137"
+        }
+      ]
+    },
+    {
+      "acronym": "hmm",
+      "flagName": "hmm",
+      "fullName": "worst nm players",
+      "seed": "26",
+      "players": [
+        {
+          "username": "joung",
+          "rank": 41442,
+          "id": 38407267,
+          "pfp": "https://a.ppy.sh/38407267"
+        },
+        {
+          "username": "Rodney0510",
+          "rank": 23680,
+          "id": 35764457,
+          "pfp": "https://a.ppy.sh/35764457"
+        }
+      ]
+    },
+    {
+      "acronym": "HR#1",
+      "flagName": "HR#1",
+      "fullName": "HardRock Number One",
+      "seed": "27",
+      "players": [
+        {
+          "username": "briantseng",
+          "rank": 38012,
+          "id": 21925012,
+          "pfp": "https://a.ppy.sh/21925012"
+        },
+        {
+          "username": "Wolfy_KL",
+          "rank": 33104,
+          "id": 11938718,
+          "pfp": "https://a.ppy.sh/11938718"
+        }
+      ]
+    },
+    {
+      "acronym": "舔头",
+      "flagName": "舔头",
+      "fullName": "No title",
+      "seed": "28",
+      "players": [
+        {
+          "username": "Vunarice",
+          "rank": 27122,
+          "id": 25578225,
+          "pfp": "https://a.ppy.sh/25578225"
+        },
+        {
+          "username": "Otaku_ALyCE",
+          "rank": 44224,
+          "id": 19743059,
+          "pfp": "https://a.ppy.sh/19743059"
+        }
+      ]
+    },
+    {
+      "acronym": "仆从俯冲",
+      "flagName": "仆从俯冲",
+      "fullName": "主人与仆从的旅游计划",
+      "seed": "29",
+      "players": [
+        {
+          "username": "Moria Ruruka",
+          "rank": 5802,
+          "id": 2642824,
+          "pfp": "https://a.ppy.sh/2642824"
+        },
+        {
+          "username": "xgj",
+          "rank": 77649,
+          "id": 37502395,
+          "pfp": "https://a.ppy.sh/37502395"
+        }
+      ]
+    },
+    {
+      "acronym": "moyi",
+      "flagName": "moyi",
+      "fullName": "新北市立中和高級中學澳蘇戰隊",
+      "seed": "30",
+      "players": [
+        {
+          "username": "Szjes",
+          "rank": 228846,
+          "id": 30146702,
+          "pfp": "https://a.ppy.sh/30146702"
+        },
+        {
+          "username": "Ethan2222",
+          "rank": 360,
+          "id": 14249222,
+          "pfp": "https://a.ppy.sh/14249222"
+        }
+      ]
+    },
+    {
+      "acronym": "QQQ",
+      "flagName": "QQQ",
+      "fullName": "决蛆零",
+      "seed": "31",
+      "players": [
+        {
+          "username": "FWdog",
+          "rank": 189410,
+          "id": 39126591,
+          "pfp": "https://a.ppy.sh/39126591"
+        },
+        {
+          "username": "KiraRiiko",
+          "rank": 118391,
+          "id": 36138270,
+          "pfp": "https://a.ppy.sh/36138270"
+        }
+      ]
+    },
+    {
+      "acronym": "bqf",
+      "flagName": "bqf",
+      "fullName": "队长你的版权费呢",
+      "seed": "32",
+      "players": [
+        {
+          "username": "mickeymouse",
+          "rank": 149530,
+          "id": 24096425,
+          "pfp": "https://a.ppy.sh/24096425"
+        },
+        {
+          "username": "[ Lithromanti ]",
+          "rank": 164678,
+          "id": 32975448,
+          "pfp": "https://a.ppy.sh/32975448"
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "id": "qualifier",
+      "name": "Qualifier",
+      "description": "Qualifier",
+      "bestOf": 9,
+      "startDate": "2023-10-29T18:35:42+08:00",
+      "matches": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "beatmaps": [
+        {
+          "id": 986375,
+          "mods": "LM1",
+          "specialmods": "Barrel_Roll",
+          "beatmapInfo": {
+            "onlineId": 986375,
+            "difficultyName": "Ex",
+            "bpm": 192.0,
+            "length": 260000.0,
+            "starRating": 6.4937,
+            "metadata": {
+              "title": "bouquet",
+              "titleUnicode": "bouquet",
+              "artist": "ChouCho",
+              "artistUnicode": "ChouCho",
+              "author": {
+                "onlineId": 3193504,
+                "username": "Kibbleru",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "ちょうちょ betastar sotarks kalibe -nitrous kisses",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 7.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/460580/covers/cover@2x.jpg?1650642663",
+              "card": "https://assets.ppy.sh/beatmaps/460580/covers/card@2x.jpg?1650642663",
+              "list": "https://assets.ppy.sh/beatmaps/460580/covers/list@2x.jpg?1650642663"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM2",
+          "specialmods": "Traceable",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 5395611,
+          "mods": "LM3",
+          "specialmods": "Grow",
+          "beatmapInfo": {
+            "onlineId": 5395611,
+            "difficultyName": "Pastel Prism",
+            "bpm": 152.0,
+            "length": 134000.0,
+            "starRating": 5.72311,
+            "metadata": {
+              "title": "Paradox Palette",
+              "titleUnicode": "Paradox Palette",
+              "artist": "Aethoro",
+              "artistUnicode": "Aethoro",
+              "author": {
+                "onlineId": 8688812,
+                "username": "Mir",
+                "countryString": "Unknown"
+              },
+              "source": "Arcaea",
+              "tags": "electronic instrumental orchestral piano alt low bpm",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2464948/covers/cover@2x.jpg?1776483012",
+              "card": "https://assets.ppy.sh/beatmaps/2464948/covers/card@2x.jpg?1776483012",
+              "list": "https://assets.ppy.sh/beatmaps/2464948/covers/list@2x.jpg?1776483012"
+            }
+          }
+        },
+        {
+          "id": 1166087,
+          "mods": "NM1",
+          "beatmapInfo": {
+            "onlineId": 1166087,
+            "difficultyName": "Milked",
+            "bpm": 254.92,
+            "length": 213000.0,
+            "starRating": 7.18123,
+            "metadata": {
+              "title": "Milk Crown on Sonnetica",
+              "titleUnicode": "ミルククラウン・オン・ソーネチカ",
+              "artist": "nameless",
+              "artistUnicode": "nameless",
+              "author": {
+                "onlineId": 1052994,
+                "username": "Milan-",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "deetz appleeaterx utaite",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.5,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.7,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/550414/covers/cover@2x.jpg?1650654109",
+              "card": "https://assets.ppy.sh/beatmaps/550414/covers/card@2x.jpg?1650654109",
+              "list": "https://assets.ppy.sh/beatmaps/550414/covers/list@2x.jpg?1650654109"
+            }
+          }
+        },
+        {
+          "id": 4846755,
+          "mods": "NM2",
+          "beatmapInfo": {
+            "onlineId": 4846755,
+            "difficultyName": "Chaos",
+            "bpm": 230.0,
+            "length": 139000.0,
+            "starRating": 7.16742,
+            "metadata": {
+              "title": "Perfect Neglect",
+              "titleUnicode": "Perfect Neglect",
+              "artist": "Kobaryo",
+              "artistUnicode": "Kobaryo",
+              "author": {
+                "onlineId": 8953955,
+                "username": "Zelq",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "electronic speedcore fa featured artist owc2024 ro16 fm3 round of 16 osu world cup",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.8,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2274665/covers/cover@2x.jpg?1774090809",
+              "card": "https://assets.ppy.sh/beatmaps/2274665/covers/card@2x.jpg?1774090809",
+              "list": "https://assets.ppy.sh/beatmaps/2274665/covers/list@2x.jpg?1774090809"
+            }
+          }
+        },
+        {
+          "id": 5169485,
+          "mods": "NM3",
+          "beatmapInfo": {
+            "onlineId": 5169485,
+            "difficultyName": "Team USA",
+            "bpm": 190.0,
+            "length": 181000.0,
+            "starRating": 6.65712,
+            "metadata": {
+              "title": "chronos_visionia",
+              "titleUnicode": "chronos_visionia",
+              "artist": "ak+q",
+              "artistUnicode": "ak+q",
+              "author": {
+                "onlineId": 18130046,
+                "username": "6pXgEj3hc7Umj5H",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "osu! beatmapping world championship 2025 o!bwc obwc obwc25 obwc25qf qualifier round 6pxgej3hc7umj5h fowwo phyr pandize weoweet",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.4,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2388832/covers/cover@2x.jpg?1752649215",
+              "card": "https://assets.ppy.sh/beatmaps/2388832/covers/card@2x.jpg?1752649215",
+              "list": "https://assets.ppy.sh/beatmaps/2388832/covers/list@2x.jpg?1752649215"
+            }
+          }
+        },
+        {
+          "id": 5157035,
+          "mods": "HD1",
+          "beatmapInfo": {
+            "onlineId": 5157035,
+            "difficultyName": "X",
+            "bpm": 180.0,
+            "length": 180000.0,
+            "starRating": 6.7626,
+            "metadata": {
+              "title": "Onomatomania feat.sekai",
+              "titleUnicode": "オノマトマニア (（feat.星界）)",
+              "artist": "Marmalade butcher",
+              "artistUnicode": "Marmalade butcher",
+              "author": {
+                "onlineId": 2917990,
+                "username": "jj986544591",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.2,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667",
+              "card": "https://assets.ppy.sh/beatmaps/2384905/covers/card@2x.jpg?1758891667",
+              "list": "https://assets.ppy.sh/beatmaps/2384905/covers/list@2x.jpg?1758891667"
+            }
+          }
+        },
+        {
+          "id": 4392073,
+          "mods": "HD2",
+          "beatmapInfo": {
+            "onlineId": 4392073,
+            "difficultyName": "What What",
+            "bpm": 170.0,
+            "length": 197000.0,
+            "starRating": 6.13943,
+            "metadata": {
+              "title": "What What",
+              "titleUnicode": "뭔데 뭔데",
+              "artist": "Im Chang Jung",
+              "artistUnicode": "임창정",
+              "author": {
+                "onlineId": 7178423,
+                "username": "Teacchyyy",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "임창정 im chang jung 2001 different color 원상우 korea korean pop k-pop",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 4.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816",
+              "card": "https://assets.ppy.sh/beatmaps/2094662/covers/card@2x.jpg?1735390816",
+              "list": "https://assets.ppy.sh/beatmaps/2094662/covers/list@2x.jpg?1735390816"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "HR1",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        },
+        {
+          "id": 5677214,
+          "mods": "HR2",
+          "beatmapInfo": {
+            "onlineId": 5677214,
+            "difficultyName": "Super Saturated Syringing",
+            "bpm": 160.0,
+            "length": 109000.0,
+            "starRating": 5.83321,
+            "metadata": {
+              "title": "Romari Time!",
+              "titleUnicode": "海露欢游",
+              "artist": "HOYO-MiX",
+              "artistUnicode": "HOYO-MiX",
+              "author": {
+                "onlineId": 959763,
+                "username": "Flask",
+                "countryString": "Unknown"
+              },
+              "source": "Genshin Impact",
+              "tags": "ロマリ・タイム！ 原神 海露歡游 hoyoverse sigewinne 希格雯 soc5 summer osu cup 5 rd reverse draft qf hr2 electronic video game instrumental [shk]sparknight sparknights",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.8,
+              "overallDifficulty": 8.8,
+              "approachRate": 9.3,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554",
+              "card": "https://assets.ppy.sh/beatmaps/2555901/covers/card@2x.jpg?1785678554",
+              "list": "https://assets.ppy.sh/beatmaps/2555901/covers/list@2x.jpg?1785678554"
+            }
+          }
+        },
+        {
+          "id": 1000684,
+          "mods": "DT1",
+          "beatmapInfo": {
+            "onlineId": 1000684,
+            "difficultyName": "Catharsis",
+            "bpm": 178.0,
+            "length": 316000.0,
+            "starRating": 5.77005,
+            "metadata": {
+              "title": "Back to Marie",
+              "titleUnicode": "Back to Marie",
+              "artist": "Kumagai Eri(cv.Seto Asami)",
+              "artistUnicode": "熊谷絵里（cv.瀬戸麻沙美）",
+              "author": {
+                "onlineId": 4369739,
+                "username": "Yunomi",
+                "countryString": "Unknown"
+              },
+              "source": "音楽少女",
+              "tags": "electro.muster adore deetz sukinathan ongaku shoujo taishi cosmic record",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.2,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/467761/covers/cover@2x.jpg?1622104855",
+              "card": "https://assets.ppy.sh/beatmaps/467761/covers/card@2x.jpg?1622104855",
+              "list": "https://assets.ppy.sh/beatmaps/467761/covers/list@2x.jpg?1622104855"
+            }
+          }
+        },
+        {
+          "id": 1580739,
+          "mods": "DT2",
+          "beatmapInfo": {
+            "onlineId": 1580739,
+            "difficultyName": "Mirash's Another",
+            "bpm": 165.0,
+            "length": 118000.0,
+            "starRating": 4.83225,
+            "metadata": {
+              "title": "NEW GENERATION -mou, omae shika mienai-",
+              "titleUnicode": "NEW GENERATION -もう、お前しか見えない-",
+              "artist": "SUPER STAR -MITSURU-",
+              "artistUnicode": "SUPER STAR 満-MITSURU-",
+              "author": {
+                "onlineId": 2377881,
+                "username": "Yales",
+                "countryString": "Unknown"
+              },
+              "source": "beatmania IIDX 15 DJ TROOPERS",
+              "tags": "ayyri eiri- [r] ron mirash eurobeat bemani konami only one act now i can't see anybody else but you",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 7.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/739888/covers/cover@2x.jpg?1650662722",
+              "card": "https://assets.ppy.sh/beatmaps/739888/covers/card@2x.jpg?1650662722",
+              "list": "https://assets.ppy.sh/beatmaps/739888/covers/list@2x.jpg?1650662722"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "swiss-round-1",
+      "name": "Swiss Round 1",
+      "description": "",
+      "bestOf": 13,
+      "startDate": "",
+      "matches": [],
+      "beatmaps": [
+        {
+          "id": 986375,
+          "mods": "LM1",
+          "beatmapInfo": {
+            "onlineId": 986375,
+            "difficultyName": "Ex",
+            "bpm": 192.0,
+            "length": 260000.0,
+            "starRating": 6.4937,
+            "metadata": {
+              "title": "bouquet",
+              "titleUnicode": "bouquet",
+              "artist": "ChouCho",
+              "artistUnicode": "ChouCho",
+              "author": {
+                "onlineId": 3193504,
+                "username": "Kibbleru",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "ちょうちょ betastar sotarks kalibe -nitrous kisses",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 7.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/460580/covers/cover@2x.jpg?1650642663",
+              "card": "https://assets.ppy.sh/beatmaps/460580/covers/card@2x.jpg?1650642663",
+              "list": "https://assets.ppy.sh/beatmaps/460580/covers/list@2x.jpg?1650642663"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM2",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 5395611,
+          "mods": "LM3",
+          "beatmapInfo": {
+            "onlineId": 5395611,
+            "difficultyName": "Pastel Prism",
+            "bpm": 152.0,
+            "length": 134000.0,
+            "starRating": 5.72311,
+            "metadata": {
+              "title": "Paradox Palette",
+              "titleUnicode": "Paradox Palette",
+              "artist": "Aethoro",
+              "artistUnicode": "Aethoro",
+              "author": {
+                "onlineId": 8688812,
+                "username": "Mir",
+                "countryString": "Unknown"
+              },
+              "source": "Arcaea",
+              "tags": "electronic instrumental orchestral piano alt low bpm",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2464948/covers/cover@2x.jpg?1776483012",
+              "card": "https://assets.ppy.sh/beatmaps/2464948/covers/card@2x.jpg?1776483012",
+              "list": "https://assets.ppy.sh/beatmaps/2464948/covers/list@2x.jpg?1776483012"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM4",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 1166087,
+          "mods": "NM1",
+          "beatmapInfo": {
+            "onlineId": 1166087,
+            "difficultyName": "Milked",
+            "bpm": 254.92,
+            "length": 213000.0,
+            "starRating": 7.18123,
+            "metadata": {
+              "title": "Milk Crown on Sonnetica",
+              "titleUnicode": "ミルククラウン・オン・ソーネチカ",
+              "artist": "nameless",
+              "artistUnicode": "nameless",
+              "author": {
+                "onlineId": 1052994,
+                "username": "Milan-",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "deetz appleeaterx utaite",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.5,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.7,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/550414/covers/cover@2x.jpg?1650654109",
+              "card": "https://assets.ppy.sh/beatmaps/550414/covers/card@2x.jpg?1650654109",
+              "list": "https://assets.ppy.sh/beatmaps/550414/covers/list@2x.jpg?1650654109"
+            }
+          }
+        },
+        {
+          "id": 4846755,
+          "mods": "NM2",
+          "beatmapInfo": {
+            "onlineId": 4846755,
+            "difficultyName": "Chaos",
+            "bpm": 230.0,
+            "length": 139000.0,
+            "starRating": 7.16742,
+            "metadata": {
+              "title": "Perfect Neglect",
+              "titleUnicode": "Perfect Neglect",
+              "artist": "Kobaryo",
+              "artistUnicode": "Kobaryo",
+              "author": {
+                "onlineId": 8953955,
+                "username": "Zelq",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "electronic speedcore fa featured artist owc2024 ro16 fm3 round of 16 osu world cup",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.8,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2274665/covers/cover@2x.jpg?1774090809",
+              "card": "https://assets.ppy.sh/beatmaps/2274665/covers/card@2x.jpg?1774090809",
+              "list": "https://assets.ppy.sh/beatmaps/2274665/covers/list@2x.jpg?1774090809"
+            }
+          }
+        },
+        {
+          "id": 5169485,
+          "mods": "NM3",
+          "beatmapInfo": {
+            "onlineId": 5169485,
+            "difficultyName": "Team USA",
+            "bpm": 190.0,
+            "length": 181000.0,
+            "starRating": 6.65712,
+            "metadata": {
+              "title": "chronos_visionia",
+              "titleUnicode": "chronos_visionia",
+              "artist": "ak+q",
+              "artistUnicode": "ak+q",
+              "author": {
+                "onlineId": 18130046,
+                "username": "6pXgEj3hc7Umj5H",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "osu! beatmapping world championship 2025 o!bwc obwc obwc25 obwc25qf qualifier round 6pxgej3hc7umj5h fowwo phyr pandize weoweet",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.4,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2388832/covers/cover@2x.jpg?1752649215",
+              "card": "https://assets.ppy.sh/beatmaps/2388832/covers/card@2x.jpg?1752649215",
+              "list": "https://assets.ppy.sh/beatmaps/2388832/covers/list@2x.jpg?1752649215"
+            }
+          }
+        },
+        {
+          "id": 5157035,
+          "mods": "HD1",
+          "beatmapInfo": {
+            "onlineId": 5157035,
+            "difficultyName": "X",
+            "bpm": 180.0,
+            "length": 180000.0,
+            "starRating": 6.7626,
+            "metadata": {
+              "title": "Onomatomania feat.sekai",
+              "titleUnicode": "オノマトマニア (（feat.星界）)",
+              "artist": "Marmalade butcher",
+              "artistUnicode": "Marmalade butcher",
+              "author": {
+                "onlineId": 2917990,
+                "username": "jj986544591",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.2,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667",
+              "card": "https://assets.ppy.sh/beatmaps/2384905/covers/card@2x.jpg?1758891667",
+              "list": "https://assets.ppy.sh/beatmaps/2384905/covers/list@2x.jpg?1758891667"
+            }
+          }
+        },
+        {
+          "id": 4392073,
+          "mods": "HD2",
+          "beatmapInfo": {
+            "onlineId": 4392073,
+            "difficultyName": "What What",
+            "bpm": 170.0,
+            "length": 197000.0,
+            "starRating": 6.13943,
+            "metadata": {
+              "title": "What What",
+              "titleUnicode": "뭔데 뭔데",
+              "artist": "Im Chang Jung",
+              "artistUnicode": "임창정",
+              "author": {
+                "onlineId": 7178423,
+                "username": "Teacchyyy",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "임창정 im chang jung 2001 different color 원상우 korea korean pop k-pop",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 4.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816",
+              "card": "https://assets.ppy.sh/beatmaps/2094662/covers/card@2x.jpg?1735390816",
+              "list": "https://assets.ppy.sh/beatmaps/2094662/covers/list@2x.jpg?1735390816"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "HR1",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        },
+        {
+          "id": 5677214,
+          "mods": "HR2",
+          "beatmapInfo": {
+            "onlineId": 5677214,
+            "difficultyName": "Super Saturated Syringing",
+            "bpm": 160.0,
+            "length": 109000.0,
+            "starRating": 5.83321,
+            "metadata": {
+              "title": "Romari Time!",
+              "titleUnicode": "海露欢游",
+              "artist": "HOYO-MiX",
+              "artistUnicode": "HOYO-MiX",
+              "author": {
+                "onlineId": 959763,
+                "username": "Flask",
+                "countryString": "Unknown"
+              },
+              "source": "Genshin Impact",
+              "tags": "ロマリ・タイム！ 原神 海露歡游 hoyoverse sigewinne 希格雯 soc5 summer osu cup 5 rd reverse draft qf hr2 electronic video game instrumental [shk]sparknight sparknights",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.8,
+              "overallDifficulty": 8.8,
+              "approachRate": 9.3,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554",
+              "card": "https://assets.ppy.sh/beatmaps/2555901/covers/card@2x.jpg?1785678554",
+              "list": "https://assets.ppy.sh/beatmaps/2555901/covers/list@2x.jpg?1785678554"
+            }
+          }
+        },
+        {
+          "id": 1000684,
+          "mods": "DT1",
+          "beatmapInfo": {
+            "onlineId": 1000684,
+            "difficultyName": "Catharsis",
+            "bpm": 178.0,
+            "length": 316000.0,
+            "starRating": 5.77005,
+            "metadata": {
+              "title": "Back to Marie",
+              "titleUnicode": "Back to Marie",
+              "artist": "Kumagai Eri(cv.Seto Asami)",
+              "artistUnicode": "熊谷絵里（cv.瀬戸麻沙美）",
+              "author": {
+                "onlineId": 4369739,
+                "username": "Yunomi",
+                "countryString": "Unknown"
+              },
+              "source": "音楽少女",
+              "tags": "electro.muster adore deetz sukinathan ongaku shoujo taishi cosmic record",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.2,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/467761/covers/cover@2x.jpg?1622104855",
+              "card": "https://assets.ppy.sh/beatmaps/467761/covers/card@2x.jpg?1622104855",
+              "list": "https://assets.ppy.sh/beatmaps/467761/covers/list@2x.jpg?1622104855"
+            }
+          }
+        },
+        {
+          "id": 1580739,
+          "mods": "DT2",
+          "beatmapInfo": {
+            "onlineId": 1580739,
+            "difficultyName": "Mirash's Another",
+            "bpm": 165.0,
+            "length": 118000.0,
+            "starRating": 4.83225,
+            "metadata": {
+              "title": "NEW GENERATION -mou, omae shika mienai-",
+              "titleUnicode": "NEW GENERATION -もう、お前しか見えない-",
+              "artist": "SUPER STAR -MITSURU-",
+              "artistUnicode": "SUPER STAR 満-MITSURU-",
+              "author": {
+                "onlineId": 2377881,
+                "username": "Yales",
+                "countryString": "Unknown"
+              },
+              "source": "beatmania IIDX 15 DJ TROOPERS",
+              "tags": "ayyri eiri- [r] ron mirash eurobeat bemani konami only one act now i can't see anybody else but you",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 7.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/739888/covers/cover@2x.jpg?1650662722",
+              "card": "https://assets.ppy.sh/beatmaps/739888/covers/card@2x.jpg?1650662722",
+              "list": "https://assets.ppy.sh/beatmaps/739888/covers/list@2x.jpg?1650662722"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "TB",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "swiss-round-2",
+      "name": "Swiss Round 2",
+      "beatmaps": [
+        {
+          "id": 986375,
+          "mods": "LM1",
+          "beatmapInfo": {
+            "onlineId": 986375,
+            "difficultyName": "Ex",
+            "bpm": 192.0,
+            "length": 260000.0,
+            "starRating": 6.4937,
+            "metadata": {
+              "title": "bouquet",
+              "titleUnicode": "bouquet",
+              "artist": "ChouCho",
+              "artistUnicode": "ChouCho",
+              "author": {
+                "onlineId": 3193504,
+                "username": "Kibbleru",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "ちょうちょ betastar sotarks kalibe -nitrous kisses",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 7.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/460580/covers/cover@2x.jpg?1650642663",
+              "card": "https://assets.ppy.sh/beatmaps/460580/covers/card@2x.jpg?1650642663",
+              "list": "https://assets.ppy.sh/beatmaps/460580/covers/list@2x.jpg?1650642663"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM2",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 5395611,
+          "mods": "LM3",
+          "beatmapInfo": {
+            "onlineId": 5395611,
+            "difficultyName": "Pastel Prism",
+            "bpm": 152.0,
+            "length": 134000.0,
+            "starRating": 5.72311,
+            "metadata": {
+              "title": "Paradox Palette",
+              "titleUnicode": "Paradox Palette",
+              "artist": "Aethoro",
+              "artistUnicode": "Aethoro",
+              "author": {
+                "onlineId": 8688812,
+                "username": "Mir",
+                "countryString": "Unknown"
+              },
+              "source": "Arcaea",
+              "tags": "electronic instrumental orchestral piano alt low bpm",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2464948/covers/cover@2x.jpg?1776483012",
+              "card": "https://assets.ppy.sh/beatmaps/2464948/covers/card@2x.jpg?1776483012",
+              "list": "https://assets.ppy.sh/beatmaps/2464948/covers/list@2x.jpg?1776483012"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM4",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 1166087,
+          "mods": "NM1",
+          "beatmapInfo": {
+            "onlineId": 1166087,
+            "difficultyName": "Milked",
+            "bpm": 254.92,
+            "length": 213000.0,
+            "starRating": 7.18123,
+            "metadata": {
+              "title": "Milk Crown on Sonnetica",
+              "titleUnicode": "ミルククラウン・オン・ソーネチカ",
+              "artist": "nameless",
+              "artistUnicode": "nameless",
+              "author": {
+                "onlineId": 1052994,
+                "username": "Milan-",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "deetz appleeaterx utaite",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.5,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.7,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/550414/covers/cover@2x.jpg?1650654109",
+              "card": "https://assets.ppy.sh/beatmaps/550414/covers/card@2x.jpg?1650654109",
+              "list": "https://assets.ppy.sh/beatmaps/550414/covers/list@2x.jpg?1650654109"
+            }
+          }
+        },
+        {
+          "id": 4846755,
+          "mods": "NM2",
+          "beatmapInfo": {
+            "onlineId": 4846755,
+            "difficultyName": "Chaos",
+            "bpm": 230.0,
+            "length": 139000.0,
+            "starRating": 7.16742,
+            "metadata": {
+              "title": "Perfect Neglect",
+              "titleUnicode": "Perfect Neglect",
+              "artist": "Kobaryo",
+              "artistUnicode": "Kobaryo",
+              "author": {
+                "onlineId": 8953955,
+                "username": "Zelq",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "electronic speedcore fa featured artist owc2024 ro16 fm3 round of 16 osu world cup",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.8,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2274665/covers/cover@2x.jpg?1774090809",
+              "card": "https://assets.ppy.sh/beatmaps/2274665/covers/card@2x.jpg?1774090809",
+              "list": "https://assets.ppy.sh/beatmaps/2274665/covers/list@2x.jpg?1774090809"
+            }
+          }
+        },
+        {
+          "id": 5169485,
+          "mods": "NM3",
+          "beatmapInfo": {
+            "onlineId": 5169485,
+            "difficultyName": "Team USA",
+            "bpm": 190.0,
+            "length": 181000.0,
+            "starRating": 6.65712,
+            "metadata": {
+              "title": "chronos_visionia",
+              "titleUnicode": "chronos_visionia",
+              "artist": "ak+q",
+              "artistUnicode": "ak+q",
+              "author": {
+                "onlineId": 18130046,
+                "username": "6pXgEj3hc7Umj5H",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "osu! beatmapping world championship 2025 o!bwc obwc obwc25 obwc25qf qualifier round 6pxgej3hc7umj5h fowwo phyr pandize weoweet",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.4,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2388832/covers/cover@2x.jpg?1752649215",
+              "card": "https://assets.ppy.sh/beatmaps/2388832/covers/card@2x.jpg?1752649215",
+              "list": "https://assets.ppy.sh/beatmaps/2388832/covers/list@2x.jpg?1752649215"
+            }
+          }
+        },
+        {
+          "id": 5157035,
+          "mods": "HD1",
+          "beatmapInfo": {
+            "onlineId": 5157035,
+            "difficultyName": "X",
+            "bpm": 180.0,
+            "length": 180000.0,
+            "starRating": 6.7626,
+            "metadata": {
+              "title": "Onomatomania feat.sekai",
+              "titleUnicode": "オノマトマニア (（feat.星界）)",
+              "artist": "Marmalade butcher",
+              "artistUnicode": "Marmalade butcher",
+              "author": {
+                "onlineId": 2917990,
+                "username": "jj986544591",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.2,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667",
+              "card": "https://assets.ppy.sh/beatmaps/2384905/covers/card@2x.jpg?1758891667",
+              "list": "https://assets.ppy.sh/beatmaps/2384905/covers/list@2x.jpg?1758891667"
+            }
+          }
+        },
+        {
+          "id": 4392073,
+          "mods": "HD2",
+          "beatmapInfo": {
+            "onlineId": 4392073,
+            "difficultyName": "What What",
+            "bpm": 170.0,
+            "length": 197000.0,
+            "starRating": 6.13943,
+            "metadata": {
+              "title": "What What",
+              "titleUnicode": "뭔데 뭔데",
+              "artist": "Im Chang Jung",
+              "artistUnicode": "임창정",
+              "author": {
+                "onlineId": 7178423,
+                "username": "Teacchyyy",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "임창정 im chang jung 2001 different color 원상우 korea korean pop k-pop",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 4.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816",
+              "card": "https://assets.ppy.sh/beatmaps/2094662/covers/card@2x.jpg?1735390816",
+              "list": "https://assets.ppy.sh/beatmaps/2094662/covers/list@2x.jpg?1735390816"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "HR1",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        },
+        {
+          "id": 5677214,
+          "mods": "HR2",
+          "beatmapInfo": {
+            "onlineId": 5677214,
+            "difficultyName": "Super Saturated Syringing",
+            "bpm": 160.0,
+            "length": 109000.0,
+            "starRating": 5.83321,
+            "metadata": {
+              "title": "Romari Time!",
+              "titleUnicode": "海露欢游",
+              "artist": "HOYO-MiX",
+              "artistUnicode": "HOYO-MiX",
+              "author": {
+                "onlineId": 959763,
+                "username": "Flask",
+                "countryString": "Unknown"
+              },
+              "source": "Genshin Impact",
+              "tags": "ロマリ・タイム！ 原神 海露歡游 hoyoverse sigewinne 希格雯 soc5 summer osu cup 5 rd reverse draft qf hr2 electronic video game instrumental [shk]sparknight sparknights",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.8,
+              "overallDifficulty": 8.8,
+              "approachRate": 9.3,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554",
+              "card": "https://assets.ppy.sh/beatmaps/2555901/covers/card@2x.jpg?1785678554",
+              "list": "https://assets.ppy.sh/beatmaps/2555901/covers/list@2x.jpg?1785678554"
+            }
+          }
+        },
+        {
+          "id": 1000684,
+          "mods": "DT1",
+          "beatmapInfo": {
+            "onlineId": 1000684,
+            "difficultyName": "Catharsis",
+            "bpm": 178.0,
+            "length": 316000.0,
+            "starRating": 5.77005,
+            "metadata": {
+              "title": "Back to Marie",
+              "titleUnicode": "Back to Marie",
+              "artist": "Kumagai Eri(cv.Seto Asami)",
+              "artistUnicode": "熊谷絵里（cv.瀬戸麻沙美）",
+              "author": {
+                "onlineId": 4369739,
+                "username": "Yunomi",
+                "countryString": "Unknown"
+              },
+              "source": "音楽少女",
+              "tags": "electro.muster adore deetz sukinathan ongaku shoujo taishi cosmic record",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.2,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/467761/covers/cover@2x.jpg?1622104855",
+              "card": "https://assets.ppy.sh/beatmaps/467761/covers/card@2x.jpg?1622104855",
+              "list": "https://assets.ppy.sh/beatmaps/467761/covers/list@2x.jpg?1622104855"
+            }
+          }
+        },
+        {
+          "id": 1580739,
+          "mods": "DT2",
+          "beatmapInfo": {
+            "onlineId": 1580739,
+            "difficultyName": "Mirash's Another",
+            "bpm": 165.0,
+            "length": 118000.0,
+            "starRating": 4.83225,
+            "metadata": {
+              "title": "NEW GENERATION -mou, omae shika mienai-",
+              "titleUnicode": "NEW GENERATION -もう、お前しか見えない-",
+              "artist": "SUPER STAR -MITSURU-",
+              "artistUnicode": "SUPER STAR 満-MITSURU-",
+              "author": {
+                "onlineId": 2377881,
+                "username": "Yales",
+                "countryString": "Unknown"
+              },
+              "source": "beatmania IIDX 15 DJ TROOPERS",
+              "tags": "ayyri eiri- [r] ron mirash eurobeat bemani konami only one act now i can't see anybody else but you",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 7.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/739888/covers/cover@2x.jpg?1650662722",
+              "card": "https://assets.ppy.sh/beatmaps/739888/covers/card@2x.jpg?1650662722",
+              "list": "https://assets.ppy.sh/beatmaps/739888/covers/list@2x.jpg?1650662722"
+            }
+          }
+        },
+        {
+          "id": 986375,
+          "mods": "TB",
+          "beatmapInfo": {
+            "onlineId": 986375,
+            "difficultyName": "Ex",
+            "bpm": 192.0,
+            "length": 260000.0,
+            "starRating": 6.4937,
+            "metadata": {
+              "title": "bouquet",
+              "titleUnicode": "bouquet",
+              "artist": "ChouCho",
+              "artistUnicode": "ChouCho",
+              "author": {
+                "onlineId": 3193504,
+                "username": "Kibbleru",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "ちょうちょ betastar sotarks kalibe -nitrous kisses",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 7.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/460580/covers/cover@2x.jpg?1650642663",
+              "card": "https://assets.ppy.sh/beatmaps/460580/covers/card@2x.jpg?1650642663",
+              "list": "https://assets.ppy.sh/beatmaps/460580/covers/list@2x.jpg?1650642663"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "swiss-round-3",
+      "name": "Swiss Round 3",
+      "beatmaps": [
+        {
+          "id": 986375,
+          "mods": "LM1",
+          "beatmapInfo": {
+            "onlineId": 986375,
+            "difficultyName": "Ex",
+            "bpm": 192.0,
+            "length": 260000.0,
+            "starRating": 6.4937,
+            "metadata": {
+              "title": "bouquet",
+              "titleUnicode": "bouquet",
+              "artist": "ChouCho",
+              "artistUnicode": "ChouCho",
+              "author": {
+                "onlineId": 3193504,
+                "username": "Kibbleru",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "ちょうちょ betastar sotarks kalibe -nitrous kisses",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 7.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/460580/covers/cover@2x.jpg?1650642663",
+              "card": "https://assets.ppy.sh/beatmaps/460580/covers/card@2x.jpg?1650642663",
+              "list": "https://assets.ppy.sh/beatmaps/460580/covers/list@2x.jpg?1650642663"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM2",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 5395611,
+          "mods": "LM3",
+          "beatmapInfo": {
+            "onlineId": 5395611,
+            "difficultyName": "Pastel Prism",
+            "bpm": 152.0,
+            "length": 134000.0,
+            "starRating": 5.72311,
+            "metadata": {
+              "title": "Paradox Palette",
+              "titleUnicode": "Paradox Palette",
+              "artist": "Aethoro",
+              "artistUnicode": "Aethoro",
+              "author": {
+                "onlineId": 8688812,
+                "username": "Mir",
+                "countryString": "Unknown"
+              },
+              "source": "Arcaea",
+              "tags": "electronic instrumental orchestral piano alt low bpm",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2464948/covers/cover@2x.jpg?1776483012",
+              "card": "https://assets.ppy.sh/beatmaps/2464948/covers/card@2x.jpg?1776483012",
+              "list": "https://assets.ppy.sh/beatmaps/2464948/covers/list@2x.jpg?1776483012"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM4",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 4392073,
+          "mods": "LM5",
+          "beatmapInfo": {
+            "onlineId": 4392073,
+            "difficultyName": "What What",
+            "bpm": 170.0,
+            "length": 197000.0,
+            "starRating": 6.13943,
+            "metadata": {
+              "title": "What What",
+              "titleUnicode": "뭔데 뭔데",
+              "artist": "Im Chang Jung",
+              "artistUnicode": "임창정",
+              "author": {
+                "onlineId": 7178423,
+                "username": "Teacchyyy",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "임창정 im chang jung 2001 different color 원상우 korea korean pop k-pop",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 4.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816",
+              "card": "https://assets.ppy.sh/beatmaps/2094662/covers/card@2x.jpg?1735390816",
+              "list": "https://assets.ppy.sh/beatmaps/2094662/covers/list@2x.jpg?1735390816"
+            }
+          }
+        },
+        {
+          "id": 1166087,
+          "mods": "NM1",
+          "beatmapInfo": {
+            "onlineId": 1166087,
+            "difficultyName": "Milked",
+            "bpm": 254.92,
+            "length": 213000.0,
+            "starRating": 7.18123,
+            "metadata": {
+              "title": "Milk Crown on Sonnetica",
+              "titleUnicode": "ミルククラウン・オン・ソーネチカ",
+              "artist": "nameless",
+              "artistUnicode": "nameless",
+              "author": {
+                "onlineId": 1052994,
+                "username": "Milan-",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "deetz appleeaterx utaite",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.5,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.7,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/550414/covers/cover@2x.jpg?1650654109",
+              "card": "https://assets.ppy.sh/beatmaps/550414/covers/card@2x.jpg?1650654109",
+              "list": "https://assets.ppy.sh/beatmaps/550414/covers/list@2x.jpg?1650654109"
+            }
+          }
+        },
+        {
+          "id": 4846755,
+          "mods": "NM2",
+          "beatmapInfo": {
+            "onlineId": 4846755,
+            "difficultyName": "Chaos",
+            "bpm": 230.0,
+            "length": 139000.0,
+            "starRating": 7.16742,
+            "metadata": {
+              "title": "Perfect Neglect",
+              "titleUnicode": "Perfect Neglect",
+              "artist": "Kobaryo",
+              "artistUnicode": "Kobaryo",
+              "author": {
+                "onlineId": 8953955,
+                "username": "Zelq",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "electronic speedcore fa featured artist owc2024 ro16 fm3 round of 16 osu world cup",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.8,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2274665/covers/cover@2x.jpg?1774090809",
+              "card": "https://assets.ppy.sh/beatmaps/2274665/covers/card@2x.jpg?1774090809",
+              "list": "https://assets.ppy.sh/beatmaps/2274665/covers/list@2x.jpg?1774090809"
+            }
+          }
+        },
+        {
+          "id": 5169485,
+          "mods": "NM3",
+          "beatmapInfo": {
+            "onlineId": 5169485,
+            "difficultyName": "Team USA",
+            "bpm": 190.0,
+            "length": 181000.0,
+            "starRating": 6.65712,
+            "metadata": {
+              "title": "chronos_visionia",
+              "titleUnicode": "chronos_visionia",
+              "artist": "ak+q",
+              "artistUnicode": "ak+q",
+              "author": {
+                "onlineId": 18130046,
+                "username": "6pXgEj3hc7Umj5H",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "osu! beatmapping world championship 2025 o!bwc obwc obwc25 obwc25qf qualifier round 6pxgej3hc7umj5h fowwo phyr pandize weoweet",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.4,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2388832/covers/cover@2x.jpg?1752649215",
+              "card": "https://assets.ppy.sh/beatmaps/2388832/covers/card@2x.jpg?1752649215",
+              "list": "https://assets.ppy.sh/beatmaps/2388832/covers/list@2x.jpg?1752649215"
+            }
+          }
+        },
+        {
+          "id": 5157035,
+          "mods": "HD1",
+          "beatmapInfo": {
+            "onlineId": 5157035,
+            "difficultyName": "X",
+            "bpm": 180.0,
+            "length": 180000.0,
+            "starRating": 6.7626,
+            "metadata": {
+              "title": "Onomatomania feat.sekai",
+              "titleUnicode": "オノマトマニア (（feat.星界）)",
+              "artist": "Marmalade butcher",
+              "artistUnicode": "Marmalade butcher",
+              "author": {
+                "onlineId": 2917990,
+                "username": "jj986544591",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.2,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667",
+              "card": "https://assets.ppy.sh/beatmaps/2384905/covers/card@2x.jpg?1758891667",
+              "list": "https://assets.ppy.sh/beatmaps/2384905/covers/list@2x.jpg?1758891667"
+            }
+          }
+        },
+        {
+          "id": 4392073,
+          "mods": "HD2",
+          "beatmapInfo": {
+            "onlineId": 4392073,
+            "difficultyName": "What What",
+            "bpm": 170.0,
+            "length": 197000.0,
+            "starRating": 6.13943,
+            "metadata": {
+              "title": "What What",
+              "titleUnicode": "뭔데 뭔데",
+              "artist": "Im Chang Jung",
+              "artistUnicode": "임창정",
+              "author": {
+                "onlineId": 7178423,
+                "username": "Teacchyyy",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "임창정 im chang jung 2001 different color 원상우 korea korean pop k-pop",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 4.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816",
+              "card": "https://assets.ppy.sh/beatmaps/2094662/covers/card@2x.jpg?1735390816",
+              "list": "https://assets.ppy.sh/beatmaps/2094662/covers/list@2x.jpg?1735390816"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "HR1",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        },
+        {
+          "id": 5677214,
+          "mods": "HR2",
+          "beatmapInfo": {
+            "onlineId": 5677214,
+            "difficultyName": "Super Saturated Syringing",
+            "bpm": 160.0,
+            "length": 109000.0,
+            "starRating": 5.83321,
+            "metadata": {
+              "title": "Romari Time!",
+              "titleUnicode": "海露欢游",
+              "artist": "HOYO-MiX",
+              "artistUnicode": "HOYO-MiX",
+              "author": {
+                "onlineId": 959763,
+                "username": "Flask",
+                "countryString": "Unknown"
+              },
+              "source": "Genshin Impact",
+              "tags": "ロマリ・タイム！ 原神 海露歡游 hoyoverse sigewinne 希格雯 soc5 summer osu cup 5 rd reverse draft qf hr2 electronic video game instrumental [shk]sparknight sparknights",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.8,
+              "overallDifficulty": 8.8,
+              "approachRate": 9.3,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554",
+              "card": "https://assets.ppy.sh/beatmaps/2555901/covers/card@2x.jpg?1785678554",
+              "list": "https://assets.ppy.sh/beatmaps/2555901/covers/list@2x.jpg?1785678554"
+            }
+          }
+        },
+        {
+          "id": 1000684,
+          "mods": "DT1",
+          "beatmapInfo": {
+            "onlineId": 1000684,
+            "difficultyName": "Catharsis",
+            "bpm": 178.0,
+            "length": 316000.0,
+            "starRating": 5.77005,
+            "metadata": {
+              "title": "Back to Marie",
+              "titleUnicode": "Back to Marie",
+              "artist": "Kumagai Eri(cv.Seto Asami)",
+              "artistUnicode": "熊谷絵里（cv.瀬戸麻沙美）",
+              "author": {
+                "onlineId": 4369739,
+                "username": "Yunomi",
+                "countryString": "Unknown"
+              },
+              "source": "音楽少女",
+              "tags": "electro.muster adore deetz sukinathan ongaku shoujo taishi cosmic record",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.2,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/467761/covers/cover@2x.jpg?1622104855",
+              "card": "https://assets.ppy.sh/beatmaps/467761/covers/card@2x.jpg?1622104855",
+              "list": "https://assets.ppy.sh/beatmaps/467761/covers/list@2x.jpg?1622104855"
+            }
+          }
+        },
+        {
+          "id": 1580739,
+          "mods": "DT2",
+          "beatmapInfo": {
+            "onlineId": 1580739,
+            "difficultyName": "Mirash's Another",
+            "bpm": 165.0,
+            "length": 118000.0,
+            "starRating": 4.83225,
+            "metadata": {
+              "title": "NEW GENERATION -mou, omae shika mienai-",
+              "titleUnicode": "NEW GENERATION -もう、お前しか見えない-",
+              "artist": "SUPER STAR -MITSURU-",
+              "artistUnicode": "SUPER STAR 満-MITSURU-",
+              "author": {
+                "onlineId": 2377881,
+                "username": "Yales",
+                "countryString": "Unknown"
+              },
+              "source": "beatmania IIDX 15 DJ TROOPERS",
+              "tags": "ayyri eiri- [r] ron mirash eurobeat bemani konami only one act now i can't see anybody else but you",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 7.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/739888/covers/cover@2x.jpg?1650662722",
+              "card": "https://assets.ppy.sh/beatmaps/739888/covers/card@2x.jpg?1650662722",
+              "list": "https://assets.ppy.sh/beatmaps/739888/covers/list@2x.jpg?1650662722"
+            }
+          }
+        },
+        {
+          "id": 5677214,
+          "mods": "DT3",
+          "beatmapInfo": {
+            "onlineId": 5677214,
+            "difficultyName": "Super Saturated Syringing",
+            "bpm": 160.0,
+            "length": 109000.0,
+            "starRating": 5.83321,
+            "metadata": {
+              "title": "Romari Time!",
+              "titleUnicode": "海露欢游",
+              "artist": "HOYO-MiX",
+              "artistUnicode": "HOYO-MiX",
+              "author": {
+                "onlineId": 959763,
+                "username": "Flask",
+                "countryString": "Unknown"
+              },
+              "source": "Genshin Impact",
+              "tags": "ロマリ・タイム！ 原神 海露歡游 hoyoverse sigewinne 希格雯 soc5 summer osu cup 5 rd reverse draft qf hr2 electronic video game instrumental [shk]sparknight sparknights",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.8,
+              "overallDifficulty": 8.8,
+              "approachRate": 9.3,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554",
+              "card": "https://assets.ppy.sh/beatmaps/2555901/covers/card@2x.jpg?1785678554",
+              "list": "https://assets.ppy.sh/beatmaps/2555901/covers/list@2x.jpg?1785678554"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "TB",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "semifinals",
+      "name": "Semifinals",
+      "beatmaps": [
+        {
+          "id": 986375,
+          "mods": "LM1",
+          "beatmapInfo": {
+            "onlineId": 986375,
+            "difficultyName": "Ex",
+            "bpm": 192.0,
+            "length": 260000.0,
+            "starRating": 6.4937,
+            "metadata": {
+              "title": "bouquet",
+              "titleUnicode": "bouquet",
+              "artist": "ChouCho",
+              "artistUnicode": "ChouCho",
+              "author": {
+                "onlineId": 3193504,
+                "username": "Kibbleru",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "ちょうちょ betastar sotarks kalibe -nitrous kisses",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 7.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/460580/covers/cover@2x.jpg?1650642663",
+              "card": "https://assets.ppy.sh/beatmaps/460580/covers/card@2x.jpg?1650642663",
+              "list": "https://assets.ppy.sh/beatmaps/460580/covers/list@2x.jpg?1650642663"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM2",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 5395611,
+          "mods": "LM3",
+          "beatmapInfo": {
+            "onlineId": 5395611,
+            "difficultyName": "Pastel Prism",
+            "bpm": 152.0,
+            "length": 134000.0,
+            "starRating": 5.72311,
+            "metadata": {
+              "title": "Paradox Palette",
+              "titleUnicode": "Paradox Palette",
+              "artist": "Aethoro",
+              "artistUnicode": "Aethoro",
+              "author": {
+                "onlineId": 8688812,
+                "username": "Mir",
+                "countryString": "Unknown"
+              },
+              "source": "Arcaea",
+              "tags": "electronic instrumental orchestral piano alt low bpm",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2464948/covers/cover@2x.jpg?1776483012",
+              "card": "https://assets.ppy.sh/beatmaps/2464948/covers/card@2x.jpg?1776483012",
+              "list": "https://assets.ppy.sh/beatmaps/2464948/covers/list@2x.jpg?1776483012"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "LM4",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 4392073,
+          "mods": "LM5",
+          "beatmapInfo": {
+            "onlineId": 4392073,
+            "difficultyName": "What What",
+            "bpm": 170.0,
+            "length": 197000.0,
+            "starRating": 6.13943,
+            "metadata": {
+              "title": "What What",
+              "titleUnicode": "뭔데 뭔데",
+              "artist": "Im Chang Jung",
+              "artistUnicode": "임창정",
+              "author": {
+                "onlineId": 7178423,
+                "username": "Teacchyyy",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "임창정 im chang jung 2001 different color 원상우 korea korean pop k-pop",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 4.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816",
+              "card": "https://assets.ppy.sh/beatmaps/2094662/covers/card@2x.jpg?1735390816",
+              "list": "https://assets.ppy.sh/beatmaps/2094662/covers/list@2x.jpg?1735390816"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "LM6",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        },
+        {
+          "id": 1166087,
+          "mods": "NM1",
+          "beatmapInfo": {
+            "onlineId": 1166087,
+            "difficultyName": "Milked",
+            "bpm": 254.92,
+            "length": 213000.0,
+            "starRating": 7.18123,
+            "metadata": {
+              "title": "Milk Crown on Sonnetica",
+              "titleUnicode": "ミルククラウン・オン・ソーネチカ",
+              "artist": "nameless",
+              "artistUnicode": "nameless",
+              "author": {
+                "onlineId": 1052994,
+                "username": "Milan-",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "deetz appleeaterx utaite",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.5,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.7,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/550414/covers/cover@2x.jpg?1650654109",
+              "card": "https://assets.ppy.sh/beatmaps/550414/covers/card@2x.jpg?1650654109",
+              "list": "https://assets.ppy.sh/beatmaps/550414/covers/list@2x.jpg?1650654109"
+            }
+          }
+        },
+        {
+          "id": 4846755,
+          "mods": "NM2",
+          "beatmapInfo": {
+            "onlineId": 4846755,
+            "difficultyName": "Chaos",
+            "bpm": 230.0,
+            "length": 139000.0,
+            "starRating": 7.16742,
+            "metadata": {
+              "title": "Perfect Neglect",
+              "titleUnicode": "Perfect Neglect",
+              "artist": "Kobaryo",
+              "artistUnicode": "Kobaryo",
+              "author": {
+                "onlineId": 8953955,
+                "username": "Zelq",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "electronic speedcore fa featured artist owc2024 ro16 fm3 round of 16 osu world cup",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.8,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2274665/covers/cover@2x.jpg?1774090809",
+              "card": "https://assets.ppy.sh/beatmaps/2274665/covers/card@2x.jpg?1774090809",
+              "list": "https://assets.ppy.sh/beatmaps/2274665/covers/list@2x.jpg?1774090809"
+            }
+          }
+        },
+        {
+          "id": 5169485,
+          "mods": "NM3",
+          "beatmapInfo": {
+            "onlineId": 5169485,
+            "difficultyName": "Team USA",
+            "bpm": 190.0,
+            "length": 181000.0,
+            "starRating": 6.65712,
+            "metadata": {
+              "title": "chronos_visionia",
+              "titleUnicode": "chronos_visionia",
+              "artist": "ak+q",
+              "artistUnicode": "ak+q",
+              "author": {
+                "onlineId": 18130046,
+                "username": "6pXgEj3hc7Umj5H",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "osu! beatmapping world championship 2025 o!bwc obwc obwc25 obwc25qf qualifier round 6pxgej3hc7umj5h fowwo phyr pandize weoweet",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.4,
+              "overallDifficulty": 9.0,
+              "approachRate": 9.5,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2388832/covers/cover@2x.jpg?1752649215",
+              "card": "https://assets.ppy.sh/beatmaps/2388832/covers/card@2x.jpg?1752649215",
+              "list": "https://assets.ppy.sh/beatmaps/2388832/covers/list@2x.jpg?1752649215"
+            }
+          }
+        },
+        {
+          "id": 307410,
+          "mods": "NM4",
+          "beatmapInfo": {
+            "onlineId": 307410,
+            "difficultyName": "Extra",
+            "bpm": 144.0,
+            "length": 181000.0,
+            "starRating": 5.81905,
+            "metadata": {
+              "title": "Chi no Iro wa Kiiro",
+              "titleUnicode": "地の色は黄色",
+              "artist": "Akiyama Uni",
+              "artistUnicode": "あきやま うに",
+              "author": {
+                "onlineId": 416662,
+                "username": "Hollow Wings",
+                "countryString": "Unknown"
+              },
+              "source": "Touhou",
+              "tags": "th10.5 fxt tasofro twilight frontier 黄昏フロンティア u2 zun scarlet weather rhapsody hisouten jun the ground's color is yellow",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 3.0,
+              "overallDifficulty": 8.0,
+              "approachRate": 9.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112",
+              "card": "https://assets.ppy.sh/beatmaps/119779/covers/card@2x.jpg?1622068112",
+              "list": "https://assets.ppy.sh/beatmaps/119779/covers/list@2x.jpg?1622068112"
+            }
+          }
+        },
+        {
+          "id": 5157035,
+          "mods": "HD1",
+          "beatmapInfo": {
+            "onlineId": 5157035,
+            "difficultyName": "X",
+            "bpm": 180.0,
+            "length": 180000.0,
+            "starRating": 6.7626,
+            "metadata": {
+              "title": "Onomatomania feat.sekai",
+              "titleUnicode": "オノマトマニア (（feat.星界）)",
+              "artist": "Marmalade butcher",
+              "artistUnicode": "Marmalade butcher",
+              "author": {
+                "onlineId": 2917990,
+                "username": "jj986544591",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.2,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667",
+              "card": "https://assets.ppy.sh/beatmaps/2384905/covers/card@2x.jpg?1758891667",
+              "list": "https://assets.ppy.sh/beatmaps/2384905/covers/list@2x.jpg?1758891667"
+            }
+          }
+        },
+        {
+          "id": 4392073,
+          "mods": "HD2",
+          "beatmapInfo": {
+            "onlineId": 4392073,
+            "difficultyName": "What What",
+            "bpm": 170.0,
+            "length": 197000.0,
+            "starRating": 6.13943,
+            "metadata": {
+              "title": "What What",
+              "titleUnicode": "뭔데 뭔데",
+              "artist": "Im Chang Jung",
+              "artistUnicode": "임창정",
+              "author": {
+                "onlineId": 7178423,
+                "username": "Teacchyyy",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "임창정 im chang jung 2001 different color 원상우 korea korean pop k-pop",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 4.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816",
+              "card": "https://assets.ppy.sh/beatmaps/2094662/covers/card@2x.jpg?1735390816",
+              "list": "https://assets.ppy.sh/beatmaps/2094662/covers/list@2x.jpg?1735390816"
+            }
+          }
+        },
+        {
+          "id": 5157035,
+          "mods": "HD3",
+          "beatmapInfo": {
+            "onlineId": 5157035,
+            "difficultyName": "X",
+            "bpm": 180.0,
+            "length": 180000.0,
+            "starRating": 6.7626,
+            "metadata": {
+              "title": "Onomatomania feat.sekai",
+              "titleUnicode": "オノマトマニア (（feat.星界）)",
+              "artist": "Marmalade butcher",
+              "artistUnicode": "Marmalade butcher",
+              "author": {
+                "onlineId": 2917990,
+                "username": "jj986544591",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 9.2,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667",
+              "card": "https://assets.ppy.sh/beatmaps/2384905/covers/card@2x.jpg?1758891667",
+              "list": "https://assets.ppy.sh/beatmaps/2384905/covers/list@2x.jpg?1758891667"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "HR1",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        },
+        {
+          "id": 5677214,
+          "mods": "HR2",
+          "beatmapInfo": {
+            "onlineId": 5677214,
+            "difficultyName": "Super Saturated Syringing",
+            "bpm": 160.0,
+            "length": 109000.0,
+            "starRating": 5.83321,
+            "metadata": {
+              "title": "Romari Time!",
+              "titleUnicode": "海露欢游",
+              "artist": "HOYO-MiX",
+              "artistUnicode": "HOYO-MiX",
+              "author": {
+                "onlineId": 959763,
+                "username": "Flask",
+                "countryString": "Unknown"
+              },
+              "source": "Genshin Impact",
+              "tags": "ロマリ・タイム！ 原神 海露歡游 hoyoverse sigewinne 希格雯 soc5 summer osu cup 5 rd reverse draft qf hr2 electronic video game instrumental [shk]sparknight sparknights",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.8,
+              "overallDifficulty": 8.8,
+              "approachRate": 9.3,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554",
+              "card": "https://assets.ppy.sh/beatmaps/2555901/covers/card@2x.jpg?1785678554",
+              "list": "https://assets.ppy.sh/beatmaps/2555901/covers/list@2x.jpg?1785678554"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "HR3",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        },
+        {
+          "id": 1000684,
+          "mods": "DT1",
+          "beatmapInfo": {
+            "onlineId": 1000684,
+            "difficultyName": "Catharsis",
+            "bpm": 178.0,
+            "length": 316000.0,
+            "starRating": 5.77005,
+            "metadata": {
+              "title": "Back to Marie",
+              "titleUnicode": "Back to Marie",
+              "artist": "Kumagai Eri(cv.Seto Asami)",
+              "artistUnicode": "熊谷絵里（cv.瀬戸麻沙美）",
+              "author": {
+                "onlineId": 4369739,
+                "username": "Yunomi",
+                "countryString": "Unknown"
+              },
+              "source": "音楽少女",
+              "tags": "electro.muster adore deetz sukinathan ongaku shoujo taishi cosmic record",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 8.5,
+              "approachRate": 9.2,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/467761/covers/cover@2x.jpg?1622104855",
+              "card": "https://assets.ppy.sh/beatmaps/467761/covers/card@2x.jpg?1622104855",
+              "list": "https://assets.ppy.sh/beatmaps/467761/covers/list@2x.jpg?1622104855"
+            }
+          }
+        },
+        {
+          "id": 1580739,
+          "mods": "DT2",
+          "beatmapInfo": {
+            "onlineId": 1580739,
+            "difficultyName": "Mirash's Another",
+            "bpm": 165.0,
+            "length": 118000.0,
+            "starRating": 4.83225,
+            "metadata": {
+              "title": "NEW GENERATION -mou, omae shika mienai-",
+              "titleUnicode": "NEW GENERATION -もう、お前しか見えない-",
+              "artist": "SUPER STAR -MITSURU-",
+              "artistUnicode": "SUPER STAR 満-MITSURU-",
+              "author": {
+                "onlineId": 2377881,
+                "username": "Yales",
+                "countryString": "Unknown"
+              },
+              "source": "beatmania IIDX 15 DJ TROOPERS",
+              "tags": "ayyri eiri- [r] ron mirash eurobeat bemani konami only one act now i can't see anybody else but you",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.0,
+              "overallDifficulty": 7.5,
+              "approachRate": 8.0,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/739888/covers/cover@2x.jpg?1650662722",
+              "card": "https://assets.ppy.sh/beatmaps/739888/covers/card@2x.jpg?1650662722",
+              "list": "https://assets.ppy.sh/beatmaps/739888/covers/list@2x.jpg?1650662722"
+            }
+          }
+        },
+        {
+          "id": 5677214,
+          "mods": "DT3",
+          "beatmapInfo": {
+            "onlineId": 5677214,
+            "difficultyName": "Super Saturated Syringing",
+            "bpm": 160.0,
+            "length": 109000.0,
+            "starRating": 5.83321,
+            "metadata": {
+              "title": "Romari Time!",
+              "titleUnicode": "海露欢游",
+              "artist": "HOYO-MiX",
+              "artistUnicode": "HOYO-MiX",
+              "author": {
+                "onlineId": 959763,
+                "username": "Flask",
+                "countryString": "Unknown"
+              },
+              "source": "Genshin Impact",
+              "tags": "ロマリ・タイム！ 原神 海露歡游 hoyoverse sigewinne 希格雯 soc5 summer osu cup 5 rd reverse draft qf hr2 electronic video game instrumental [shk]sparknight sparknights",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 5.0,
+              "circleSize": 4.8,
+              "overallDifficulty": 8.8,
+              "approachRate": 9.3,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554",
+              "card": "https://assets.ppy.sh/beatmaps/2555901/covers/card@2x.jpg?1785678554",
+              "list": "https://assets.ppy.sh/beatmaps/2555901/covers/list@2x.jpg?1785678554"
+            }
+          }
+        },
+        {
+          "id": 2274038,
+          "mods": "TB",
+          "beatmapInfo": {
+            "onlineId": 2274038,
+            "difficultyName": "Fragments",
+            "bpm": 220.0,
+            "length": 302000.0,
+            "starRating": 6.46708,
+            "metadata": {
+              "title": "Kagaribito",
+              "titleUnicode": "カガリビト",
+              "artist": "F9",
+              "artistUnicode": "F9",
+              "author": {
+                "onlineId": 689997,
+                "username": "captin1",
+                "countryString": "Unknown"
+              },
+              "source": "",
+              "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
+              "previewTime": -1
+            },
+            "difficulty": {
+              "drainRate": 6.0,
+              "circleSize": 4.2,
+              "overallDifficulty": 8.6,
+              "approachRate": 9.6,
+              "sliderMultiplier": 1.0,
+              "sliderTickRate": 1.0
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205",
+              "card": "https://assets.ppy.sh/beatmaps/1087452/covers/card@2x.jpg?1622178205",
+              "list": "https://assets.ppy.sh/beatmaps/1087452/covers/list@2x.jpg?1622178205"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "matches": [
+    {
+      "id": 1,
+      "roundId": "swiss-round-1",
+      "team1Acronym": "貓鴨",
+      "team1Score": null,
+      "team2Acronym": "我超威了",
+      "team2Score": null,
+      "completed": false,
+      "losers": false,
+      "current": false,
+      "date": "2026-09-20T19:30:30+08:00",
+      "pointsToWin": 5,
+      "winnerColour": "null",
+      "position": {
+        "x": 100,
+        "y": 40
+      }
+    }
+  ],
+  "progressions": []
+}

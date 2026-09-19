@@ -1,0 +1,160 @@
+/* =========================================
+   Playing 子页面
+   ========================================= */
+
+[data-page="playing"] .pl-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* =========================================
+   右下：四维 / BPM 面板
+   样式完全复制 showcase 的 .stats-panel
+   ========================================= */
+
+[data-page="playing"] .pl-stats-panel {
+  position: absolute;
+  left: 960px;
+  top: 980px;
+  width: 960px;
+  max-width: 100%;
+  height: 100px;
+  border-radius: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3px;
+  font-size: 17px;
+  line-height: 1.2;
+  color: #f8f8f6;
+
+  background: rgba(6, 10, 18, 0.15);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  border: 1px solid rgba(140, 185, 255, 0.15);
+  padding: 0 40px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+
+  z-index: 2;
+}
+
+[data-page="playing"] .pl-stats-row {
+  display: flex;
+  align-items: baseline;
+}
+
+[data-page="playing"] .pl-stats-col--left {
+  flex: 0 0 210px;
+  width: 210px;
+}
+
+[data-page="playing"] .pl-stats-col--right {
+  margin-left: 5px;
+}
+
+[data-page="playing"] .pl-stats-panel .pl-label {
+  opacity: .85;
+}
+
+[data-page="playing"] .pl-stats-panel strong {
+  font-weight: 700;
+  color: #f8f8f6;
+}
+
+/* ---------- 最右侧 OSU! 徽章（与 showcase 一致） ---------- */
+[data-page="playing"] .osu-badge {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(calc(-50% + 5px));
+
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 3px solid #f8f8f6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+  font-weight: 800;
+  font-style: normal;
+  letter-spacing: 0.5px;
+  color: #f8f8f6;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* =========================================
+   左下：地图卡片
+   样式完全复制 showcase 的 .map-card
+   ========================================= */
+
+[data-page="playing"] .pl-map-card {
+  position: absolute;
+  left: 0;
+  top: 980px;
+  width: 960px;
+  max-width: 100%;
+  height: 100px;
+  border-radius: 0;
+  overflow: hidden;
+  background-color: #1a2130;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  padding: 0 40px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: #f8f8f6;
+  box-shadow:
+    inset 0 0 28px 4px #0008,
+    0 0 8px rgba(0, 0, 0, 0.67);
+
+  transition: opacity .5s ease;
+  z-index: 2;
+}
+
+
+/* =========================================
+   状态 B：地图卡片堆到 stats-panel 上方
+   ========================================= */
+
+[data-page="playing"] .pl-stage.state-b .pl-map-card {
+  left: 960px;
+  top: 880px;
+}
+
+/* =========================================
+   过渡：淡出 → 换位 → 淡入
+   ========================================= */
+
+[data-page="playing"] .pl-stage.pl-transitioning .pl-map-card {
+  opacity: 0;
+}
+
+[data-page="playing"] .pl-stage.pl-no-transition .pl-map-card {
+  transition: none !important;
+}
+
+.pl-map-card,
+.pl-map-card *,
+.pl-stats-panel,
+.pl-stats-panel * {
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}

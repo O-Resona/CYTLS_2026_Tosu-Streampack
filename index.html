@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>CYT 2026: Lazer Scramble</title>
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/pages/showcase.css">
+  <link rel="stylesheet" href="css/pages/mappool.css">
+  <link rel="stylesheet" href="css/pages/showcase-countdown.css">
+  <link rel="stylesheet" href="css/pages/match-countdown.css">
+  <link rel="stylesheet" href="css/pages/playing.css">
+  <link rel="stylesheet" href="css/pages/bracket.css">
+</head>
+<body>
+
+  <div class="stage" id="stage">
+
+    <!-- 左侧导航 -->
+    <aside class="sidebar">
+      <button class="nav-btn active" data-target="showcase">Showcase</button>
+      <button class="nav-btn" data-target="playing">Playing</button>
+      <button class="nav-btn" data-target="mappool">Mappool</button>
+      <button class="nav-btn" data-target="showcase-countdown">Showcase Countdown</button>
+      <button class="nav-btn" data-target="match-countdown">Match Countdown</button>
+      <button class="nav-btn" data-target="bracket">Bracket</button>
+
+      <!-- Mappool 控制面板：仅 mappool 页面激活时显示 -->
+      <div class="mappool-panel" id="mappoolPanel" hidden>
+        <div class="mappool-panel__title">控制面板</div>
+
+        <div class="round-selector">
+          <div class="round-label">当前轮次</div>
+          <div class="custom-select">
+            <div class="selected-option" id="mappoolSelectedRound">—</div>
+            <div class="options-container" id="mappoolRoundOptions"></div>
+          </div>
+        </div>
+
+        <button type="button" id="mappoolRedBanBtn"   class="mp-btn mp-btn--red active">RED BAN</button>
+        <button type="button" id="mappoolBlueBanBtn"  class="mp-btn mp-btn--blue">BLUE BAN</button>
+        <button type="button" id="mappoolRedPickBtn"  class="mp-btn mp-btn--red-pick">RED PICK</button>
+        <button type="button" id="mappoolBluePickBtn" class="mp-btn mp-btn--blue-pick">BLUE PICK</button>
+        <button type="button" id="mappoolResetBtn"    class="mp-btn mp-btn--reset">重置所有</button>
+      </div>
+    </aside>
+
+    <!-- 右侧：子页面在这里被注入 -->
+    <main class="main" id="pageRoot">
+
+      <!-- 全局背景：img 在下，video 在上，二者都在所有 .page 之下 -->
+      <img class="global-bg-image" data-bg="main" src="src/bg.png"  alt="">
+      <img class="global-bg-image" data-bg="alt"  src="src/bg2.png" alt="" style="display:none">
+      <img class="global-bg-image" data-bg="third" src="src/bg3.png" alt="" style="display:none">
+
+      <video class="global-bg-video" data-bg="main" src="src/bg.mp4"  muted loop autoplay playsinline preload="auto"></video>
+      <video class="global-bg-video" data-bg="alt2" src="src/bg2.mp4" muted loop autoplay playsinline preload="auto" style="display:none"></video>
+
+      <div class="global-bg-cover"></div>
+    </main>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+
+</body>
+</html>

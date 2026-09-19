@@ -1,0 +1,63 @@
+/* =========================================
+   Showcase Countdown 子页面
+   ========================================= */
+
+[data-page="showcase-countdown"] .sc-layout {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  color: #f8f8f6;
+  text-align: center;
+  user-select: none;
+}
+
+/* ---------- 第一行：主标题 ---------- */
+
+[data-page="showcase-countdown"] .sc-title {
+  font-size: 80px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1.1;
+  color: #f8f8f6;
+  text-shadow:
+    0 0 40px rgba(77, 155, 255, .55),
+    0 4px 24px rgba(0, 0, 0, .7);
+}
+
+/* ---------- 第二行：副标题 ---------- */
+
+[data-page="showcase-countdown"] .sc-subtitle {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  color: #9ec5ff;
+  opacity: 0.85;
+  text-shadow: 0 0 20px rgba(77, 155, 255, .4);
+  margin-top: -8px;   /* 拉近和主标题的距离 */
+}
+
+/* ---------- 第三行：倒计时 ---------- */
+
+[data-page="showcase-countdown"] .sc-timer {
+  margin-top: 32px;
+  font-size: 140px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: #f8f8f6;
+  text-shadow:
+    0 0 50px rgba(77, 155, 255, .55),
+    0 6px 30px rgba(0, 0, 0, .75);
+}
+
+[data-page="showcase-countdown"],
+[data-page="showcase-countdown"] * {
+  font-family: 'SourceHanSerif', "Songti SC", "SimSun", serif;
+}

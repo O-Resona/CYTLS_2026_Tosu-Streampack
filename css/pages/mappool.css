@@ -1,0 +1,355 @@
+/* =========================================
+   Mappool 子页面
+   ========================================= */
+
+/* ---------- 图池区 ---------- */
+
+[data-page="mappool"] .mappool-wrapper {
+  position: absolute;      /* ← 修复：让卡片压在背景之上 */
+  inset: 0;
+  z-index: 1;
+
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+[data-page="mappool"] .mappool-empty {
+  margin-top: 200px;
+  color: #5c6a7e;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+/* ---------- 行 ---------- */
+
+[data-page="mappool"] .mapRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 32.4px;
+}
+
+[data-page="mappool"] .mappool-wrapper.is-compact .mapRow {
+  margin-bottom: 20px;
+}
+
+/* ---------- 地图卡 ---------- */
+
+[data-page="mappool"] .mapContainer {
+  width: 565px;
+  height: 67px;
+  background: no-repeat center center;
+  background-size: cover;
+  font-size: 11pt;
+  color: #f8f8f6;
+  border-radius: 35px;
+  cursor: pointer;
+  transition: box-shadow .3s ease, transform .2s ease;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin: 0 8.5px;
+}
+
+[data-page="mappool"] .mapContainer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}
+
+[data-page="mappool"] .mapContainer.blueBorder {
+  box-shadow:
+    inset 0 0 0 4pt #147aff,
+    0 0 0 5pt #147aff;
+}
+
+[data-page="mappool"] .mapContainer.redBorder {
+  box-shadow:
+    inset 0 0 0 4pt #fa0000,
+    0 0 0 5pt #fa0000;
+}
+
+/* ---------- 内容 ---------- */
+
+[data-page="mappool"] .mapContent {
+  display: flex;
+  background-color: rgba(0, 0, 0, .4);
+  width: 100%;
+  height: 100%;
+  border-radius: 35px;
+  position: relative;
+}
+
+[data-page="mappool"] .mapContent.banned {
+  background-color: rgba(0, 0, 0, .8);
+}
+
+[data-page="mappool"] .mapContent.banned .mapMetadata,
+[data-page="mappool"] .mapContent.banned .modImgContainer {
+  opacity: .3;
+}
+
+/* ---------- 闪烁 ---------- */
+
+@keyframes flashWhite {
+  0%, 18%, 33%, 48%, 63%, 78%   { background-color: rgba(0, 0, 0, .4); }
+  10%, 25%, 40%, 55%, 70%, 85%  { background-color: rgba(255, 255, 255, .6); }
+  8%, 15%, 23%, 30%, 38%, 45%,
+  53%, 60%, 68%, 75%, 83%, 90%  { background-color: rgba(70, 70, 70, .4); }
+  100%                          { background-color: rgba(70, 70, 70, 0); }
+}
+
+[data-page="mappool"] .mapContent.flashingWhite {
+  animation: flashWhite 4s ease-in-out;
+}
+
+/* ---------- 元数据 ---------- */
+
+[data-page="mappool"] .mapMetadata {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  padding: 0 10px;
+}
+
+[data-page="mappool"] .mapDetailsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+  width: 100%;
+}
+
+[data-page="mappool"] .mapDetails {
+  margin: 0 10px;
+  font-size: 10pt;
+  text-align: center;
+}
+
+/* ---------- mod 图标 ---------- */
+
+[data-page="mappool"] .modImgContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 120px;
+}
+
+[data-page="mappool"] .modImgWrapper {
+  margin-right: 15px;
+  position: relative;
+  width: 80px;
+  height: 35px;
+}
+
+[data-page="mappool"] .modImgWrapper img {
+  width: 80px;
+  height: 35px;
+  object-fit: contain;
+}
+
+[data-page="mappool"] .banMap {
+  min-width: 20px;
+  height: 100%;
+  background-color: transparent;
+}
+
+[data-page="mappool"] .bold {
+  font-weight: 700;
+}
+
+/* =========================================
+   Mappool 控制面板（位于 sidebar 底部）
+   ========================================= */
+
+.mappool-panel {
+  margin-top: auto;           /* 推到底部 */
+  padding-top: 16px;
+  border-top: 1px solid #1c2230;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mappool-panel[hidden] {
+  display: none !important;
+}
+
+.mappool-panel__title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8996a8;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* ---------- 轮次选择器 ---------- */
+
+.mappool-panel .round-selector {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.mappool-panel .round-label {
+  font-size: 11px;
+  color: #8996a8;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.mappool-panel .custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.mappool-panel .selected-option {
+  width: 100%;
+  padding: 10px 12px;
+  background: #1a2130;
+  border: 1px solid #232b39;
+  color: #dbe6f5;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: background .15s ease;
+}
+
+.mappool-panel .selected-option:hover {
+  background: #232b39;
+}
+
+.mappool-panel .selected-option::after {
+  content: "▼";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: #8996a8;
+}
+
+.mappool-panel .options-container {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #1a2130;
+  border: 1px solid #232b39;
+  border-radius: 8px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height .25s ease, opacity .2s ease;
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+}
+
+.mappool-panel .options-container.active {
+  max-height: 260px;
+  overflow-y: auto;
+  opacity: 1;
+}
+
+.mappool-panel .custom-option {
+  padding: 9px 12px;
+  font-size: 13px;
+  color: #dbe6f5;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(35, 43, 57, .6);
+  transition: background .15s ease;
+}
+
+.mappool-panel .custom-option:last-child {
+  border-bottom: none;
+}
+
+.mappool-panel .custom-option:hover {
+  background: #232b39;
+}
+
+.mappool-panel .custom-option.selected {
+  background: #4d9bff;
+  color: #f8f8f6;
+}
+
+/* ---------- 按钮 ---------- */
+
+.mappool-panel .mp-btn {
+  width: 100%;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid #232b39;
+  background: #141922;
+  color: #dbe6f5;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.mappool-panel .mp-btn:hover {
+  background: #1a2130;
+  border-color: #2f3a4d;
+}
+
+.mappool-panel .mp-btn.active {
+  box-shadow: 0 0 0 2px #4d9bff;
+}
+
+.mappool-panel .mp-btn--red {
+  background: rgba(255, 107, 107, .12);
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, .35);
+}
+.mappool-panel .mp-btn--red:hover {
+  background: rgba(255, 107, 107, .2);
+}
+
+.mappool-panel .mp-btn--blue {
+  background: rgba(77, 150, 255, .12);
+  color: #4d96ff;
+  border-color: rgba(77, 150, 255, .35);
+}
+.mappool-panel .mp-btn--blue:hover {
+  background: rgba(77, 150, 255, .2);
+}
+
+.mappool-panel .mp-btn--red-pick {
+  background: rgba(255, 142, 142, .12);
+  color: #ff8e8e;
+  border-color: rgba(255, 142, 142, .35);
+}
+.mappool-panel .mp-btn--red-pick:hover {
+  background: rgba(255, 142, 142, .2);
+}
+
+.mappool-panel .mp-btn--blue-pick {
+  background: rgba(107, 168, 255, .12);
+  color: #6ba8ff;
+  border-color: rgba(107, 168, 255, .35);
+}
+.mappool-panel .mp-btn--blue-pick:hover {
+  background: rgba(107, 168, 255, .2);
+}
+
+.mappool-panel .mp-btn--reset {
+  background: #232b39;
+  color: #dbe6f5;
+  margin-top: 4px;
+}
+.mappool-panel .mp-btn--reset:hover {
+  background: #2d3648;
+}
