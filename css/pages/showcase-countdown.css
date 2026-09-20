@@ -10,7 +10,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 36px;             /* ← 24 → 36，配合更大字号 */
   color: #f8f8f6;
   text-align: center;
   user-select: none;
@@ -19,9 +19,9 @@
 /* ---------- 第一行：主标题 ---------- */
 
 [data-page="showcase-countdown"] .sc-title {
-  font-size: 80px;
+  font-size: 110px;
   font-weight: 900;
-  letter-spacing: 4px;
+  letter-spacing: 5px;
   line-height: 1.1;
   color: #f8f8f6;
   text-shadow:
@@ -29,33 +29,54 @@
     0 4px 24px rgba(0, 0, 0, .7);
 }
 
-/* ---------- 第二行：副标题 ---------- */
-
-[data-page="showcase-countdown"] .sc-subtitle {
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: 10px;
-  text-transform: uppercase;
-  color: #9ec5ff;
-  opacity: 0.85;
-  text-shadow: 0 0 20px rgba(77, 155, 255, .4);
-  margin-top: -8px;   /* 拉近和主标题的距离 */
-}
-
 /* ---------- 第三行：倒计时 ---------- */
 
 [data-page="showcase-countdown"] .sc-timer {
-  margin-top: 32px;
-  font-size: 140px;
+  font-size: 200px;
   font-weight: 900;
-  letter-spacing: 6px;
-  font-variant-numeric: tabular-nums;
   line-height: 1;
   color: #f8f8f6;
   text-shadow:
     0 0 50px rgba(77, 155, 255, .55),
     0 6px 30px rgba(0, 0, 0, .75);
+
+  display: grid;
+  grid-template-columns: 0.65em 0.65em 0.45em 0.65em 0.65em;
+  justify-content: center;
+  align-items: baseline;
 }
+
+[data-page="showcase-countdown"] .sc-digit {
+  text-align: center;
+}
+
+[data-page="showcase-countdown"] .sc-colon {
+  text-align: center;
+  opacity: 0.85;
+}
+
+/* ---------- 第二行：副标题（贴底居中） ---------- */
+
+[data-page="showcase-countdown"] .sc-subtitle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  z-index: 1;
+
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+
+  color: #3e44ce; 
+  text-shadow: 0 0 16px rgba(62, 68, 206, .5);
+}
+
+/* =========================================
+   字体：整页使用思源宋体
+   ========================================= */
 
 [data-page="showcase-countdown"],
 [data-page="showcase-countdown"] * {

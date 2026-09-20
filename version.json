@@ -1,0 +1,13 @@
+{
+  "modules": {
+    "source": {
+      "version": "0.1.0"
+    },
+    "tournamentjson": {
+      "version": "2026.0920.1"
+    },
+    "core": {
+      "version": "0.1.0"
+    }
+  }
+}

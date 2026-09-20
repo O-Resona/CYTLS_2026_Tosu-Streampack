@@ -676,7 +676,7 @@
         {
           "id": 986375,
           "mods": "LM1",
-          "specialmods": "Barrel_Roll",
+          "specialmods": ["Barrel_Roll"],
           "beatmapInfo": {
             "onlineId": 986375,
             "difficultyName": "Ex",
@@ -715,7 +715,7 @@
         {
           "id": 307410,
           "mods": "LM2",
-          "specialmods": "Traceable",
+          "specialmods": ["Traceable", "Barrel_Roll"],
           "beatmapInfo": {
             "onlineId": 307410,
             "difficultyName": "Extra",
@@ -754,7 +754,7 @@
         {
           "id": 5395611,
           "mods": "LM3",
-          "specialmods": "Grow",
+          "specialmods": ["Grow"],
           "beatmapInfo": {
             "onlineId": 5395611,
             "difficultyName": "Pastel Prism",

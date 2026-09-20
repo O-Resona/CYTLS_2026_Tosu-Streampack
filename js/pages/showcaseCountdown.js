@@ -17,14 +17,13 @@
    ========================================= */
 
 // 第一行主标题（同时会广播到 localStorage，供其它页面匹配轮次）
-const TITLE = 'Qualifier ShowCase';
+const TITLE = 'Qualifier Showcase';
 
 // 第二行副标题
 const SUBTITLE = 'starting soon';
 
 // 倒计时归零的目标时间（ISO 8601，带时区）
-// 例：'2026-09-19T13:00:00+08:00'
-const TARGET_TIME_ISO = '2026-09-19T13:00:00+08:00';
+const TARGET_TIME_ISO = '2026-09-20T15:20:00+08:00';
 
 /* =========================================
    ▲▲▲ 手动配置区结束 ▲▲▲
@@ -66,17 +65,25 @@ export function initShowcaseCountdown() {
 
   /* ---------- 倒计时 ---------- */
 
-  function tick() {
-    if (!elTimer) return;
+function tick() {
+  if (!elTimer) return;
 
-    let diff = targetTime - Date.now();
-    if (!Number.isFinite(diff) || diff < 0) diff = 0;
+  let diff = targetTime - Date.now();
+  if (!Number.isFinite(diff) || diff < 0) diff = 0;
 
-    const totalSec = Math.floor(diff / 1000);
-    const m = Math.floor(totalSec / 60);
-    const s = totalSec % 60;
+  const totalSec = Math.floor(diff / 1000);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
 
-    elTimer.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  const mm = String(m).padStart(2, '0');
+  const ss = String(s).padStart(2, '0');
+
+  elTimer.innerHTML =
+    `<span class="sc-digit">${mm[0]}</span>` +
+    `<span class="sc-digit">${mm[1]}</span>` +
+    `<span class="sc-colon">:</span>` +
+    `<span class="sc-digit">${ss[0]}</span>` +
+    `<span class="sc-digit">${ss[1]}</span>`;
   }
 
   /* ---------- 生命周期 ---------- */

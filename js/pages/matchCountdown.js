@@ -89,25 +89,26 @@ function renderStatic(match) {
 
   /* ---------- Tick ---------- */
 
-  function tick() {
-    if (!targetTime) {
-      elHours.textContent   = '00';
-      elMinutes.textContent = '00';
-      elSeconds.textContent = '00';
-      return;
-    }
+function tick() {
+  if (!elTimer) return;
 
-    let diff = targetTime - Date.now();
-    if (diff < 0) diff = 0;
+  let diff = targetTime - Date.now();
+  if (!Number.isFinite(diff) || diff < 0) diff = 0;
 
-    const totalSec = Math.floor(diff / 1000);
-    const hours   = Math.floor((totalSec % 86400) / 3600);
-    const minutes = Math.floor((totalSec % 3600) / 60);
-    const seconds = totalSec % 60;
+  const totalSec = Math.floor(diff / 1000);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
 
-    elHours.textContent   = pad2(hours);
-    elMinutes.textContent = pad2(minutes);
-    elSeconds.textContent = pad2(seconds);
+  const mm = String(m).padStart(2, '0');
+  const ss = String(s).padStart(2, '0');
+
+  // 每个字符独立 span，宽度由 CSS 控制
+  elTimer.innerHTML =
+    `<span class="sc-digit">${mm[0]}</span>` +
+    `<span class="sc-digit">${mm[1]}</span>` +
+    `<span class="sc-colon">:</span>` +
+    `<span class="sc-digit">${ss[0]}</span>` +
+    `<span class="sc-digit">${ss[1]}</span>`;
   }
 
   /* ---------- 生命周期 ---------- */

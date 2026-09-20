@@ -93,9 +93,6 @@
   overflow: hidden;
   position: relative;
   background-color: #1a2130;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
   box-sizing: border-box;
   padding: 0 40px;
   display: flex;
@@ -108,6 +105,34 @@
     0 0 8px rgba(0, 0, 0, 0.67);
 
   transition: box-shadow .4s ease;
+}
+
+/* 背景层：绝对定位填满卡片，独立做透明度过渡 */
+.map-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: opacity .5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.map-card__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* 卡片里的内容要浮在背景层之上 */
+.map-card__title,
+.map-card__meta,
+.map-card__special {
+  position: relative;
+  z-index: 1;
 }
 
 .map-card.redBorder {
@@ -154,7 +179,7 @@
 }
 
 .map-card__meta-item--mapper {
-  flex: 0 0 200px;
+  flex: 0 0 270px;
   width: 200px;
 }
 
@@ -180,21 +205,31 @@
   white-space: nowrap;
 }
 
-/* ---------- LM 特殊 mod 图标（卡片右侧居中） ---------- */
+/* ---------- LM 特殊 mod 图标 ---------- */
 
-.map-card__special {
+.map-card__specials {
   position: absolute;
   right: 30px;
   top: 50%;
   transform: translateY(-50%);
-  height: 50px;
-  width: auto;
-  max-width: 140px;
-  object-fit: contain;
   display: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1px;
+  width: max-content;
   pointer-events: none;
   user-select: none;
+  z-index: 1;
+}
+
+.map-card__special {
+  display: block;
+  height: 50px;
+  width: 72px;
+  object-fit: contain;
+  flex-shrink: 0; 
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  position: relative;
 }
 
 /* =========================================
@@ -263,8 +298,8 @@
 
 .stats-modlist {
   position: absolute;
-  left: 400px;              /* 数值列之后 */
-  right: 120px;             /* OSU 徽章之前 */
+  left: 450px;              /* 数值列之后 */
+  right: 100px;             /* OSU 徽章之前 */
   top: 25px;                /* 与第一行数据对齐 */
   font-size: 16px;
   font-weight: 600; 
@@ -275,6 +310,8 @@
 
   display: table;
   table-layout: auto;
+  border-spacing: 0 3px;
+  margin-top: -3px; 
 }
 
 .stats-modlist__row {
@@ -295,32 +332,25 @@
 }
 
 .stats-modlist__row span.is-active {
-  color: #3e44ce;
+  color: inherit;
   font-weight: 700;
+  text-shadow:
+    0 0 2px rgba(246, 219, 0, 0.95),
+    0 0 5px rgba(246, 219, 0, 0.7),
+    0 0 9px rgba(246, 219, 0, 0.35);
 }
 
-/* ---------- 最右侧 OSU! 徽章 ---------- */
+/* ---------- 最右侧 OSU 图标 ---------- */
 .osu-badge {
   position: absolute;
   right: 30px;
   top: 50%;
-  transform: translateY(calc(-50% + 5px));   /* ← 下移 5px */
+  transform: translateY(calc(-50% + 5px));
 
-  width: 58px;
   height: 58px;
-  border-radius: 50%;
-  border: 3px solid #f8f8f6;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 15px;
-  font-weight: 800;
-  font-style: normal;
-  letter-spacing: 0.5px;
-  color: #f8f8f6;
-  text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
 
   pointer-events: none;
   user-select: none;
@@ -331,4 +361,25 @@
 .stats-panel,
 .stats-panel * {
   font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+/* =========================================
+   绿幕（用于直播扣像）
+   ========================================= */
+
+.green-screen {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 102px;
+
+  width: 1472px;
+  height: 828px;
+
+  background: #00B140;
+  z-index: 4;
+
+  /* 可选：微调边缘，避免和卡片/背景产生视觉缝隙 */
+  border-radius: 0;
+  pointer-events: none;
 }
