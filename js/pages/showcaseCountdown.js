@@ -23,7 +23,7 @@ const TITLE = 'Qualifier Showcase';
 const SUBTITLE = 'starting soon';
 
 // 倒计时归零的目标时间（ISO 8601，带时区）
-const TARGET_TIME_ISO = '2026-09-20T15:20:00+08:00';
+const TARGET_TIME_ISO = '2026-09-21T01:30:00+08:00';
 
 /* =========================================
    ▲▲▲ 手动配置区结束 ▲▲▲
