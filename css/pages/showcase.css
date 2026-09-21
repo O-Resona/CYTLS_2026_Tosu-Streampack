@@ -179,7 +179,7 @@
 }
 
 .map-card__meta-item--mapper {
-  flex: 0 0 270px;
+  flex: 0 0 320px;
   width: 200px;
 }
 
@@ -193,15 +193,10 @@
 }
 
 .map-card__mapper {
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 150px;
 }
 
 .map-card__difficulty {
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

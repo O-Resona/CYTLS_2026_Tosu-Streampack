@@ -715,7 +715,7 @@
         {
           "id": 307410,
           "mods": "LM2",
-          "specialmods": ["Traceable", "Barrel_Roll"],
+          "specialmods": ["Traceable"],
           "beatmapInfo": {
             "onlineId": 307410,
             "difficultyName": "Extra",
@@ -881,9 +881,8 @@
               "artist": "ak+q",
               "artistUnicode": "ak+q",
               "author": {
-                "onlineId": 18130046,
-                "username": "6pXgEj3hc7Umj5H",
-                "countryString": "Unknown"
+                "onlineId": -1,
+                "username": "6pX et al."
               },
               "source": "",
               "tags": "osu! beatmapping world championship 2025 o!bwc obwc obwc25 obwc25qf qualifier round 6pxgej3hc7umj5h fowwo phyr pandize weoweet",
@@ -995,9 +994,8 @@
               "artist": "F9",
               "artistUnicode": "F9",
               "author": {
-                "onlineId": 689997,
-                "username": "captin1",
-                "countryString": "Unknown"
+                "onlineId": -1,
+                "username": "captin1, RLC"
               },
               "source": "",
               "tags": "whipstitching person millstones 2e hatsune miku vocaloid cover kiyono rlc collab japanese",
@@ -1071,9 +1069,8 @@
               "artist": "Kumagai Eri(cv.Seto Asami)",
               "artistUnicode": "熊谷絵里（cv.瀬戸麻沙美）",
               "author": {
-                "onlineId": 4369739,
-                "username": "Yunomi",
-                "countryString": "Unknown"
+                "onlineId": -1,
+                "username": "ac8129464363, Yunomi, Nathan"
               },
               "source": "音楽少女",
               "tags": "electro.muster adore deetz sukinathan ongaku shoujo taishi cosmic record",

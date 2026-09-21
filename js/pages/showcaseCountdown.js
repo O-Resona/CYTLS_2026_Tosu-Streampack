@@ -17,13 +17,13 @@
    ========================================= */
 
 // 第一行主标题（同时会广播到 localStorage，供其它页面匹配轮次）
-const TITLE = 'Qualifier Showcase';
+const TITLE = 'Qualifiers Showcase';
 
 // 第二行副标题
 const SUBTITLE = 'starting soon';
 
 // 倒计时归零的目标时间（ISO 8601，带时区）
-const TARGET_TIME_ISO = '2026-09-21T01:30:00+08:00';
+const TARGET_TIME_ISO = '2026-09-21T22:00:00+08:00';
 
 /* =========================================
    ▲▲▲ 手动配置区结束 ▲▲▲
