@@ -23,7 +23,7 @@ const TITLE = 'Qualifiers Showcase';
 const SUBTITLE = 'starting soon';
 
 // 倒计时归零的目标时间（ISO 8601，带时区）
-const TARGET_TIME_ISO = '2026-09-21T22:00:00+08:00';
+const TARGET_TIME_ISO = '2026-09-21T21:46:00+08:00';
 
 /* =========================================
    ▲▲▲ 手动配置区结束 ▲▲▲
@@ -63,7 +63,10 @@ export function initShowcaseCountdown() {
     }
   }
 
-  /* ---------- 倒计时 ---------- */
+/* ---------- 倒计时 ---------- */
+
+let transitionTriggered = false;
+let hasSeenNonZero = false;       // ← 新增：是否曾经有过剩余时间
 
 function tick() {
   if (!elTimer) return;
@@ -84,7 +87,19 @@ function tick() {
     `<span class="sc-colon">:</span>` +
     `<span class="sc-digit">${ss[0]}</span>` +
     `<span class="sc-digit">${ss[1]}</span>`;
+
+  // 记录「曾经有过剩余时间」
+  if (diff > 0) {
+    hasSeenNonZero = true;
   }
+
+  // 只有「曾经有过时间，现在归零」才触发转场
+  if (diff === 0 && hasSeenNonZero && !transitionTriggered) {
+    transitionTriggered = true;
+    stop();
+    playFinalTransition();
+  }
+}
 
   /* ---------- 生命周期 ---------- */
 
@@ -108,4 +123,61 @@ function tick() {
 
   pageEl.addEventListener('page:activated', start);
   pageEl.addEventListener('page:deactivated', stop);
+}
+
+/* =========================================
+   最终转场：Countdown → Showcase
+   ========================================= */
+
+function playFinalTransition() {
+  const finalBg   = document.getElementById('finalBg');
+  const finalFore = document.getElementById('finalFore');
+  if (!finalBg || !finalFore) return;
+
+  // 重置
+  finalBg.hidden = false;
+  finalFore.hidden = false;
+  finalBg.classList.remove('is-bg3-out');
+  finalFore.classList.remove('is-text-in', 'is-text2-in', 'is-cuts-in', 'is-text-out');
+  void finalBg.offsetWidth;
+
+  // 让当前 page 也淡出（和 bg3 同步，3s）
+  const currentPage = document.querySelector('.page.active');
+  if (currentPage) currentPage.classList.add('is-fading-out');
+
+  // t=0      bg3 + page 一起淡出（3s）
+  finalBg.classList.add('is-bg3-out');
+
+  // t=3000   text.png 淡入（1s）
+  setTimeout(() => finalFore.classList.add('is-text-in'), 3000);
+
+  // t=4000   text2.png 淡入（1s）
+  setTimeout(() => finalFore.classList.add('is-text2-in'), 4000);
+
+  // t=7000   （text2 完成后停留 2s）cut 从两侧滑入（1s）
+  setTimeout(() => finalFore.classList.add('is-cuts-in'), 7000);
+
+  // t=8000   cut 对齐 → 切页 + text/text2 消失
+  setTimeout(() => {
+    window.app?.router?.show('showcase');
+    finalBg.hidden = true;
+    finalFore.classList.add('is-text-out');      // ← text/text2 消失
+  }, 8000);
+
+  // t=9000   cut 停留结束 → 倒退滑出（1s）
+  setTimeout(() => {
+    finalFore.classList.remove('is-cuts-in');
+  }, 9000);
+
+  // t=10000  清理
+  setTimeout(() => {
+    finalFore.hidden = true;
+    finalBg.hidden = true;
+    finalBg.classList.remove('is-bg3-out');
+    finalFore.classList.remove('is-text-in', 'is-text2-in', 'is-cuts-in', 'is-text-out');
+
+    document.querySelectorAll('.page.is-fading-out').forEach(p => {
+      p.classList.remove('is-fading-out');
+    });
+  }, 10000);
 }

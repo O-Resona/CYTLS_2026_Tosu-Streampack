@@ -7,25 +7,36 @@
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/pages/showcase.css">
   <link rel="stylesheet" href="css/pages/mappool.css">
+  <link rel="stylesheet" href="css/pages/playing.css">
   <link rel="stylesheet" href="css/pages/showcase-countdown.css">
   <link rel="stylesheet" href="css/pages/match-countdown.css">
-  <link rel="stylesheet" href="css/pages/playing.css">
   <link rel="stylesheet" href="css/pages/bracket.css">
+  <!-- 如果 winner 以后有独立样式，在这里加： -->
+  <!-- <link rel="stylesheet" href="css/pages/winner.css"> -->
 </head>
 <body>
 
   <div class="stage" id="stage">
 
-    <!-- 左侧导航 -->
+    <!-- =====================================================
+         左侧导航 280 x 1080
+         ===================================================== -->
     <aside class="sidebar">
-      <button class="nav-btn active" data-target="showcase">Showcase</button>
-      <button class="nav-btn" data-target="playing">Playing</button>
-      <button class="nav-btn" data-target="mappool">Mappool</button>
-      <button class="nav-btn" data-target="showcase-countdown">Showcase Countdown</button>
-      <button class="nav-btn" data-target="match-countdown">Match Countdown</button>
-      <button class="nav-btn" data-target="bracket">Bracket</button>
 
-      <!-- Mappool 控制面板：仅 mappool 页面激活时显示 -->
+      <!-- 上半区 -->
+      <button class="nav-btn" data-target="bracket">Bracket</button>
+      <button class="nav-btn" data-target="match-countdown">Match Countdown</button>
+      <button class="nav-btn" data-target="mappool">Mappool</button>
+      <button class="nav-btn" data-target="playing">Playing</button>
+      <button class="nav-btn" data-target="winner">Winner</button>
+
+      <!-- 空行 + 下半区 -->
+      <button class="nav-btn nav-btn--gap-top" data-target="showcase-countdown">Showcase Countdown</button>
+      <button class="nav-btn" data-target="showcase">Showcase</button>
+
+      <!-- =====================================================
+           Mappool 控制面板：仅 mappool 页面激活时显示
+           ===================================================== -->
       <div class="mappool-panel" id="mappoolPanel" hidden>
         <div class="mappool-panel__title">控制面板</div>
 
@@ -43,21 +54,46 @@
         <button type="button" id="mappoolBluePickBtn" class="mp-btn mp-btn--blue-pick">BLUE PICK</button>
         <button type="button" id="mappoolResetBtn"    class="mp-btn mp-btn--reset">重置所有</button>
       </div>
+
     </aside>
 
-    <!-- 右侧：子页面在这里被注入 -->
+    <!-- =====================================================
+         右侧主区域 1920 x 1080
+         ===================================================== -->
     <main class="main" id="pageRoot">
 
-      <!-- 全局背景：img 在下，video 在上，二者都在所有 .page 之下 -->
-      <img class="global-bg-image" data-bg="main" src="src/bg.png"  alt="">
-      <img class="global-bg-image" data-bg="alt"  src="src/bg2.png" alt="" style="display:none">
-      <img class="global-bg-image" data-bg="third" src="src/bg3.png" alt="" style="display:none">
+      <!-- ---------- 全局背景媒体 ---------- -->
 
+      <!-- 视频：两个共存，靠 display 切换 -->
       <video class="global-bg-video" data-bg="main" src="src/bg.mp4"  muted loop autoplay playsinline preload="auto"></video>
       <video class="global-bg-video" data-bg="alt2" src="src/bg2.mp4" muted loop autoplay playsinline preload="auto" style="display:none"></video>
 
+      <!-- 图片：三张共存，靠 display 切换 -->
+      <img class="global-bg-image" data-bg="main"  src="src/bg.png"  alt="">
+      <img class="global-bg-image" data-bg="alt"   src="src/bg2.png" alt="" style="display:none">
+      <img class="global-bg-image" data-bg="third" src="src/bg3.png" alt="" style="display:none">
+
+      <!-- 覆盖层（用于纯色背景的页面，如 Showcase Countdown） -->
       <div class="global-bg-cover"></div>
+
+      <!-- ---------- 转场背景层：在 page 之下，含 bg4 / bg3 ---------- -->
+      <div class="final-bg" id="finalBg" hidden>
+        <img class="ft-bg4" src="src/bg4.png" alt="">
+        <img class="ft-bg3" src="src/bg3.png" alt="">
+      </div>
+
+      <!-- ---------- 各子页面将在此被 router 动态注入 ---------- -->
+
+      <!-- ---------- 转场前景层：在 page 之上 ---------- -->
+      <div class="final-fore" id="finalFore" hidden>
+        <img class="ft-text"  src="src/text.png"  alt="">
+        <img class="ft-text2" src="src/text2.png" alt="">
+        <img class="ft-cut"   src="src/cut.png"   alt="">
+        <img class="ft-cut2"  src="src/cut2.png"  alt="">
+      </div>
+
     </main>
+
   </div>
 
   <script type="module" src="js/main.js"></script>

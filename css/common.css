@@ -129,6 +129,10 @@ body {
   height: 26px;
 }
 
+.nav-btn--gap-top {
+  margin-top: 48px;      /* 上半区最后一个按钮下方留行 */
+}
+
 /* =========================================
    右侧主区域 1920 x 1080
    ========================================= */
@@ -206,6 +210,18 @@ body {
   animation: fadeOut .7s ease both;
 }
 
+/* 新增：page 慢速淡出（3s，用于转场） */
+.page.is-fading-out {
+  visibility: visible !important;
+  pointer-events: none !important;
+  animation: fadeOutSlow 3s ease forwards !important;
+}
+
+@keyframes fadeOutSlow {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
@@ -231,4 +247,125 @@ body {
   z-index: 4;
   pointer-events: none;
   user-select: none;
+}
+
+/* =========================================
+   最终转场层
+   ========================================= */
+
+/* ---------- 转场背景层（在 page 之下） ---------- */
+
+.final-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 3;                    /* 低于 .page(4)，高于全局 cover(2) */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.final-bg[hidden] {
+  display: none !important;
+}
+
+.final-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ft-bg4 {
+  z-index: 1;
+  filter: brightness(0.25);      /* 初始：明显偏暗 */
+  transition: filter 3s ease;    /* ease 曲线，平滑地从暗到亮 */
+}
+
+.ft-bg3 {
+  z-index: 2;
+  transition: opacity 3s cubic-bezier(0.9, 0, 0.95, 0.5);
+}
+
+.final-bg.is-bg3-out .ft-bg4 {
+  filter: brightness(1); 
+}
+
+.final-bg.is-bg3-out .ft-bg3 {
+  opacity: 0;
+}
+
+/* ---------- 转场前景层（在 page 之上） ---------- */
+
+.final-fore {
+  position: absolute;
+  inset: 0;
+  z-index: 5;                    /* 高于 .page(4) */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.final-fore[hidden] {
+  display: none !important;
+}
+
+.final-fore img {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- 全屏文字 ---------- */
+
+.ft-text,
+.ft-text2 {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.ft-text  { z-index: 1; }
+.ft-text2 { z-index: 2; }
+
+.final-fore.is-text-in  .ft-text  { opacity: 1; }
+.final-fore.is-text2-in .ft-text2 { opacity: 1; }
+
+/* ---------- cut 半屏（相对 .main 定位） ---------- */
+
+.ft-cut {
+  top: 0;
+  left: 0;                        /* 左边缘在 .main 左边缘 */
+  width: 960px;
+  height: 1080px;
+  object-fit: cover;
+  z-index: 3;
+  transform: translateX(-100%);   /* 右边缘对齐 .main 左边缘，完全在页外 */
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ft-cut2 {
+  top: 0;
+  left: 100%;                     /* 左边缘对齐 .main 右边缘 */
+  width: 960px;
+  height: 1080px;
+  object-fit: cover;
+  z-index: 3;
+  transform: translateX(0);       /* 完全在页外 */
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* cut 滑入对齐：左 cut 到 0，右 cut 向左移自身宽度 */
+.final-fore.is-cuts-in .ft-cut  { transform: translateX(0); }
+.final-fore.is-cuts-in .ft-cut2 { transform: translateX(-100%); }
+
+/* text/text2 消失（cut 对齐后触发） */
+.final-fore.is-text-out .ft-text,
+.final-fore.is-text-out .ft-text2 {
+  opacity: 0;
+  transition: opacity .3s ease;
 }

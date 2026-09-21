@@ -12,6 +12,7 @@ import { initShowcaseCountdown } from './pages/showcaseCountdown.js';
 import { initMatchCountdown }    from './pages/matchCountdown.js';
 import { initPlaying } from './pages/playing.js';
 import { initBracket } from './pages/bracket.js';
+import { initWinner } from './pages/winner.js';
 
 /* =========================================
    1. 创建服务实例
@@ -42,18 +43,14 @@ osuSocket.connect();
    ========================================= */
 
 const pages = {
-  'showcase': {
-    html: 'pages/showcase.html',
-    init: () => initShowcase({ mapInfo, tokenStore, tournamentState, tournamentData }),
-    // 默认：video 'main' + image 'main'
-  },
-  'playing': {
-    html: 'pages/playing.html',
-    init: () => initPlaying({ tokenStore, tournamentState, mapInfo, tournamentData}),
-  },
   'bracket': {
     html: 'pages/bracket.html',
     init: () => initBracket({ tournamentData }),
+    bg: 'alt',
+  },
+  'match-countdown': {
+    html: 'pages/match-countdown.html',
+    init: () => initMatchCountdown({ tournamentData }),
     bg: 'alt',
   },
   'mappool': {
@@ -61,16 +58,23 @@ const pages = {
     init: () => initMappool({ tournamentData }),
     bg: 'alt',
   },
+  'playing': {
+    html: 'pages/playing.html',
+    init: () => initPlaying({ tokenStore, tournamentState, mapInfo, tournamentData }),
+  },
+  'winner': {
+    html: 'pages/winner.html',
+    init: () => initWinner(),
+  },
   'showcase-countdown': {
     html: 'pages/showcase-countdown.html',
     init: () => initShowcaseCountdown(),
     video: 'alt2',
     bg: 'third',
   },
-  'match-countdown': {
-    html: 'pages/match-countdown.html',
-    init: () => initMatchCountdown({ tournamentData }),
-    bg: 'alt',
+  'showcase': {
+    html: 'pages/showcase.html',
+    init: () => initShowcase({ mapInfo, tokenStore, tournamentState, tournamentData }),
   },
 };
 
@@ -119,13 +123,14 @@ async function boot() {
 
   initBgVideo();
 
-  createRouter({
+  const router = createRouter({
     pages,
     deps: { osuSocket, tokenStore, tournamentState, mapInfo, tournamentData },
   });
 
-  // 暴露到全局，便于调试 / 后续页面接入
-  window.app = { osuSocket, tokenStore, tournamentState, mapInfo, tournamentData };
+  window.app = {
+    osuSocket, tokenStore, tournamentState, mapInfo, tournamentData, router,
+  };
 }
 
 if (document.readyState === 'loading') {
