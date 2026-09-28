@@ -1,13 +1,11 @@
 /**
  * Match Countdown 子页面
  *
- * 从 tournamentData.getMatches() 里选下一场比赛，自动倒计时。
- *
- * 选择优先级：
- *   1. current === true 的对局
- *   2. completed === false 且 date > now 中最早的一场
- *   3. 全部过期时，取最早的一场（仅显示日期，倒计时归零）
+ * 从 localStorage['cyt2026.currentMatchId'] 读取当前比赛。
  */
+
+const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
+
 export function initMatchCountdown({ tournamentData }) {
   const pageEl = document.querySelector('[data-page="match-countdown"]');
   if (!pageEl) return;
@@ -25,97 +23,76 @@ export function initMatchCountdown({ tournamentData }) {
   let targetTime = null;
   let intervalId = null;
 
-  /* ---------- 找下一场比赛 ---------- */
+  /* ---------- 读当前比赛 ---------- */
 
-  function pickNextMatch() {
-    const matches = tournamentData.getMatches();
-    if (!matches.length) return null;
-
-    // 1. 正在进行的
-    const current = matches.find(m => m.current === true && m.date);
-    if (current) return current;
-
-    const now = Date.now();
-
-    // 2. 未来最早
-    const upcoming = matches
-      .filter(m => !m.completed && m.date)
-      .map(m => ({ m, t: new Date(m.date).getTime() }))
-      .filter(x => Number.isFinite(x.t) && x.t > now)
-      .sort((a, b) => a.t - b.t);
-
-    if (upcoming.length) return upcoming[0].m;
-
-    // 3. 最早的一场
-    const anyDate = matches
-      .filter(m => m.date)
-      .map(m => ({ m, t: new Date(m.date).getTime() }))
-      .filter(x => Number.isFinite(x.t))
-      .sort((a, b) => a.t - b.t);
-
-    return anyDate[0]?.m || null;
+  function pickCurrentMatch() {
+    let idStr;
+    try { idStr = localStorage.getItem(CURRENT_MATCH_KEY); }
+    catch { return null; }
+    if (!idStr) return null;
+    const id = Number(idStr);
+    return tournamentData.getMatch(id);
   }
 
   /* ---------- 渲染 ---------- */
 
-function renderStatic(match) {
-  if (!match) {
-    elRound.textContent = '';
-    elTeam1.textContent = '—';
-    elTeam2.textContent = '—';
-    elDate.textContent  = '暂无比赛安排';
-    targetTime = null;
-    return;
-  }
+  function renderStatic(match) {
+    if (!match) {
+      elRound.textContent = '';
+      elTeam1.textContent = '—';
+      elTeam2.textContent = '—';
+      elDate.textContent  = '未选择比赛';
+      targetTime = null;
+      return;
+    }
 
-  const round = tournamentData.getRound(match.roundId);
-  elRound.textContent = round?.name || '';
-  elTeam1.textContent = match.team1Acronym || '—';
-  elTeam2.textContent = match.team2Acronym || '—';
+    const round = tournamentData.getRound(match.roundId);
+    elRound.textContent = round?.name || '';
+    elTeam1.textContent = match.team1Acronym || '—';
+    elTeam2.textContent = match.team2Acronym || '—';
 
-  const d = new Date(match.date);
-  if (Number.isFinite(d.getTime())) {
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mi = String(d.getMinutes()).padStart(2, '0');
-    elDate.textContent = `${mm}/${dd} ${hh}:${mi}`;
-    targetTime = d.getTime();
-  } else {
-    elDate.textContent = '';
-    targetTime = null;
+    const d = new Date(match.date);
+    if (Number.isFinite(d.getTime())) {
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mi = String(d.getMinutes()).padStart(2, '0');
+      elDate.textContent = `${mm}/${dd} ${hh}:${mi}`;
+      targetTime = d.getTime();
+    } else {
+      elDate.textContent = '';
+      targetTime = null;
+    }
   }
-}
 
   /* ---------- Tick ---------- */
 
-function tick() {
-  if (!elTimer) return;
+  function tick() {
+    if (!targetTime) {
+      elHours.textContent   = '00';
+      elMinutes.textContent = '00';
+      elSeconds.textContent = '00';
+      return;
+    }
 
-  let diff = targetTime - Date.now();
-  if (!Number.isFinite(diff) || diff < 0) diff = 0;
+    let diff = targetTime - Date.now();
+    if (diff < 0) diff = 0;
 
-  const totalSec = Math.floor(diff / 1000);
-  const m = Math.floor(totalSec / 60);
-  const s = totalSec % 60;
+    const totalSec = Math.floor(diff / 1000);
+    const hours   = Math.floor(totalSec / 3600);
+    const minutes = Math.floor((totalSec % 3600) / 60);
+    const seconds = totalSec % 60;
 
-  const mm = String(m).padStart(2, '0');
-  const ss = String(s).padStart(2, '0');
-
-  // 每个字符独立 span，宽度由 CSS 控制
-  elTimer.innerHTML =
-    `<span class="sc-digit">${mm[0]}</span>` +
-    `<span class="sc-digit">${mm[1]}</span>` +
-    `<span class="sc-colon">:</span>` +
-    `<span class="sc-digit">${ss[0]}</span>` +
-    `<span class="sc-digit">${ss[1]}</span>`;
+    elHours.textContent   = pad2(hours);
+    elMinutes.textContent = pad2(minutes);
+    elSeconds.textContent = pad2(seconds);
   }
 
   /* ---------- 生命周期 ---------- */
 
   function start() {
     stop();
-    renderStatic(pickNextMatch());
+    renderStatic(pickCurrentMatch());
     tick();
     intervalId = setInterval(tick, 1000);
   }
@@ -130,4 +107,8 @@ function tick() {
   start();
   pageEl.addEventListener('page:activated',   start);
   pageEl.addEventListener('page:deactivated', stop);
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === CURRENT_MATCH_KEY) start();
+  });
 }

@@ -8,150 +8,195 @@
   overflow: hidden;
 }
 
+[data-page="playing"] .pl-stage::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 200px;
+  height: 10px;
+  background: linear-gradient(
+    to right,
+    #AE1318 0%,   #AE1318 50%,
+    #1661AB 50%,  #1661AB 100%
+  );
+  z-index: 10;
+  pointer-events: none;
+}
+
 /* =========================================
-   右下：四维 / BPM 面板
-   样式完全复制 showcase 的 .stats-panel
+   绿幕（top:160，bottom:200）
+   ========================================= */
+
+[data-page="playing"] .pl-green-screen {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 160px;
+  bottom: 200px;
+  background: #00ff00;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* =========================================
+   分数区（底部往上 100~200px）
+   ========================================= */
+
+[data-page="playing"] .pl-scores {
+  --bar-w: 0px;                /* 由 JS 动态更新 */
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100px;
+  height: 100px;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+/* ---------- 分数盒子 ---------- */
+
+[data-page="playing"] .pl-score-box {
+  position: absolute;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  transition: transform 0.18s linear;
+  will-change: transform;
+}
+
+/* 左队（红）：基础距中线 20px */
+[data-page="playing"] .pl-score-box--left {
+  right: 50%;
+  transform: translateX(-20px);
+}
+
+/* 右队（蓝）：基础距中线 20px */
+[data-page="playing"] .pl-score-box--right {
+  left: 50%;
+  align-items: flex-start;
+  transform: translateX(20px);
+}
+
+/* 右队 diff 提到上方 */
+[data-page="playing"] .pl-score-box--right .pl-diff {
+  order: -1;
+}
+
+/* ---------- 分数 ---------- */
+
+[data-page="playing"] .pl-score {
+  font-size: 55px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  transition: font-size 0.4s ease, font-family 0.4s ease, opacity 0.4s ease;
+}
+
+[data-page="playing"] .pl-score--left,
+[data-page="playing"] .pl-score--right {
+  color: #f8f8f6;
+  font-family: 'Core Sans CR 15 Thin', Arial, sans-serif;
+  text-shadow: 0 0 30px rgba(248, 248, 246, 0.25);
+}
+
+/* 领先方分数下移 5px（落后方带 .is-light，不受影响） */
+[data-page="playing"] .pl-score:not(.is-light) {
+  transform: translateY(4px);
+}
+
+[data-page="playing"] .pl-score.is-light {
+  font-size: 45px;
+  font-family: 'Core Sans CR 25 Light', Arial, sans-serif;
+  font-weight: 400;  
+}
+
+/* ---------- 分差 ---------- */
+
+[data-page="playing"] .pl-diff {
+  font-size: 28px;
+  font-weight: 200;
+  font-family: 'Core Sans CR 25 Light', Arial, sans-serif;
+  line-height: 1;
+  color: #f8f8f6;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+[data-page="playing"] .pl-diff.is-visible {
+  opacity: 0.7;
+}
+
+/* ---------- 分数条 ---------- */
+
+[data-page="playing"] .pl-scores__bar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 22px;
+  width: 0;
+  border-radius: 0;
+  transition: width 0.18s linear, background-color 0.3s, transform 0.18s linear;
+}
+
+/* ---------- 状态 B：分数整个隐藏 ---------- */
+
+[data-page="playing"] .pl-stage.state-b .pl-scores {
+  opacity: 0;
+}
+
+/* =========================================
+   底部：地图卡片 / 四维
    ========================================= */
 
 [data-page="playing"] .pl-stats-panel {
   position: absolute;
   left: 960px;
-  top: 980px;
+  bottom: 0;
   width: 960px;
-  max-width: 100%;
   height: 100px;
-  border-radius: 0;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 3px;
-  font-size: 17px;
-  line-height: 1.2;
-  color: #f8f8f6;
-
-  background: rgba(6, 10, 18, 0.15);
-  backdrop-filter: blur(10px) saturate(1.2);
-  -webkit-backdrop-filter: blur(10px) saturate(1.2);
-  border: 1px solid rgba(140, 185, 255, 0.15);
-  padding: 0 40px;
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-
-  will-change: backdrop-filter;
-  transform: translateZ(0);
-
   z-index: 2;
 }
-
-[data-page="playing"] .pl-stats-row {
-  display: flex;
-  align-items: baseline;
-}
-
-[data-page="playing"] .pl-stats-col--left {
-  flex: 0 0 210px;
-  width: 210px;
-}
-
-[data-page="playing"] .pl-stats-col--right {
-  margin-left: 5px;
-}
-
-[data-page="playing"] .pl-stats-panel .pl-label {
-  opacity: .85;
-}
-
-[data-page="playing"] .pl-stats-panel strong {
-  font-weight: 700;
-  color: #f8f8f6;
-}
-
-/* ---------- 最右侧 OSU! 徽章（与 showcase 一致） ---------- */
-[data-page="playing"] .osu-badge {
-  position: absolute;
-  right: 30px;
-  top: 50%;
-  transform: translateY(calc(-50% + 5px));
-
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  border: 3px solid #f8f8f6;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 15px;
-  font-weight: 800;
-  font-style: normal;
-  letter-spacing: 0.5px;
-  color: #f8f8f6;
-  text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-
-  pointer-events: none;
-  user-select: none;
-}
-
-/* =========================================
-   左下：地图卡片
-   样式完全复制 showcase 的 .map-card
-   ========================================= */
 
 [data-page="playing"] .pl-map-card {
   position: absolute;
   left: 0;
-  top: 980px;
+  bottom: 0;
   width: 960px;
-  max-width: 100%;
   height: 100px;
-  border-radius: 0;
-  overflow: hidden;
-  background-color: #1a2130;
-  box-sizing: border-box;
-  padding: 0 40px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  color: #f8f8f6;
-  box-shadow:
-    inset 0 0 28px 4px #0008,
-    0 0 8px rgba(0, 0, 0, 0.67);
-
-  transition: opacity .5s ease;
   z-index: 2;
+  opacity: 1;
+  transition: opacity 0.5s ease;
 }
-
-
-/* =========================================
-   状态 B：地图卡片堆到 stats-panel 上方
-   ========================================= */
 
 [data-page="playing"] .pl-stage.state-b .pl-map-card {
   left: 960px;
-  top: 880px;
+  bottom: 100px;
 }
 
 /* =========================================
-   过渡：淡出 → 换位 → 淡入
+   布局过渡
    ========================================= */
 
-[data-page="playing"] .pl-stage.pl-transitioning .pl-map-card {
+[data-page="playing"] .pl-stage.is-transitioning-to-b .pl-map-card {
   opacity: 0;
 }
 
-[data-page="playing"] .pl-stage.pl-no-transition .pl-map-card {
-  transition: none !important;
+[data-page="playing"] .pl-stage.is-transitioning-to-a .pl-map-card {
+  opacity: 0;
 }
 
-.pl-map-card,
-.pl-map-card *,
-.pl-stats-panel,
-.pl-stats-panel * {
-  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+/* =========================================
+   让 playing 页整体浮在全局聊天框之上
+   （.page 默认 z-index:3，chatbox 为 4）
+   ========================================= */
+
+.page[data-page="playing"] {
+  z-index: 5;
 }

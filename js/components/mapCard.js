@@ -9,6 +9,14 @@
  * mapper 优先取 tournamentData 里的，取不到再用 osu 传来的。
  * specialmods 支持字符串或数组两种写法。
  */
+
+/* 非 LM 的 mod 图标（文件名不含扩展名） */
+const MOD_ICON_MAP = {
+  HR: 'Hard Rock',
+  HD: 'Hidden',
+  DT: 'Double Time',
+};
+
 export class MapCard {
   constructor(root, { tournamentData, tokenStore } = {}) {
     this.root = root;
@@ -129,57 +137,94 @@ export class MapCard {
   }
 
   /* =========================================
-     LM 特殊 mod 图标（支持多个）
+     LM 特殊 mod 图标（支持多个）+ 普通图标
      ========================================= */
 
   _renderSpecial(bm) {
     const box = this.specialEl;
     if (!box) return;
 
-    // 兼容字符串 / 数组两种写法
-    const raw = bm?.specialmods;
-    const list = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+    /* items 结构：{ type: 'img', name } 或 { type: 'label', text } */
+    const items = [];
+
+    const rawMod = String(bm?.mods || '').replace(/\d+$/, '').toUpperCase();
+
+    /* DT 特例：右侧带倍率标签 */
+    if (rawMod === 'DT') {
+      /* 先图标 */
+      items.push({ type: 'img', name: MOD_ICON_MAP.DT });
+
+      /* 后标签 */
+      if (bm?.dtRate != null) {
+        const n = Number(bm.dtRate);
+        if (Number.isFinite(n)) {
+          const rateStr = n.toFixed(2).replace(/\.?0+$/, '');
+          items.push({ type: 'label', text: `${rateStr}x` });
+        }
+      }
+    }
+    /* HR / HD → 单图标 */
+    else if (MOD_ICON_MAP[rawMod]) {
+      items.push({ type: 'img', name: MOD_ICON_MAP[rawMod] });
+    }
+
+    /* LM → 读 specialmods（支持多个） */
+    if (rawMod === 'LM') {
+      const raw = bm?.specialmods;
+      const sp = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+      sp.forEach(name => items.push({ type: 'img', name }));
+    }
 
     const token = ++this._specialToken;
 
-    // 没有 → 清空隐藏
-    if (!list.length) {
+    /* 没有 → 清空隐藏 */
+    if (!items.length) {
       box.innerHTML = '';
       box.style.display = 'none';
       return;
     }
 
-    // 先隐藏，避免切换时闪旧内容
+    /* 先隐藏，避免切换时闪旧内容 */
     box.style.display = 'none';
     box.innerHTML = '';
 
     let loadedCount = 0;
-    const total = list.length;
+    const total = items.length;
 
-    list.forEach((name, idx) => {
+    const finish = () => {
+      if (token !== this._specialToken) return;
+      loadedCount++;
+      if (loadedCount === total) {
+        box.style.display = box.children.length ? 'flex' : 'none';
+      }
+    };
+
+    items.forEach((item, idx) => {
+      /* 文字标签（如 "1.35x"） */
+      if (item.type === 'label') {
+        const el = document.createElement('span');
+        el.className = 'map-card__special-label';
+        el.textContent = item.text;
+        el.style.zIndex = '1';
+        box.appendChild(el);
+        finish();
+        return;
+      }
+
+      /* 图标 */
       const img = new Image();
       img.className = 'map-card__special';
-      img.alt = name;
-      img.style.zIndex = String(idx + 1);   // 右侧在上层
+      img.alt = item.name;
+      img.style.zIndex = '2';
 
-      img.onload = () => {
-        if (token !== this._specialToken) return;
-        loadedCount++;
-        if (loadedCount === total) {
-          box.style.display = box.children.length ? 'flex' : 'none';
-        }
-      };
-
+      img.onload  = finish;
       img.onerror = () => {
         if (token !== this._specialToken) return;
-        console.warn('[MapCard] special mod 图片加载失败:', `src/mods/${name}.png`);
-        loadedCount++;
-        if (loadedCount === total) {
-          box.style.display = box.children.length ? 'flex' : 'none';
-        }
+        console.warn('[MapCard] special mod 图片加载失败:', `src/mods_tag/${item.name}.png`);
+        finish();
       };
 
-      img.src = `src/mods/${name}.png`;
+      img.src = `src/mods_tag/${item.name}.png`;
       box.appendChild(img);
     });
   }

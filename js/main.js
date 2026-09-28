@@ -10,9 +10,12 @@ import { initShowcase }          from './pages/showcase.js';
 import { initMappool }           from './pages/mappool.js';
 import { initShowcaseCountdown } from './pages/showcaseCountdown.js';
 import { initMatchCountdown }    from './pages/matchCountdown.js';
-import { initPlaying } from './pages/playing.js';
-import { initBracket } from './pages/bracket.js';
-import { initWinner } from './pages/winner.js';
+import { initPlaying }           from './pages/playing.js';
+import { initBracket }           from './pages/bracket.js';
+import { initWinner }            from './pages/winner.js';
+import { TeamHud }               from './components/teamHud.js';
+import { ChatBox } from './components/chatBox.js';
+import { LogoBadge } from './components/logoBadge.js';
 
 /* =========================================
    1. 创建服务实例
@@ -24,6 +27,11 @@ const tournamentState = new TournamentState();
 const mapInfo         = new MapInfo(tokenStore);
 const tournamentData  = new TournamentData();
 
+/* teamHud 是全局单例，先声明，boot() 里赋值 */
+let teamHud = null;
+let chatBox = null;
+let logoBadge = null; 
+
 /* =========================================
    2. 接线：osu 消息 → store
    ========================================= */
@@ -34,12 +42,6 @@ osuSocket.connect();
 
 /* =========================================
    3. 页面注册表
-   =========================================
-   background 字段：
-     video: 'main' | 'alt2'       ← 指定视频（默认 'main'）
-     bg:    'main' | 'alt' | 'third' | 'none'   ← 指定图片（默认 'main'）
-     cover: 0 ~ 1                 ← 覆盖层不透明度（默认 0）
-     coverColor: '#fff'           ← 覆盖层颜色（默认白色）
    ========================================= */
 
 const pages = {
@@ -55,20 +57,27 @@ const pages = {
   },
   'mappool': {
     html: 'pages/mappool.html',
-    init: () => initMappool({ tournamentData }),
+    init: () => initMappool({ tournamentData, osuSocket }),
     bg: 'alt',
+    hud: true,
+    logoBadge: true,
   },
   'playing': {
     html: 'pages/playing.html',
-    init: () => initPlaying({ tokenStore, tournamentState, mapInfo, tournamentData }),
+    init: () => initPlaying({
+      tokenStore, tournamentState, mapInfo, tournamentData, osuSocket, teamHud, chatBox
+    }),
+    hud: true,
+    logoBadge: true,
   },
   'winner': {
     html: 'pages/winner.html',
     init: () => initWinner(),
+    logoBadge: true,
   },
   'showcase-countdown': {
     html: 'pages/showcase-countdown.html',
-    init: () => initShowcaseCountdown(),
+    init: () => initShowcaseCountdown({ tournamentData }),
     video: 'alt2',
     bg: 'third',
   },
@@ -79,7 +88,7 @@ const pages = {
 };
 
 /* =========================================
-   4. 全局背景视频：静音 + 自动播放兜底
+   4. 全局背景视频
    ========================================= */
 
 function initBgVideo() {
@@ -87,7 +96,6 @@ function initBgVideo() {
   if (!videos.length) return;
 
   videos.forEach(video => {
-    // HTML 上的 muted 属性在部分浏览器首次加载时可能不生效，显式再设一次
     video.muted       = true;
     video.loop        = true;
     video.playsInline = true;
@@ -95,7 +103,6 @@ function initBgVideo() {
     const tryPlay = () => {
       video.play().catch(err => {
         console.warn('[BG] 自动播放被阻止，等待用户交互:', err);
-
         const retry = () => {
           video.play().catch(() => {});
           document.removeEventListener('click', retry);
@@ -119,17 +126,38 @@ function initBgVideo() {
    ========================================= */
 
 async function boot() {
+
+  /* 预加载 SourceHanSerif，避免 showcase-countdown 首次进入时字体闪烁 */
+  if (document.fonts && document.fonts.load) {
+    Promise.all([
+      document.fonts.load('900 100px "SourceHanSerif"'),
+      document.fonts.load('700 28px "SourceHanSerif"'),
+      document.fonts.load('400 100px "SourceHanSerif"'),
+    ]).catch(() => {});
+  }
+
   await tournamentData.init();
 
   initBgVideo();
 
+  const hudEl = document.getElementById('globalHud');
+  teamHud = hudEl ? new TeamHud(hudEl, { tournamentData }) : null;
+
+  const chatEl = document.getElementById('globalChatBox');
+  chatBox = chatEl ? new ChatBox(chatEl, { tournamentData }) : null;
+  chatBox?.mount(osuSocket);
+
+  const logoEl = document.getElementById('globalLogo');
+  logoBadge = logoEl ? new LogoBadge(logoEl, { tournamentData }) : null;
+
   const router = createRouter({
     pages,
-    deps: { osuSocket, tokenStore, tournamentState, mapInfo, tournamentData },
+    deps: { osuSocket, tokenStore, tournamentState, mapInfo, tournamentData, teamHud, chatBox , logoBadge }
   });
 
   window.app = {
-    osuSocket, tokenStore, tournamentState, mapInfo, tournamentData, router,
+    osuSocket, tokenStore, tournamentState, mapInfo, tournamentData,
+    router, teamHud, chatBox, logoBadge
   };
 }
 

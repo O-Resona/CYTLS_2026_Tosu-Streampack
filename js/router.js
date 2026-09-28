@@ -75,6 +75,27 @@ function applyBackground(pageName) {
   }
 }
 
+/* ---------- 应用 HUD 显隐 ---------- */
+
+function applyHud(pageName) {
+  const cfg = pages[pageName] || {};
+  const hudEl = document.getElementById('globalHud');
+
+  if (hudEl) hudEl.classList.toggle('is-visible', cfg.hud === true);
+
+  if (deps.chatBox) {
+    cfg.hud === true ? deps.chatBox.show() : deps.chatBox.hide();
+  }
+
+  if (deps.logoBadge) {
+    cfg.logoBadge === true ? deps.logoBadge.show() : deps.logoBadge.hide();
+  }
+
+  if (cfg.hud === true && deps.teamHud) {
+    deps.teamHud.refresh();
+  }
+}
+
   /* ---------- 加载页面 ---------- */
 
   async function loadPage(name) {
@@ -152,6 +173,7 @@ function applyBackground(pageName) {
 
       // 3. 应用背景
       applyBackground(name);
+      applyHud(name);
 
       // 4. 新页面立即淡入
       section.classList.add('active');

@@ -7,11 +7,26 @@
  * 数据结构参照 bracket.json，字段说明见 data/tournament.json。
  */
 const SEED_URL = 'data/tournament.json';
+const OVERRIDE_KEY = 'cyt2026.matchOverrides';
 
 export class TournamentData {
   constructor() {
     this.data = null;
     this._readyPromise = null;
+    this._overrides = this._loadOverrides();
+  }
+
+  _loadOverrides() {
+    try {
+      const raw = localStorage.getItem(OVERRIDE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+  }
+
+  _saveOverrides() {
+    try {
+      localStorage.setItem(OVERRIDE_KEY, JSON.stringify(this._overrides));
+    } catch {}
   }
 
   /* =========================================
@@ -24,6 +39,14 @@ export class TournamentData {
       const res = await fetch(SEED_URL);
       if (!res.ok) throw new Error(`加载 ${SEED_URL} 失败: ${res.status}`);
       this.data = await res.json();
+
+      /* 把 mappools 里的 beatmaps 按 round.mappool 注入到各 round */
+      const pools = this.data.mappools || [];
+      for (const round of (this.data.rounds || [])) {
+        const pool = pools.find(p => p.id === round.mappool);
+        round.beatmaps = pool?.beatmaps || [];
+      }
+
       console.log('[TournamentData] 已加载', SEED_URL);
       return this.data;
     })();
@@ -82,21 +105,89 @@ export class TournamentData {
   }
 
   /* =========================================
+     图池
+     ========================================= */
+
+  getMappools() {
+    if (Array.isArray(this.data?.mappools) && this.data.mappools.length) {
+      return this.data.mappools;
+    }
+
+    /* 回退：从 rounds 反推 unique mappools */
+    const map = new Map();
+    for (const r of this.getRounds()) {
+      const id = r.mappool || r.id;
+      if (!map.has(id)) {
+        map.set(id, {
+          id,
+          name: r.name,
+          beatmaps: r.beatmaps || [],
+        });
+      }
+    }
+    return Array.from(map.values());
+  }
+
+  getMappool(id) {
+    if (!id) return null;
+    return (this.data?.mappools || []).find(p => p.id === id) || null;
+  }
+
+  /* =========================================
      对局
      ========================================= */
 
   getMatches() {
-    return this.data?.matches ?? [];
+    const raw = this.data?.matches ?? [];
+    if (!Object.keys(this._overrides).length) return raw;
+    return raw.map(m => {
+      const ov = this._overrides[String(m.id)];
+      return ov ? { ...m, ...ov } : m;
+    });
   }
 
   getMatch(id) {
     if (id === undefined || id === null) return null;
-    return this.getMatches().find(m => m.id === id) || null;
+    const raw = (this.data?.matches ?? []).find(m => m.id === id);
+    if (!raw) return null;
+    const ov = this._overrides[String(id)];
+    return ov ? { ...raw, ...ov } : raw;
   }
+
+getMatchBP(matchId) {
+  const match = this.getMatch(matchId);
+  if (!match) return { bans: [], picks: [] };
+  return {
+    bans:  Array.isArray(match.bans)  ? match.bans  : [],
+    picks: Array.isArray(match.picks) ? match.picks : [],
+  };
+}
 
   /** 某轮次下的所有对局（按 matches[].roundId 过滤） */
   getMatchesByRound(roundId) {
     return this.getMatches().filter(m => m.roundId === roundId);
+  }
+
+  /* =========================================
+     比赛覆盖层（直播员手动修正，不影响本地文件）
+     ========================================= */
+
+  setMatchOverride(matchId, patch) {
+    if (matchId == null) return;
+    const id = String(matchId);
+    const cur = this._overrides[id] || {};
+    this._overrides[id] = { ...cur, ...patch };
+    this._saveOverrides();
+  }
+
+  clearMatchOverride(matchId) {
+    if (matchId == null) return;
+    delete this._overrides[String(matchId)];
+    this._saveOverrides();
+  }
+
+  hasMatchOverride(matchId) {
+    return matchId != null && !!this._overrides[String(matchId)];
   }
 
   /** 当前正在进行的对局 */

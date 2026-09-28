@@ -1,31 +1,38 @@
+/**
+ * Mappool 子页面
+ *
+ * 图池展示 + BP 交互
+ *
+ * 轮次选择器现在按 mappool 分组显示：
+ *   Swiss Phase Ⅰ / Swiss Phase Ⅱ / Bracket Stage
+ */
+
 const MOD_ICONS = {
   LM: 'src/mods/LM.png',
   NM: 'src/mods/NM.png',
   HD: 'src/mods/HD.png',
   HR: 'src/mods/HR.png',
   DT: 'src/mods/DT.png',
+  FM: 'src/mods/FM.png',
   TB: 'src/mods/TB.png',
 };
 
 const STORAGE_KEY_LOCAL  = 'mapBPActions';
 const STORAGE_KEY_SHARED = 'cyt_woc_bp_actions_shared';
 
-function getLayoutForRound(round) {
-  const name = `${round?.name || ''} ${round?.description || ''}`;
+/* mappool id → 显示名（json 里没写 name 时用） */
+const MAPPool_LABELS = {
+  'swiss-1': 'Swiss Phase Ⅰ',
+  'swiss-2': 'Swiss Phase Ⅱ',
+  'bracket': 'Bracket Stage',
+};
 
-  // Swiss Round 1 / 2
-  if (/swiss\s*round\s*[12]\b/i.test(name)) {
-    return [3, 1, 3, 2, 2, 2, 1];
-  }
-
-  // Swiss Round 3 / 4 / 5
-  if (/swiss\s*round\s*[345]\b/i.test(name)) {
-    return [3, 2, 3, 2, 2, 3, 1];
-  }
-
-  // 其它（默认）
-  return [3, 3, 3, 1, 3, 3, 3, 1];
-}
+/* mappool id → 布局（每行卡片数量） */
+const MAPPool_LAYOUTS = {
+  'swiss-1': [3, 1, 3, 2, 2, 2, 1],
+  'swiss-2': [3, 2, 3, 2, 2, 3, 1],
+  'bracket': [3, 3, 3, 1, 3, 3, 3, 1],
+};
 
 function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -33,44 +40,62 @@ function escapeHtml(s) {
   }[c]));
 }
 
+function getMappoolLabel(pool) {
+  if (!pool) return '—';
+  return pool.name || MAPPool_LABELS[pool.id] || pool.id;
+}
+
+function getLayoutForMappool(pool) {
+  if (!pool) return [3, 3, 3, 1, 3, 3, 3, 1];
+  return MAPPool_LAYOUTS[pool.id] || [3, 3, 3, 1, 3, 3, 3, 1];
+}
+
+function isCompactMappool(pool) {
+  return pool?.id === 'bracket';
+}
+
+/* =========================================
+   入口
+   ========================================= */
+
 export function initMappool({ tournamentData }) {
   const pageEl = document.querySelector('[data-page="mappool"]');
   if (!pageEl) return;
 
   const wrapper = pageEl.querySelector('#mappoolWrapper');
 
-  // 控制面板在 sidebar 里
   const panel = document.getElementById('mappoolPanel');
   if (!panel) return;
 
-  const selectedRoundEl = panel.querySelector('#mappoolSelectedRound');
-  const roundOptionsEl  = panel.querySelector('#mappoolRoundOptions');
+  const selectedPoolEl  = panel.querySelector('#mappoolSelectedRound');   // 沿用原 id
+  const poolOptionsEl   = panel.querySelector('#mappoolRoundOptions');    // 沿用原 id
+  const btnRedBan       = panel.querySelector('#mappoolRedBanBtn');
+  const btnBlueBan      = panel.querySelector('#mappoolBlueBanBtn');
+  const btnRedPick      = panel.querySelector('#mappoolRedPickBtn');
+  const btnBluePick     = panel.querySelector('#mappoolBluePickBtn');
+  const btnReset        = panel.querySelector('#mappoolResetBtn');
+  const btnReload       = panel.querySelector('#mappoolReloadBtn');
 
-  const btnRedBan    = panel.querySelector('#mappoolRedBanBtn');
-  const btnBlueBan   = panel.querySelector('#mappoolBlueBanBtn');
-  const btnRedPick   = panel.querySelector('#mappoolRedPickBtn');
-  const btnBluePick  = panel.querySelector('#mappoolBluePickBtn');
-  const btnReset     = panel.querySelector('#mappoolResetBtn');
+  const pools = tournamentData.getMappools();
+  let currentPool = pools[0] || null;
+  let currentMode = 'redBan';
+  let maps        = [];
+  const mapStates = new Map();
 
-  const rounds = tournamentData.getRounds();
-  let currentRound = rounds[0] || null;
-  let currentMode  = 'redBan';
-  let maps         = [];
-  const mapStates  = new Map();
-
-  if (!rounds.length) {
-    wrapper.innerHTML = '<div class="mappool-empty">没有可用的轮次数据</div>';
+  if (!pools.length) {
+    wrapper.innerHTML = '<div class="mappool-empty">没有可用的图池数据</div>';
     return;
   }
 
-  /* ---------- 数据转换 ---------- */
+  /* =========================================
+     数据转换
+     ========================================= */
 
   function beatmapToCard(bm) {
     const info = bm.beatmapInfo || {};
     const meta = info.metadata || {};
-    const rawMod = bm.mods || 'NM';
-    // "LM1" → "LM"，"NM" → "NM"，"HD2" → "HD"
-    const modKey = rawMod.replace(/\d+$/, '') || 'NM';
+    const rawMods = bm.mods || 'NM';
+    const modKey = rawMods.replace(/\d+$/, '') || 'NM';
 
     return {
       id:         String(info.onlineId ?? bm.id ?? ''),
@@ -78,20 +103,24 @@ export function initMappool({ tournamentData }) {
       mapper:     meta.author?.username || '',
       difficulty: info.difficultyName || '',
       mod:        modKey,
+      rawMods,
       bg:         info.covers?.cover || info.covers?.['cover@2x'] || '',
     };
   }
 
-  function loadMapsForRound(round) {
-    maps = (round?.beatmaps || []).map(beatmapToCard);
+  function loadMapsForPool(pool) {
+    maps = (pool?.beatmaps || []).map(beatmapToCard);
   }
 
-  /* ---------- 渲染 ---------- */
+  /* =========================================
+     渲染图池
+     ========================================= */
 
   function renderLayout() {
     wrapper.innerHTML = '';
+    wrapper.classList.toggle('is-compact', isCompactMappool(currentPool));
 
-    const layout = getLayoutForRound(currentRound);
+    const layout = getLayoutForMappool(currentPool);
     let idx = 0;
 
     for (const count of layout) {
@@ -113,9 +142,6 @@ export function initMappool({ tournamentData }) {
       wrapper.appendChild(row);
     }
 
-      const rows = wrapper.querySelectorAll('.mapRow').length;
-      wrapper.classList.toggle('is-compact', rows >= 8);
-
     restoreMapStates();
   }
 
@@ -124,6 +150,7 @@ export function initMappool({ tournamentData }) {
     card.className = 'mapContainer';
     card.dataset.mapId    = map.id;
     card.dataset.mapTitle = map.title;
+    card.dataset.mods     = map.rawMods;
     if (map.bg) card.style.backgroundImage = `url('${map.bg}')`;
 
     card.innerHTML = `
@@ -148,7 +175,9 @@ export function initMappool({ tournamentData }) {
     return card;
   }
 
-  /* ---------- 交互 ---------- */
+  /* =========================================
+     交互
+     ========================================= */
 
   function handleMapClick(card) {
     const mapId    = card.dataset.mapId;
@@ -199,7 +228,9 @@ export function initMappool({ tournamentData }) {
     }[mode])?.classList.add('active');
   }
 
-  /* ---------- 存储 ---------- */
+  /* =========================================
+     存储
+     ========================================= */
 
   function saveMapState(mapTitle, state) {
     if (!mapTitle) return;
@@ -226,27 +257,62 @@ export function initMappool({ tournamentData }) {
   }
 
   function restoreMapStates() {
-    const local   = JSON.parse(localStorage.getItem(STORAGE_KEY_LOCAL) || '{}');
+    const local   = JSON.parse(localStorage.getItem(STORAGE_KEY_LOCAL)  || '{}');
     const shared  = JSON.parse(localStorage.getItem(STORAGE_KEY_SHARED) || '{}');
     const actions = Object.keys(shared).length ? shared : local;
+    const jsonBp  = getCurrentMatchBp();
 
     wrapper.querySelectorAll('.mapContainer').forEach(card => {
       const mapId    = card.dataset.mapId;
       const mapTitle = card.dataset.mapTitle;
-      const state    = actions[mapTitle];
+      const mods     = card.dataset.mods;
       const content  = card.querySelector('.mapContent');
 
       card.classList.remove('redBorder', 'blueBorder');
       content.classList.remove('banned');
       mapStates.delete(mapId);
 
-      if (!state) return;
+      const localState = actions[mapTitle];
+      if (localState) {
+        applyBpState(card, content, mapId, localState);
+        return;
+      }
 
-      card.classList.add(state.team === 'red' ? 'redBorder' : 'blueBorder');
-      content.classList.toggle('banned', state.action === 'ban');
-
-      mapStates.set(mapId, { action: state.action, team: state.team });
+      const jsonState = findInJsonBp(jsonBp, mods);
+      if (jsonState) {
+        applyBpState(card, content, mapId, jsonState);
+      }
     });
+  }
+
+  function applyBpState(card, content, mapId, state) {
+    card.classList.add(state.team === 'red' ? 'redBorder' : 'blueBorder');
+    content.classList.toggle('banned', state.action === 'ban');
+    mapStates.set(mapId, { action: state.action, team: state.team });
+  }
+
+  function getCurrentMatchBp() {
+    try {
+      const idStr = localStorage.getItem('cyt2026.currentMatchId');
+      if (!idStr) return { bans: [], picks: [] };
+      const id = Number(idStr);
+      if (!Number.isFinite(id)) return { bans: [], picks: [] };
+      return tournamentData.getMatchBP(id);
+    } catch {
+      return { bans: [], picks: [] };
+    }
+  }
+
+  function findInJsonBp(bp, mods) {
+    if (!mods || !bp) return null;
+
+    const ban = bp.bans?.find(x => x.mods === mods);
+    if (ban) return { action: 'ban', team: ban.team };
+
+    const pick = bp.picks?.find(x => x.mods === mods);
+    if (pick) return { action: 'pick', team: pick.team };
+
+    return null;
   }
 
   function resetAll() {
@@ -259,71 +325,90 @@ export function initMappool({ tournamentData }) {
     localStorage.removeItem(STORAGE_KEY_SHARED);
   }
 
-  /* ---------- 轮次选择器 ---------- */
+  function reloadFromJson() {
+    localStorage.removeItem(STORAGE_KEY_LOCAL);
+    localStorage.removeItem(STORAGE_KEY_SHARED);
+    mapStates.clear();
+    restoreMapStates();
+  }
 
-  function renderRoundOptions() {
-    roundOptionsEl.innerHTML = '';
-    rounds.forEach(r => {
+  /* =========================================
+     图池选择器
+     ========================================= */
+
+  function renderPoolOptions() {
+    poolOptionsEl.innerHTML = '';
+    pools.forEach(p => {
       const opt = document.createElement('div');
       opt.className = 'custom-option';
-      opt.dataset.value = r.id;
-      opt.textContent = r.name || r.id;
-      opt.classList.toggle('selected', r.id === currentRound?.id);
+      opt.dataset.value = p.id;
+      opt.textContent = getMappoolLabel(p);
+      opt.classList.toggle('selected', p.id === currentPool?.id);
       opt.addEventListener('click', (e) => {
         e.stopPropagation();
-        switchRound(r.id);
+        switchPool(p.id);
       });
-      roundOptionsEl.appendChild(opt);
+      poolOptionsEl.appendChild(opt);
     });
   }
 
-  function switchRound(roundId) {
-    const r = rounds.find(x => x.id === roundId);
-    if (!r) return;
-    currentRound = r;
-    selectedRoundEl.textContent = r.name || r.id;
-    roundOptionsEl.classList.remove('active');
-    roundOptionsEl.querySelectorAll('.custom-option').forEach(o => {
-      o.classList.toggle('selected', o.dataset.value === roundId);
+  function switchPool(poolId) {
+    const p = pools.find(x => x.id === poolId);
+    if (!p) return;
+    currentPool = p;
+    selectedPoolEl.textContent = getMappoolLabel(p);
+    poolOptionsEl.classList.remove('active');
+    poolOptionsEl.querySelectorAll('.custom-option').forEach(o => {
+      o.classList.toggle('selected', o.dataset.value === poolId);
     });
-    loadMapsForRound(r);
+    loadMapsForPool(p);
     renderLayout();
   }
 
-  /* ---------- 事件绑定 ---------- */
+  /* =========================================
+     事件绑定
+     ========================================= */
 
   btnRedBan.addEventListener('click',   () => setMode('redBan'));
   btnBlueBan.addEventListener('click',  () => setMode('blueBan'));
   btnRedPick.addEventListener('click',  () => setMode('redPick'));
   btnBluePick.addEventListener('click', () => setMode('bluePick'));
   btnReset.addEventListener('click', resetAll);
+  btnReload?.addEventListener('click', reloadFromJson);
 
-  selectedRoundEl.addEventListener('click', (e) => {
+  selectedPoolEl.addEventListener('click', (e) => {
     e.stopPropagation();
-    roundOptionsEl.classList.toggle('active');
+    poolOptionsEl.classList.toggle('active');
   });
-  document.addEventListener('click', () => roundOptionsEl.classList.remove('active'));
+  document.addEventListener('click', () => poolOptionsEl.classList.remove('active'));
 
-  /* ---------- 面板显隐 ---------- */
-
-  function showPanel() { panel.hidden = false; }
-  function hidePanel() { panel.hidden = true; }
+  /* =========================================
+     面板显隐
+     ========================================= */
 
   pageEl.addEventListener('page:activated', () => {
-    showPanel();
+    panel.hidden = false;
     restoreMapStates();
   });
-  pageEl.addEventListener('page:deactivated', hidePanel);
+  pageEl.addEventListener('page:deactivated', () => {
+    panel.hidden = true;
+  });
 
-  /* ---------- 启动 ---------- */
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'cyt2026.currentMatchId') restoreMapStates();
+  });
 
-  loadMapsForRound(currentRound);
-  selectedRoundEl.textContent = currentRound.name || currentRound.id;
-  renderRoundOptions();
+  /* =========================================
+     启动
+     ========================================= */
+
+  loadMapsForPool(currentPool);
+  selectedPoolEl.textContent = getMappoolLabel(currentPool);
+  renderPoolOptions();
   renderLayout();
   setMode('redBan');
 
   if (pageEl.classList.contains('active')) {
-    showPanel();
+    panel.hidden = false;
   }
 }

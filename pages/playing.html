@@ -1,10 +1,24 @@
 <section class="page" data-page="playing">
 
-  <img class="page-logo" src="src/logo.png" alt="">
-  <div class="pl-stage pl-no-transition">
+  <div class="pl-stage">
 
-    <!-- 地图信息卡片：内层类名与 showcase 一致，外层保留 pl- 前缀控制动画 -->
-    <div class="pl-map-card">
+    <div class="pl-green-screen"></div>
+
+    <!-- 中部：分数 -->
+    <div class="pl-scores">
+      <div class="pl-score-box pl-score-box--left">
+        <span class="pl-diff" id="plDiff1"></span>
+        <span class="pl-score pl-score--left" id="plScore1">0</span>
+      </div>
+      <div class="pl-score-box pl-score-box--right">
+        <span class="pl-score pl-score--right" id="plScore2">0</span>
+        <span class="pl-diff" id="plDiff2"></span>
+      </div>
+      <div class="pl-scores__bar" id="plScoreBar"></div>
+    </div>
+
+    <!-- 底部：地图卡 + 聊天 + 四维 -->
+    <div class="map-card pl-map-card">
       <div class="map-card__title" data-field="artistTitle">—</div>
       <div class="map-card__meta">
         <span class="map-card__meta-item map-card__meta-item--mapper">
@@ -16,31 +30,28 @@
           <strong class="map-card__difficulty" data-field="diffName">—</strong>
         </span>
       </div>
-
-    <div class="map-card__specials"></div>
+      <div class="map-card__specials"></div>
     </div>
 
-    <!-- 四维 / BPM 面板：内容与 Showcase 完全一致 -->
-    <div class="pl-stats-panel">
-      <div class="pl-stats-row">
-        <div class="pl-stats-col pl-stats-col--left">
+    <div class="stats-panel pl-stats-panel">
+      <div class="stats-row">
+        <div class="stats-col--left">
           CS <strong data-field="mCS">-</strong> /
           AR <strong data-field="mAR">-</strong> /
           OD <strong data-field="mOD">-</strong>
         </div>
-        <div class="pl-stats-col pl-stats-col--right">
+        <div class="stats-col--right">
           Length <strong data-field="totalTime">0:00</strong>
         </div>
       </div>
-      <div class="pl-stats-row">
-        <div class="pl-stats-col pl-stats-col--left">
+      <div class="stats-row">
+        <div class="stats-col--left">
           Star Rating <strong data-field="mStars">-</strong>
         </div>
-        <div class="pl-stats-col pl-stats-col--right">
+        <div class="stats-col--right">
           BPM <strong data-field="mBpm">-</strong>
         </div>
       </div>
-
       <div class="osu-badge">OSU!</div>
     </div>
 

@@ -9,11 +9,16 @@ import { ReconnectingWebSocket } from './reconnectingWebSocket.js';
  *   'error'     连接错误
  *   'message'   每条原始消息
  *   'tourney'   比赛房间数据
- *   'ipcState'  比赛状态数值
+ *   'ipcState'  比赛状态数值（原始值，不用于判断打图）
+ *   'playing'   是否在打图（boolean）
+ *   'gameplay'  实时比分 { left, right }
+ *   'chat'      聊天消息数组
  *   'tokens'    token 批量更新
  *
- * 关键点：_extractTokens 里 mapid 必须**第一个写入**，
- * 因为下游（MapCard 等）会在其它 token 触发 render 时立刻读取 mapid。
+ * 打图判断依据（lazer mp 观战）：
+ *   - bm.time.current 在 (0, full) 之间
+ *   - 且至少一个 ipcClients 玩家的 gameplay.score 是数字
+ *   - 预览模式下 gameplay 缺失，score 为 undefined → 非打图
  */
 export class OsuSocket {
   constructor(url) {
@@ -64,20 +69,63 @@ export class OsuSocket {
 
     this._emit('message', data);
 
-    // ---- 比赛房间 ----
     const manager = data?.tourney?.manager;
+
     if (manager) {
       this._emit('tourney', data.tourney);
+
+      // 原始 ipcState（保留给可能用到的地方）
       if (typeof manager.ipcState === 'number') {
         this._emit('ipcState', manager.ipcState);
       }
+
+      // ---------- 打图状态 ----------
+      const isPlaying = this._detectPlaying(data);
+      this._emit('playing', isPlaying);
+
+      // ---------- 实时比分：从 ipcClients 累加 ----------
+      let left  = 0;
+      let right = 0;
+      const clients = data.tourney?.ipcClients;
+      if (Array.isArray(clients)) {
+        for (const c of clients) {
+          const s = Number(c?.gameplay?.score) || 0;
+          if (c?.team === 'left')       left  += s;
+          else if (c?.team === 'right') right += s;
+        }
+      }
+      this._emit('gameplay', { left, right });
+
+      // ---------- 聊天 ----------
+      if (Array.isArray(manager.chat)) {
+        this._emit('chat', manager.chat);
+      }
     }
 
-    // ---- 地图信息 → tokens ----
+    // ---------- 地图 tokens ----------
     const tokens = this._extractTokens(data);
     if (tokens && Object.keys(tokens).length) {
       this._emit('tokens', tokens);
     }
+  }
+
+  /* =========================================
+     打图状态判断
+     ========================================= */
+
+  _detectPlaying(data) {
+    const time = data.menu?.bm?.time;
+    if (!time) return false;
+
+    const cur  = Number(time.current);
+    const full = Number(time.full);
+    if (!Number.isFinite(cur) || !Number.isFinite(full) || full <= 0) return false;
+    if (cur <= 0 || cur >= full) return false;
+
+    const clients = data.tourney?.ipcClients;
+    if (!Array.isArray(clients) || clients.length === 0) return false;
+
+    return clients.some(c => typeof c?.gameplay?.score === 'number');
   }
 
   /* =========================================
@@ -116,7 +164,7 @@ export class OsuSocket {
     /* ---------- 5. mods ---------- */
     if (bm.mods != null) tokens.modsEnum = bm.mods;
 
-    /* ---------- 6. 谱面数值（注意 tosu 用大写字段） ---------- */
+    /* ---------- 6. 谱面数值 ---------- */
     const stats = bm.stats || {};
     const num = v => (typeof v === 'number' && Number.isFinite(v)) ? v : null;
 
@@ -124,11 +172,8 @@ export class OsuSocket {
     const ar = num(stats.AR);
     const od = num(stats.OD);
     const hp = num(stats.HP);
-
-    // 星数优先 fullSR（基础难度），其次 SR
     const stars = num(stats.fullSR) ?? num(stats.SR);
 
-    // BPM 优先 common，其次 realtime
     let bpm = null;
     if (stats.BPM && typeof stats.BPM === 'object') {
       bpm = num(stats.BPM.common) ?? num(stats.BPM.realtime);

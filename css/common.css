@@ -7,7 +7,7 @@
   src: url('../fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -15,7 +15,7 @@
   src: url('../fonts/SourceHanSerif-VF.ttf.ttc') format('truetype');
   font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 /* =========================================
@@ -214,7 +214,7 @@ body {
 .page.is-fading-out {
   visibility: visible !important;
   pointer-events: none !important;
-  animation: fadeOutSlow 3s ease forwards !important;
+  animation: fadeOutSlow 2s ease forwards !important;
 }
 
 @keyframes fadeOutSlow {
@@ -261,6 +261,13 @@ body {
   z-index: 3;                    /* 低于 .page(4)，高于全局 cover(2) */
   pointer-events: none;
   overflow: hidden;
+
+  opacity: 0;
+  transition: opacity 2.5s ease;
+}
+
+.final-bg.is-visible {
+  opacity: 0.9;
 }
 
 .final-bg[hidden] {
@@ -280,12 +287,13 @@ body {
 .ft-bg4 {
   z-index: 1;
   filter: brightness(0.25);      /* 初始：明显偏暗 */
-  transition: filter 3s ease;    /* ease 曲线，平滑地从暗到亮 */
+  transition:ease-out 1s linear;
+  will-change: filter;
 }
 
 .ft-bg3 {
   z-index: 2;
-  transition: opacity 3s cubic-bezier(0.9, 0, 0.95, 0.5);
+  transition: opacity 2s cubic-bezier(0.9, 0, 0.95, 0.5);
 }
 
 .final-bg.is-bg3-out .ft-bg4 {
@@ -301,7 +309,7 @@ body {
 .final-fore {
   position: absolute;
   inset: 0;
-  z-index: 5;                    /* 高于 .page(4) */
+  z-index: 8;
   pointer-events: none;
   overflow: hidden;
 }
@@ -335,37 +343,376 @@ body {
 .final-fore.is-text-in  .ft-text  { opacity: 1; }
 .final-fore.is-text2-in .ft-text2 { opacity: 1; }
 
-/* ---------- cut 半屏（相对 .main 定位） ---------- */
+/* ---------- 上下分屏 cut ---------- */
 
-.ft-cut {
-  top: 0;
-  left: 0;                        /* 左边缘在 .main 左边缘 */
-  width: 960px;
-  height: 1080px;
+.ft-cut-top,
+.ft-cut-bottom {
+  position: absolute;
+  left: 0;
+  width: 1920px;
+  height: 540px;
   object-fit: cover;
   z-index: 3;
-  transform: translateX(-100%);   /* 右边缘对齐 .main 左边缘，完全在页外 */
-  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(0);
+  transition:
+    transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity   0.5s ease;
+  pointer-events: none;
+  user-select: none;
 }
 
-.ft-cut2 {
+/* 上半屏：显示 cut_full 的上半部分 */
+.ft-cut-top {
   top: 0;
-  left: 100%;                     /* 左边缘对齐 .main 右边缘 */
-  width: 960px;
-  height: 1080px;
-  object-fit: cover;
-  z-index: 3;
-  transform: translateX(0);       /* 完全在页外 */
-  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  object-position: center top;
 }
 
-/* cut 滑入对齐：左 cut 到 0，右 cut 向左移自身宽度 */
-.final-fore.is-cuts-in .ft-cut  { transform: translateX(0); }
-.final-fore.is-cuts-in .ft-cut2 { transform: translateX(-100%); }
+/* 下半屏：显示 cut_full 的下半部分 */
+.ft-cut-bottom {
+  top: 540px;
+  object-position: center bottom;
+}
+
+/* 进入 cut 阶段：淡入覆盖 */
+.final-fore.is-cuts-show .ft-cut-top,
+.final-fore.is-cuts-show .ft-cut-bottom {
+  opacity: 1;
+}
+
+/* 分离：上片上移、下片下移，露出 showcase */
+.final-fore.is-cuts-in .ft-cut-top    { transform: translateY(-100%); }
+.final-fore.is-cuts-in .ft-cut-bottom { transform: translateY(100%);  }
 
 /* text/text2 消失（cut 对齐后触发） */
 .final-fore.is-text-out .ft-text,
 .final-fore.is-text-out .ft-text2 {
   opacity: 0;
-  transition: opacity .3s ease;
+  transition: opacity 1.3s ease;
+}
+
+/* =========================================
+   全局队伍 HUD（mappool / playing 共享）
+   ========================================= */
+
+.global-hud,
+.global-hud * {
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+.global-hud {
+  position: absolute;
+  top: 24px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.global-hud.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---------- 一队 ---------- */
+
+.global-hud__team {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.global-hud__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: #1a2130;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.global-hud__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px; 
+}
+
+/* ---------- 通用行 ---------- */
+
+.global-hud__row {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* ---------- 第一排：tag + 星星 ---------- */
+
+.global-hud__row--tag {
+  height: 38px;
+  gap: 8px;
+}
+
+.global-hud__tag {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  border-radius: 5px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.global-hud__tag--red  { background: #AE1318; }
+.global-hud__tag--blue { background: #1661AB; }
+
+.global-hud__stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 右队（蓝队）星星：从右往左增加 */
+.global-hud__team--right .global-hud__stars {
+  flex-direction: row-reverse;
+}
+
+/* 星星方框：加大 */
+.global-hud__star {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f8f8f6;
+  border-radius: 3px;
+  background: transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 填充层：从中心向外扩散 */
+.global-hud__star::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fde8b2;
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.global-hud__star.is-active::after {
+  transform: scale(1);
+}
+
+.global-hud__star.is-active {
+  box-shadow:
+    0 0 2px rgba(248, 248, 246, 0.9),
+    0 0 5px rgba(248, 248, 246, 0.5);
+  animation: starPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes starPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- 第二排：队名（高度 40，紧贴第一排） ---------- */
+
+.global-hud__row--name {
+  height: 38px;
+  padding: 0 6px;
+  background: #f8f8f6;
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+}
+
+/* ---------- 第三排：seed（在头像和第二排下方） ---------- */
+
+.global-hud__row--seed {
+  padding: 2px 6px;
+  margin-top: 2px;
+  background: #f8f8f6;
+  color: #1a1a1a;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  min-height: 24px;
+}
+
+/* ---------- 右队镜像 ---------- */
+
+.global-hud__team--right .global-hud__info {
+  align-items: flex-end;
+}
+
+/* =========================================
+   全局聊天框（mappool / playing 共享）
+   ========================================= */
+
+.chatbox {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 200px;
+  box-sizing: border-box;
+  padding: 0;
+  color: #f8f8f6;
+  font-size: 15px;
+  line-height: 25px;
+  overflow: hidden;
+  z-index: 4;                       /* 从 5 降到 4，让 playing 页可覆盖 */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+
+  /* 整个 200px 容器铺满交替条纹，每行 25px，共 8 行 */
+  background: repeating-linear-gradient(
+    to bottom,
+    #242124 0px,   #242124 25px,
+    #161616 25px,  #161616 50px
+  );
+}
+
+.chatbox.is-visible {
+  opacity: 1;
+}
+
+.chatbox__messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+.chatbox__line {
+  display: flex;
+  align-items: flex-start;
+  min-height: 25px;              /* 至少一行高；换行时自动变高 */
+  flex: 0 0 auto;
+  /* 不再设置 background / nth-child，条纹由容器提供 */
+}
+
+/* 时间列：30-120 */
+.chatbox__time {
+  flex: 0 0 90px;
+  margin-left: 30px;
+  box-sizing: border-box;
+  padding-right: 8px;
+  text-align: right;
+  font-weight: 600;
+  color: #f8f8f6;
+  white-space: nowrap;
+}
+
+/* ID 列：160-260（margin-left 40 制造 120-160 空白） */
+.chatbox__name {
+  flex: 0 0 100px;
+  margin-left: 40px;
+  box-sizing: border-box;
+  text-align: right;
+  font-weight: 700;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.chatbox__name--red   { color: #ff5252; }
+.chatbox__name--blue  { color: #4d9bff; }
+.chatbox__name--other { color: #5ddf7f; }
+
+/* 消息列：270-600（margin-left 10 制造 260-270 空白） */
+.chatbox__text {
+  flex: 0 0 330px;
+  margin-left: 10px;
+  box-sizing: border-box;
+  padding-right: 4px;
+  color: #f8f8f6;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   全局 Logo + 轮次徽章
+   ========================================= */
+
+.global-logo {
+  position: absolute;
+  top: -65px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.global-logo.is-visible {
+  opacity: 1;
+}
+
+.global-logo__img {
+  height: 250px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+}
+
+.global-logo__badge {
+  margin-top: -75px;
+  min-height: 34px;
+  padding: 1px 35px;
+  background: #0d14bd;
+  color: #f8f8f6;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+/* 空内容时不显示背景，避免空蓝框 */
+.global-logo__badge:empty {
+  opacity: 0;
 }

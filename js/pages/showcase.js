@@ -2,7 +2,14 @@ import { MapCard }    from '../components/mapCard.js';
 import { StatsPanel } from '../components/statsPanel.js';
 
 const COUNTDOWN_TITLE_KEY = 'cyt2026.showcaseCountdown.title';
-const DEFAULT_TITLE = 'Qualifier ShowCase';
+const DEFAULT_TITLE = 'Swiss Phase I Showcase';
+
+/* 阶段名 → mappool id */
+const STAGE_TO_MAPPool = {
+  'Swiss Phase I':  'swiss-1',
+  'Swiss Phase II': 'swiss-2',
+  'Bracket Stage':  'bracket',
+};
 
 export function initShowcase({ mapInfo, tokenStore, tournamentState, tournamentData }) {
   const pageEl = document.querySelector('[data-page="showcase"]');
@@ -11,7 +18,7 @@ export function initShowcase({ mapInfo, tokenStore, tournamentState, tournamentD
   /* ---------- 左下：地图卡片 ---------- */
   const cardEl = pageEl.querySelector('.map-card');
   if (cardEl) {
-    const card = new MapCard(cardEl, { tournamentData, tokenStore });  // ← 多传两个依赖
+    const card = new MapCard(cardEl, { tournamentData, tokenStore });
     mapInfo.watch(info => card.render(info));
   }
 
@@ -22,33 +29,51 @@ export function initShowcase({ mapInfo, tokenStore, tournamentState, tournamentD
   }
 
   /* ---------- 右下：mod 列表 ---------- */
-  const state = { round: null };
+  const state = { pool: null };
 
   function refresh() {
     const title = localStorage.getItem(COUNTDOWN_TITLE_KEY) || DEFAULT_TITLE;
-    state.round = matchRound(tournamentData.getRounds(), title);
-    renderModList(pageEl, state.round);
-    highlightCurrentMod(pageEl, state.round, tokenStore.get('mapid'));
+    state.pool = findMappoolByTitle(tournamentData, title);
+
+    renderModList(pageEl, state.pool);
+    highlightCurrentMod(pageEl, state.pool, tokenStore.get('mapid'));
   }
 
   refresh();
 
   tokenStore.watch(['mapid'], (t) => {
-    highlightCurrentMod(pageEl, state.round, t.mapid);
+    highlightCurrentMod(pageEl, state.pool, t.mapid);
   });
 
   pageEl.addEventListener('page:activated', refresh);
 }
 
+/* ---------- 从标题解析 mappool ---------- */
+
+function findMappoolByTitle(tournamentData, title) {
+  if (!title || !tournamentData) return null;
+
+  /* 尝试阶段名匹配：遍历 STAGE_TO_MAPPool */
+  for (const [stage, poolId] of Object.entries(STAGE_TO_MAPPool)) {
+    if (title.includes(stage)) {
+      return tournamentData.getMappool(poolId);
+    }
+  }
+
+  /* 兜底：如果标题就是某个 mappool id */
+  const pools = tournamentData.getMappools();
+  return pools.find(p => title.includes(p.id)) || null;
+}
+
 /* ---------- Mod 列表 ---------- */
 
-function renderModList(pageEl, round) {
+function renderModList(pageEl, pool) {
   const container = pageEl.querySelector('.stats-modlist');
   if (!container) return;
 
-  const items = buildModItems(round);
+  const items = buildModItems(pool);
 
-  // 每行 8 个
+  /* 每行 8 个 */
   const rows = [];
   for (let i = 0; i < items.length; i += 8) {
     rows.push(items.slice(i, i + 8));
@@ -61,30 +86,23 @@ function renderModList(pageEl, round) {
   ).join('');
 }
 
-function buildModItems(round) {
-  if (!round?.beatmaps?.length) return [];
-  return round.beatmaps.map(bm => bm.mods || 'NM');
+function buildModItems(pool) {
+  if (!pool?.beatmaps?.length) return [];
+  return pool.beatmaps.map(bm => bm.mods || 'NM');
 }
 
-function matchRound(rounds, title) {
-  if (!title || !rounds?.length) return null;
-  for (const r of rounds) {
-    if (r.name && title.includes(r.name)) return r;
-  }
-  const first = title.split(/\s+/)[0].replace(/[：:]/g, '');
-  return rounds.find(r => r.name === first) || null;
-}
+/* ---------- 高亮当前 mod ---------- */
 
-function highlightCurrentMod(pageEl, round, mapId) {
+function highlightCurrentMod(pageEl, pool, mapId) {
   const container = pageEl.querySelector('.stats-modlist');
   if (!container) return;
 
   container.querySelectorAll('.is-active').forEach(el => el.classList.remove('is-active'));
 
-  if (!round || mapId == null) return;
+  if (!pool || mapId == null) return;
 
   const idStr = String(mapId);
-  const current = round.beatmaps?.find(bm =>
+  const current = pool.beatmaps?.find(bm =>
     bm.beatmapInfo?.onlineId != null &&
     String(bm.beatmapInfo.onlineId) === idStr
   );

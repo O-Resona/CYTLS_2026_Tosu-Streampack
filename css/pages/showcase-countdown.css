@@ -22,8 +22,9 @@
   font-size: 110px;
   font-weight: 900;
   letter-spacing: 5px;
-  line-height: 1.1;
+  line-height: 1.15;               /* ← 从 1.1 稍调 */
   color: #f8f8f6;
+  text-align: center;               /* ← 确保居中对齐 */
   text-shadow:
     0 0 40px rgba(77, 155, 255, .55),
     0 4px 24px rgba(0, 0, 0, .7);

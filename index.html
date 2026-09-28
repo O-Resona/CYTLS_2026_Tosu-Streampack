@@ -53,6 +53,32 @@
         <button type="button" id="mappoolRedPickBtn"  class="mp-btn mp-btn--red-pick">RED PICK</button>
         <button type="button" id="mappoolBluePickBtn" class="mp-btn mp-btn--blue-pick">BLUE PICK</button>
         <button type="button" id="mappoolResetBtn"    class="mp-btn mp-btn--reset">重置所有</button>
+        <button type="button" id="mappoolReloadBtn" class="mp-btn mp-btn--reload">从 JSON 重新加载</button>
+      </div>
+
+      <!-- =====================================================
+           Bracket 控制面板：仅 bracket 页面激活时显示
+           ===================================================== -->
+      <div class="bracket-panel" id="bracketPanel" hidden>
+        <div class="bracket-panel__title">Bracket 控制面板</div>
+
+        <div class="bracket-panel__row">
+          <div class="bracket-panel__label">Team 1</div>
+          <select class="bracket-panel__select" id="bpTeam1"></select>
+        </div>
+
+        <div class="bracket-panel__row">
+          <div class="bracket-panel__label">Team 2</div>
+          <select class="bracket-panel__select" id="bpTeam2"></select>
+        </div>
+
+        <div class="bracket-panel__row">
+          <div class="bracket-panel__label">Date</div>
+          <input class="bracket-panel__input" id="bpDate" type="text"
+                 placeholder="MM/DD HH:mm" autocomplete="off">
+        </div>
+
+        <button type="button" class="bp-btn bp-btn--reset" id="bpReset">重置本场覆盖</button>
       </div>
 
     </aside>
@@ -84,12 +110,52 @@
 
       <!-- ---------- 各子页面将在此被 router 动态注入 ---------- -->
 
+      <!-- 全局队伍 HUD（mappool / playing 共享，切页时不闪） -->
+      <div class="global-hud" id="globalHud">
+
+        <div class="global-hud__team global-hud__team--left">
+          <img class="global-hud__avatar" id="ghTeam1Avatar" alt="">
+          <div class="global-hud__info">
+            <div class="global-hud__row global-hud__row--tag">
+              <span class="global-hud__tag global-hud__tag--red">red team</span>
+              <div class="global-hud__stars" id="ghTeam1Stars"></div>
+            </div>
+            <div class="global-hud__row global-hud__row--name" id="ghTeam1Name">—</div>
+            <div class="global-hud__row global-hud__row--seed" id="ghTeam1Seed"></div>
+          </div>
+        </div>
+
+        <div class="global-hud__team global-hud__team--right">
+          <div class="global-hud__info">
+            <div class="global-hud__row global-hud__row--tag">
+              <div class="global-hud__stars" id="ghTeam2Stars"></div>
+              <span class="global-hud__tag global-hud__tag--blue">blue team</span>
+            </div>
+            <div class="global-hud__row global-hud__row--name" id="ghTeam2Name">—</div>
+            <div class="global-hud__row global-hud__row--seed" id="ghTeam2Seed"></div>
+          </div>
+          <img class="global-hud__avatar" id="ghTeam2Avatar" alt="">
+        </div>
+
+      </div>
+
+      <!-- ---------- 全局聊天框 ---------- -->
+      <div class="chatbox" id="globalChatBox">
+        <div class="chatbox__messages" id="globalChatMessages"></div>
+      </div>
+
+      <!-- ---------- 全局 Logo + 轮次徽章 ---------- -->
+      <div class="global-logo" id="globalLogo">
+        <img class="global-logo__img" src="src/logo.png" alt="">
+        <div class="global-logo__badge" id="globalLogoBadge"></div>
+      </div>
+
       <!-- ---------- 转场前景层：在 page 之上 ---------- -->
       <div class="final-fore" id="finalFore" hidden>
         <img class="ft-text"  src="src/text.png"  alt="">
         <img class="ft-text2" src="src/text2.png" alt="">
-        <img class="ft-cut"   src="src/cut.png"   alt="">
-        <img class="ft-cut2"  src="src/cut2.png"  alt="">
+        <img class="ft-cut-top"    src="src/cut_top.png"    alt="">
+        <img class="ft-cut-bottom" src="src/cut_bottom.png" alt="">
       </div>
 
     </main>

@@ -227,6 +227,35 @@
   position: relative;
 }
 
+/* ---------- DT 倍率标签 ---------- */
+
+.map-card__special-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 20px 0 40px;
+  margin-left: -30px;
+  background: #431b1b;
+  color: #ff6666;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-sizing: border-box;
+
+  /* 两侧大尖角 */
+  clip-path: polygon(
+    0% 50%,
+    18px 0%,
+    calc(100% - 11px) 0%,
+    100% 50%,
+    calc(100% - 11px) 100%,
+    18px 100%
+  );
+}
+
 /* =========================================
    右下：谱面数值面板
    ========================================= */
@@ -371,7 +400,7 @@
   width: 1472px;
   height: 828px;
 
-  background: #00B140;
+  background: #00ff00;
   z-index: 4;
 
   /* 可选：微调边缘，避免和卡片/背景产生视觉缝隙 */
