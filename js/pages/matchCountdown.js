@@ -1,114 +1,135 @@
 /**
- * Match Countdown 子页面
+ * Match Info 子页面
  *
- * 从 localStorage['cyt2026.currentMatchId'] 读取当前比赛。
+ * 从 localStorage['cyt2026.currentMatchId'] 读当前比赛，
+ * 在画面中央两侧显示 RED / BLUE TEAM + 队名 + seed + 两名队员。
  */
 
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
+const OVERRIDE_KEY      = 'cyt2026.matchOverrides';
 
 export function initMatchCountdown({ tournamentData }) {
   const pageEl = document.querySelector('[data-page="match-countdown"]');
   if (!pageEl) return;
 
-  const elRound   = pageEl.querySelector('#mcRound');
-  const elTeam1   = pageEl.querySelector('#mcTeam1');
-  const elTeam2   = pageEl.querySelector('#mcTeam2');
-  const elDate    = pageEl.querySelector('#mcDate');
-  const elHours   = pageEl.querySelector('[data-unit="hours"]');
-  const elMinutes = pageEl.querySelector('[data-unit="minutes"]');
-  const elSeconds = pageEl.querySelector('[data-unit="seconds"]');
+  const refs = {
+    team1Name:   pageEl.querySelector('#mcTeam1Name'),
+    team1Seed:   pageEl.querySelector('#mcTeam1Seed'),
+    team1P1:     pageEl.querySelector('#mcTeam1P1'),
+    team1P2:     pageEl.querySelector('#mcTeam1P2'),
+    team1Avatar: pageEl.querySelector('#mcTeam1Avatar'),
+    team2Name:   pageEl.querySelector('#mcTeam2Name'),
+    team2Seed:   pageEl.querySelector('#mcTeam2Seed'),
+    team2P1:     pageEl.querySelector('#mcTeam2P1'),
+    team2P2:     pageEl.querySelector('#mcTeam2P2'),
+    team2Avatar: pageEl.querySelector('#mcTeam2Avatar'),
+  };
 
-  const pad2 = (n) => String(n).padStart(2, '0');
+  /* 与 teamHud 相同的头像加载逻辑（jpg / png 兜底） */
+  function setAvatar(imgEl, team) {
+    if (!imgEl) return;
 
-  let targetTime = null;
-  let intervalId = null;
+    if (!team?.acronym) {
+      imgEl.removeAttribute('src');
+      imgEl.style.opacity = '0';
+      imgEl.onload = null;
+      imgEl.onerror = null;
+      return;
+    }
 
-  /* ---------- 读当前比赛 ---------- */
+    const base = team.acronym;
+    const candidates = [
+      `src/ava/${base}.jpg`,
+      `src/ava/${base}.png`,
+    ];
+
+    imgEl.style.opacity = '0';
+    imgEl.alt = base;
+
+    let i = 0;
+    const tryNext = () => {
+      if (i >= candidates.length) {
+        imgEl.style.opacity = '0';
+        imgEl.onload = null;
+        imgEl.onerror = null;
+        return;
+      }
+      const path = candidates[i++];
+      imgEl.onerror = () => tryNext();
+      imgEl.onload = () => {
+        imgEl.style.opacity = '1';
+        imgEl.onload = null;
+        imgEl.onerror = null;
+      };
+      imgEl.src = path;
+    };
+
+    tryNext();
+  }
 
   function pickCurrentMatch() {
     let idStr;
     try { idStr = localStorage.getItem(CURRENT_MATCH_KEY); }
     catch { return null; }
     if (!idStr) return null;
+
     const id = Number(idStr);
+    if (!Number.isFinite(id)) return null;
     return tournamentData.getMatch(id);
   }
 
-  /* ---------- 渲染 ---------- */
+  function renderSide(match, side) {
+    const acronym = side === 'left' ? match.team1Acronym : match.team2Acronym;
+    const team = acronym ? tournamentData.getTeam(acronym) : null;
 
-  function renderStatic(match) {
+    const nameEl = side === 'left' ? refs.team1Name : refs.team2Name;
+    const seedEl = side === 'left' ? refs.team1Seed : refs.team2Seed;
+    const p1El   = side === 'left' ? refs.team1P1   : refs.team2P1;
+    const p2El   = side === 'left' ? refs.team1P2   : refs.team2P2;
+    const avEl   = side === 'left' ? refs.team1Avatar : refs.team2Avatar;
+
+    if (nameEl) nameEl.textContent = team?.fullName || acronym || '—';
+    if (seedEl) seedEl.textContent = team?.seed ? `#${team.seed}` : '';
+
+    const players = team?.players || [];
+    if (p1El) p1El.textContent = players[0]?.username || '';
+    if (p2El) p2El.textContent = players[1]?.username || '';
+
+    setAvatar(avEl, team);
+  }
+
+  function render() {
+    const match = pickCurrentMatch();
+
     if (!match) {
-      elRound.textContent = '';
-      elTeam1.textContent = '—';
-      elTeam2.textContent = '—';
-      elDate.textContent  = '未选择比赛';
-      targetTime = null;
+      reset();
       return;
     }
 
-    const round = tournamentData.getRound(match.roundId);
-    elRound.textContent = round?.name || '';
-    elTeam1.textContent = match.team1Acronym || '—';
-    elTeam2.textContent = match.team2Acronym || '—';
-
-    const d = new Date(match.date);
-    if (Number.isFinite(d.getTime())) {
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      const hh = String(d.getHours()).padStart(2, '0');
-      const mi = String(d.getMinutes()).padStart(2, '0');
-      elDate.textContent = `${mm}/${dd} ${hh}:${mi}`;
-      targetTime = d.getTime();
-    } else {
-      elDate.textContent = '';
-      targetTime = null;
-    }
+    renderSide(match, 'left');
+    renderSide(match, 'right');
   }
 
-  /* ---------- Tick ---------- */
+  function reset() {
+    ['team1Name','team1Seed','team1P1','team1P2'].forEach(k => {
+      if (refs[k]) refs[k].textContent = k.includes('Name') ? '—' : '';
+    });
+    ['team2Name','team2Seed','team2P1','team2P2'].forEach(k => {
+      if (refs[k]) refs[k].textContent = k.includes('Name') ? '—' : '';
+    });
 
-  function tick() {
-    if (!targetTime) {
-      elHours.textContent   = '00';
-      elMinutes.textContent = '00';
-      elSeconds.textContent = '00';
-      return;
-    }
-
-    let diff = targetTime - Date.now();
-    if (diff < 0) diff = 0;
-
-    const totalSec = Math.floor(diff / 1000);
-    const hours   = Math.floor(totalSec / 3600);
-    const minutes = Math.floor((totalSec % 3600) / 60);
-    const seconds = totalSec % 60;
-
-    elHours.textContent   = pad2(hours);
-    elMinutes.textContent = pad2(minutes);
-    elSeconds.textContent = pad2(seconds);
+    /* 头像清空 */
+    if (refs.team1Avatar) { refs.team1Avatar.removeAttribute('src'); refs.team1Avatar.style.opacity = '0'; }
+    if (refs.team2Avatar) { refs.team2Avatar.removeAttribute('src'); refs.team2Avatar.style.opacity = '0'; }
   }
 
-  /* ---------- 生命周期 ---------- */
+  render();
 
-  function start() {
-    stop();
-    renderStatic(pickCurrentMatch());
-    tick();
-    intervalId = setInterval(tick, 1000);
-  }
-
-  function stop() {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
-  }
-
-  start();
-  pageEl.addEventListener('page:activated',   start);
-  pageEl.addEventListener('page:deactivated', stop);
+  pageEl.addEventListener('page:activated', render);
 
   window.addEventListener('storage', (e) => {
-    if (e.key === CURRENT_MATCH_KEY) start();
+    if (e.key === CURRENT_MATCH_KEY || e.key === OVERRIDE_KEY) {
+      render();
+    }
   });
 }

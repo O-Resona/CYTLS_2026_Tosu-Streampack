@@ -5,6 +5,7 @@
  *   - 背景图（带暗化层，切换时交叉淡入淡出）
  *   - 标题 / mapper / difficulty
  *   - LM 特殊 mod 图标（支持多个，水平重叠排列）
+ *   - 当前图被某队 pick 时，加红/蓝内边框
  *
  * mapper 优先取 tournamentData 里的，取不到再用 osu 传来的。
  * specialmods 支持字符串或数组两种写法。
@@ -16,6 +17,8 @@ const MOD_ICON_MAP = {
   HD: 'Hidden',
   DT: 'Double Time',
 };
+
+const BP_ACTIONS_KEY = 'mapBPActions';
 
 export class MapCard {
   constructor(root, { tournamentData, tokenStore } = {}) {
@@ -30,6 +33,15 @@ export class MapCard {
 
     this._specialToken = 0;
     this._bgToken = 0;
+    this._lastMapTitle = '';
+
+    /* 其他标签页/窗口改动 BP 状态时同步边框 */
+    this._onStorage = (e) => {
+      if (e.key === BP_ACTIONS_KEY) {
+        this._applyBorderClass(this._lastMapTitle);
+      }
+    };
+    window.addEventListener('storage', this._onStorage);
   }
 
   /* =========================================
@@ -54,8 +66,31 @@ export class MapCard {
 
     if (this.diffEl) this.diffEl.textContent = info.diffName || '—';
 
+    // 当前图 title → 应用红/蓝内边框（只有 pick 状态才显示）
+    this._lastMapTitle = bm?.beatmapInfo?.metadata?.title || '';
+    this._applyBorderClass(this._lastMapTitle);
+
     // LM 特殊 mod 图标
     this._renderSpecial(bm);
+  }
+
+  /* =========================================
+     内边框：当前图被 pick 时，加上对应队伍色
+     ========================================= */
+
+  _applyBorderClass(mapTitle) {
+    const root = this.root;
+    if (!root) return;
+
+    root.classList.remove('redBorder', 'blueBorder');
+    if (!mapTitle) return;
+
+    try {
+      const actions = JSON.parse(localStorage.getItem(BP_ACTIONS_KEY) || '{}');
+      const state = actions[mapTitle];
+      if (!state || state.action !== 'pick') return;
+      root.classList.add(state.team === 'red' ? 'redBorder' : 'blueBorder');
+    } catch {}
   }
 
   /* =========================================
@@ -105,7 +140,6 @@ export class MapCard {
     el.dataset.leaving = '1';
     el.style.opacity = '0';
     el.addEventListener('transitionend', () => el.remove(), { once: true });
-    // 兜底：动画未触发时也移除
     setTimeout(() => el.remove(), 800);
   }
 
@@ -151,10 +185,8 @@ export class MapCard {
 
     /* DT 特例：右侧带倍率标签 */
     if (rawMod === 'DT') {
-      /* 先图标 */
       items.push({ type: 'img', name: MOD_ICON_MAP.DT });
 
-      /* 后标签 */
       if (bm?.dtRate != null) {
         const n = Number(bm.dtRate);
         if (Number.isFinite(n)) {
@@ -199,8 +231,7 @@ export class MapCard {
       }
     };
 
-    items.forEach((item, idx) => {
-      /* 文字标签（如 "1.35x"） */
+    items.forEach((item) => {
       if (item.type === 'label') {
         const el = document.createElement('span');
         el.className = 'map-card__special-label';
@@ -211,7 +242,6 @@ export class MapCard {
         return;
       }
 
-      /* 图标 */
       const img = new Image();
       img.className = 'map-card__special';
       img.alt = item.name;
@@ -227,5 +257,14 @@ export class MapCard {
       img.src = `src/mods_tag/${item.name}.png`;
       box.appendChild(img);
     });
+  }
+
+  /* 可选：外部主动刷新边框 */
+  refreshBorder() {
+    this._applyBorderClass(this._lastMapTitle);
+  }
+
+  destroy() {
+    window.removeEventListener('storage', this._onStorage);
   }
 }

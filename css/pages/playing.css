@@ -13,8 +13,8 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 200px;
-  height: 10px;
+  bottom: 192px;
+  height: 8px;
   background: linear-gradient(
     to right,
     #AE1318 0%,   #AE1318 50%,
@@ -199,4 +199,5 @@
 
 .page[data-page="playing"] {
   z-index: 5;
+  pointer-events: none; 
 }

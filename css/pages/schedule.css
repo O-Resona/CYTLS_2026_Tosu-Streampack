@@ -1,0 +1,122 @@
+/* =========================================
+   Schedule 子页面
+   ========================================= */
+
+[data-page="schedule"] .sch-layout {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 180px 90px 60px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+/* ---------- 轮次分组 ---------- */
+
+[data-page="schedule"] .sch-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+[data-page="schedule"] .sch-group__title {
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #f8f8f6;
+  text-shadow:
+    0 0 20px rgba(77, 155, 255, .55),
+    0 4px 16px rgba(0, 0, 0, .55);
+  padding-bottom: 4px;
+}
+
+[data-page="schedule"] .sch-group__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 14px;
+}
+
+/* ---------- 单场比赛 ---------- */
+
+[data-page="schedule"] .sch-match {
+  display: grid;
+  grid-template-columns: 150px 1fr 60px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  background: rgba(6, 10, 18, 0.4);
+  backdrop-filter: blur(8px) saturate(1.15);
+  -webkit-backdrop-filter: blur(8px) saturate(1.15);
+  border: 1px solid rgba(140, 185, 255, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  transition: border-color .2s ease, transform .15s ease, box-shadow .2s ease;
+}
+
+[data-page="schedule"] .sch-match:hover {
+  border-color: rgba(140, 185, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+[data-page="schedule"] .sch-match.is-selected {
+  border-color: #F6DB00;
+  box-shadow:
+    0 0 16px rgba(246, 219, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.28);
+}
+
+/* 未指定队伍 → 变灰 */
+[data-page="schedule"] .sch-match.is-empty {
+  opacity: 0.45;
+}
+
+[data-page="schedule"] .sch-match__time {
+  font-size: 16px;
+  font-weight: 700;
+  color: #8996a8;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+[data-page="schedule"] .sch-match__team {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 20px;
+  color: #f8f8f6;
+  min-width: 0;
+  overflow: hidden;
+}
+
+[data-page="schedule"] .sch-match__team--right {
+  justify-content: flex-end;
+}
+
+[data-page="schedule"] .sch-match__seed {
+  font-size: 15px;
+  color: #8996a8;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+
+[data-page="schedule"] .sch-match__name {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-page="schedule"] .sch-match__vs {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: #4d9bff;
+  letter-spacing: 2px;
+}

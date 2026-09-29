@@ -135,21 +135,18 @@
   z-index: 1;
 }
 
-.map-card.redBorder {
-  box-shadow:
-    inset 0 0 0 2pt #fa0000,
-    0 0 0 3pt #fa0000,
-    inset 0 0 28px 4px #0008;
-    0 0 8px rgba(0, 0, 0, 0.67);
+.map-card.redBorder::after,
+.map-card.blueBorder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: inherit;
 }
 
-.map-card.blueBorder {
-  box-shadow:
-    inset 0 0 0 2pt #147aff,
-    0 0 0 3pt #147aff,
-    inset 0 0 28px 4px #0008;
-    0 0 8px rgba(0, 0, 0, 0.67);
-}
+.map-card.redBorder::after  { border: 5pt solid #AE1318; }
+.map-card.blueBorder::after { border: 5pt solid #1661AB; }
 
 .map-card__title {
   width: 100%;

@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="css/pages/showcase-countdown.css">
   <link rel="stylesheet" href="css/pages/match-countdown.css">
   <link rel="stylesheet" href="css/pages/bracket.css">
-  <!-- 如果 winner 以后有独立样式，在这里加： -->
-  <!-- <link rel="stylesheet" href="css/pages/winner.css"> -->
+  <link rel="stylesheet" href="css/pages/schedule.css">
+  <link rel="stylesheet" href="css/pages/winner.css">
 </head>
 <body>
 
@@ -25,7 +25,8 @@
 
       <!-- 上半区 -->
       <button class="nav-btn" data-target="bracket">Bracket</button>
-      <button class="nav-btn" data-target="match-countdown">Match Countdown</button>
+      <button class="nav-btn" data-target="schedule">Schedule</button>
+      <button class="nav-btn" data-target="match-countdown">Match Info</button>
       <button class="nav-btn" data-target="mappool">Mappool</button>
       <button class="nav-btn" data-target="playing">Playing</button>
       <button class="nav-btn" data-target="winner">Winner</button>
@@ -38,7 +39,6 @@
            Mappool 控制面板：仅 mappool 页面激活时显示
            ===================================================== -->
       <div class="mappool-panel" id="mappoolPanel" hidden>
-        <div class="mappool-panel__title">控制面板</div>
 
         <div class="round-selector">
           <div class="round-label">当前轮次</div>
@@ -48,19 +48,40 @@
           </div>
         </div>
 
-        <button type="button" id="mappoolRedBanBtn"   class="mp-btn mp-btn--red active">RED BAN</button>
-        <button type="button" id="mappoolBlueBanBtn"  class="mp-btn mp-btn--blue">BLUE BAN</button>
-        <button type="button" id="mappoolRedPickBtn"  class="mp-btn mp-btn--red-pick">RED PICK</button>
-        <button type="button" id="mappoolBluePickBtn" class="mp-btn mp-btn--blue-pick">BLUE PICK</button>
-        <button type="button" id="mappoolResetBtn"    class="mp-btn mp-btn--reset">重置所有</button>
-        <button type="button" id="mappoolReloadBtn" class="mp-btn mp-btn--reload">从 JSON 重新加载</button>
+        <div class="first-picker-selector">
+          <div class="round-label">先选方</div>
+          <div class="first-picker-options">
+            <label><input type="radio" name="firstPicker" value="red" checked><span>红队</span></label>
+            <label><input type="radio" name="firstPicker" value="blue"><span>蓝队</span></label>
+          </div>
+        </div>
+
+        <div class="mappool-panel__group mappool-panel__group--row">
+          <button type="button" id="mappoolRedProtectBtn"  class="mp-btn mp-btn--red-protect active">RED PROTECT</button>
+          <button type="button" id="mappoolRedBanBtn"      class="mp-btn mp-btn--red">RED BAN</button>
+        </div>
+
+        <div class="mappool-panel__group mappool-panel__group--row">
+          <button type="button" id="mappoolBlueProtectBtn" class="mp-btn mp-btn--blue-protect">BLUE PROTECT</button>
+          <button type="button" id="mappoolBlueBanBtn"     class="mp-btn mp-btn--blue">BLUE BAN</button>
+        </div>
+
+        <div class="mappool-panel__group">
+          <button type="button" id="mappoolRedPickBtn"  class="mp-btn mp-btn--red-pick">RED PICK</button>
+          <button type="button" id="mappoolBluePickBtn" class="mp-btn mp-btn--blue-pick">BLUE PICK</button>
+        </div>
+
+        <div class="mappool-panel__group">
+          <button type="button" id="mappoolResetBtn"  class="mp-btn mp-btn--reset">重置所有</button>
+          <button type="button" id="mappoolReloadBtn" class="mp-btn mp-btn--reload">从 JSON 重新加载</button>
+        </div>
+
       </div>
 
       <!-- =====================================================
            Bracket 控制面板：仅 bracket 页面激活时显示
            ===================================================== -->
       <div class="bracket-panel" id="bracketPanel" hidden>
-        <div class="bracket-panel__title">Bracket 控制面板</div>
 
         <div class="bracket-panel__row">
           <div class="bracket-panel__label">Team 1</div>
@@ -79,6 +100,11 @@
         </div>
 
         <button type="button" class="bp-btn bp-btn--reset" id="bpReset">重置本场覆盖</button>
+
+        <button type="button" class="bp-btn bp-btn--danger" id="bpClearAll">
+          <span class="bp-btn__icon" aria-hidden="true">⚠</span>
+          清除所有本地修改
+        </button>
       </div>
 
     </aside>
@@ -90,34 +116,27 @@
 
       <!-- ---------- 全局背景媒体 ---------- -->
 
-      <!-- 视频：两个共存，靠 display 切换 -->
       <video class="global-bg-video" data-bg="main" src="src/bg.mp4"  muted loop autoplay playsinline preload="auto"></video>
       <video class="global-bg-video" data-bg="alt2" src="src/bg2.mp4" muted loop autoplay playsinline preload="auto" style="display:none"></video>
 
-      <!-- 图片：三张共存，靠 display 切换 -->
       <img class="global-bg-image" data-bg="main"  src="src/bg.png"  alt="">
       <img class="global-bg-image" data-bg="alt"   src="src/bg2.png" alt="" style="display:none">
       <img class="global-bg-image" data-bg="third" src="src/bg3.png" alt="" style="display:none">
 
-      <!-- 覆盖层（用于纯色背景的页面，如 Showcase Countdown） -->
       <div class="global-bg-cover"></div>
 
-      <!-- ---------- 转场背景层：在 page 之下，含 bg4 / bg3 ---------- -->
       <div class="final-bg" id="finalBg" hidden>
         <img class="ft-bg4" src="src/bg4.png" alt="">
         <img class="ft-bg3" src="src/bg3.png" alt="">
       </div>
 
-      <!-- ---------- 各子页面将在此被 router 动态注入 ---------- -->
-
-      <!-- 全局队伍 HUD（mappool / playing 共享，切页时不闪） -->
       <div class="global-hud" id="globalHud">
 
         <div class="global-hud__team global-hud__team--left">
           <img class="global-hud__avatar" id="ghTeam1Avatar" alt="">
           <div class="global-hud__info">
             <div class="global-hud__row global-hud__row--tag">
-              <span class="global-hud__tag global-hud__tag--red">red team</span>
+              <span class="global-hud__tag global-hud__tag--red">team red</span>
               <div class="global-hud__stars" id="ghTeam1Stars"></div>
             </div>
             <div class="global-hud__row global-hud__row--name" id="ghTeam1Name">—</div>
@@ -129,7 +148,7 @@
           <div class="global-hud__info">
             <div class="global-hud__row global-hud__row--tag">
               <div class="global-hud__stars" id="ghTeam2Stars"></div>
-              <span class="global-hud__tag global-hud__tag--blue">blue team</span>
+              <span class="global-hud__tag global-hud__tag--blue">team blue</span>
             </div>
             <div class="global-hud__row global-hud__row--name" id="ghTeam2Name">—</div>
             <div class="global-hud__row global-hud__row--seed" id="ghTeam2Seed"></div>
@@ -139,18 +158,15 @@
 
       </div>
 
-      <!-- ---------- 全局聊天框 ---------- -->
       <div class="chatbox" id="globalChatBox">
         <div class="chatbox__messages" id="globalChatMessages"></div>
       </div>
 
-      <!-- ---------- 全局 Logo + 轮次徽章 ---------- -->
       <div class="global-logo" id="globalLogo">
         <img class="global-logo__img" src="src/logo.png" alt="">
         <div class="global-logo__badge" id="globalLogoBadge"></div>
       </div>
 
-      <!-- ---------- 转场前景层：在 page 之上 ---------- -->
       <div class="final-fore" id="finalFore" hidden>
         <img class="ft-text"  src="src/text.png"  alt="">
         <img class="ft-text2" src="src/text2.png" alt="">

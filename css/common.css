@@ -68,22 +68,22 @@ body {
   flex: 0 0 280px;
   background: linear-gradient(180deg, #10141c 0%, #0b0e14 100%);
   border-right: 1px solid #1c2230;
-  padding: 28px 16px;
+  padding: 14px 16px 28px; 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 5px;
   position: relative;
   z-index: 10;
 }
 
 .nav-btn {
   width: 100%;
-  height: 58px;
+  height: 54px;
   border-radius: 10px;
   border: 1px solid #232b39;
   background: #141922;
   color: #8996a8;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: 0.8px;
   cursor: pointer;
@@ -130,7 +130,7 @@ body {
 }
 
 .nav-btn--gap-top {
-  margin-top: 48px;      /* 上半区最后一个按钮下方留行 */
+  margin-top: 40px;
 }
 
 /* =========================================
@@ -402,7 +402,7 @@ body {
 
 .global-hud {
   position: absolute;
-  top: 24px;
+  top: 28px;
   left: 30px;
   right: 30px;
   display: flex;
@@ -433,11 +433,14 @@ body {
   height: 80px;
   border-radius: 10px;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.15);
   background: #1a2130;
   flex-shrink: 0;
   opacity: 0;
   transition: opacity 0.2s ease;
+
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.06);    
 }
 
 .global-hud__info {
@@ -458,22 +461,24 @@ body {
 /* ---------- 第一排：tag + 星星 ---------- */
 
 .global-hud__row--tag {
-  height: 38px;
-  gap: 8px;
+  height: auto; 
+  gap: 6px;
 }
 
 .global-hud__tag {
-  height: 34px;
+  height: auto;
   display: flex;
   align-items: center;
-  padding: 0 6px;
+  padding: 8px 14px 3px 6px;
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 440;
   letter-spacing: 0.5px;
   color: #ffffff;
-  border-radius: 5px;
   line-height: 1;
   text-transform: uppercase;
+
+  transform: scaleY(0.95);
+  transform-origin: center top;
 }
 
 .global-hud__tag--red  { background: #AE1318; }
@@ -494,19 +499,28 @@ body {
 .global-hud__star {
   position: relative;
   display: inline-block;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border: 3px solid #f8f8f6;
-  border-radius: 3px;
+  border-radius: 1px;
   background: transparent;
   box-sizing: border-box;
   cursor: pointer;
-  overflow: hidden;
   user-select: none;
-  transition:
-    box-shadow 0.35s ease,
-    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: box-shadow 0.35s ease,
 }
+
+/* 点击热区：向外扩 8px，不可见 */
+.global-hud__star::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  /* 无背景无边框，只用于扩点击 */
+}
+
 
 /* 填充层：从中心向外扩散 */
 .global-hud__star::after {
@@ -528,20 +542,13 @@ body {
   box-shadow:
     0 0 2px rgba(248, 248, 246, 0.9),
     0 0 5px rgba(248, 248, 246, 0.5);
-  animation: starPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes starPop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.22); }
-  100% { transform: scale(1); }
-}
-
-/* ---------- 第二排：队名（高度 40，紧贴第一排） ---------- */
+/* ---------- 第二排：队名 ---------- */
 
 .global-hud__row--name {
   height: 38px;
-  padding: 0 6px;
+  padding: 5px 14px 3px 6px;
   background: #f8f8f6;
   color: #1a1a1a;
   font-size: 24px;
@@ -549,21 +556,26 @@ body {
   letter-spacing: 0.3px;
   display: flex;
   align-items: center;
+
+  -webkit-text-stroke: 0.2px currentColor;
 }
 
 /* ---------- 第三排：seed（在头像和第二排下方） ---------- */
 
 .global-hud__row--seed {
-  padding: 2px 6px;
+  padding: 4px 14px 0px 6px;
   margin-top: 2px;
   background: #f8f8f6;
   color: #1a1a1a;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 670;
   letter-spacing: 0.5px;
   display: flex;
   align-items: center;
   min-height: 24px;
+
+  transform: scaleY(0.9);
+  transform-origin: center top;
 }
 
 /* ---------- 右队镜像 ---------- */
@@ -581,82 +593,152 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 200px;
+  height: 190px;
   box-sizing: border-box;
   padding: 0;
   color: #f8f8f6;
   font-size: 15px;
-  line-height: 25px;
+  line-height: 24px;
   overflow: hidden;
-  z-index: 4;                       /* 从 5 降到 4，让 playing 页可覆盖 */
+  z-index: 4;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
 
-  /* 整个 200px 容器铺满交替条纹，每行 25px，共 8 行 */
-  background: repeating-linear-gradient(
-    to bottom,
-    #242124 0px,   #242124 25px,
-    #161616 25px,  #161616 50px
-  );
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 }
 
 .chatbox.is-visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
+/* ---------- 滚动容器 ---------- */
+
+/* ---------- 滚动容器：条纹画在这里，随内容滚动 ---------- */
+
+.chatbox {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 192px;
+  box-sizing: border-box;
+  padding: 0;
+  color: #f8f8f6;
+  font-size: 13px;
+  line-height: 24px;
+  overflow: hidden;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+
+  display: flex;
+  align-items: flex-end;
+  background: #161616;
+}
+
+.chatbox.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---------- 滚动容器 ---------- */
+
 .chatbox__messages {
+  width: 100%;
+  height: 192px;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  height: 100%;
-  overflow: hidden;
-  justify-content: flex-end;
+  box-sizing: border-box;
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  cursor: grab;
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #242124 0,     #242124 24px,
+    #161616 24px,  #161616 48px
+  );
+  background-attachment: local;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.chatbox__messages::-webkit-scrollbar { width: 0; height: 0; }
+.chatbox__messages.is-dragging { cursor: grabbing; }
+
+/* 内容少时贴底 */
+.chatbox__messages::before {
+  content: "";
+  flex: 0 0 0;
+  margin-top: auto;
+}
+
+/* ---------- 每一行 ---------- */
 
 .chatbox__line {
   display: flex;
   align-items: flex-start;
-  min-height: 25px;              /* 至少一行高；换行时自动变高 */
+  line-height: 24px;
+  min-height: 24px;
+  padding: 0;
   flex: 0 0 auto;
-  /* 不再设置 background / nth-child，条纹由容器提供 */
+  background: transparent;
+  overflow: hidden;               /* 单行溢出裁掉 */
 }
 
-/* 时间列：30-120 */
+.chatbox__line,
+.chatbox__line * {
+  line-height: 24px !important;   /* 所有子元素锁死行高 */
+}
+
+/* ---------- 时间列 ---------- */
+
 .chatbox__time {
-  flex: 0 0 90px;
-  margin-left: 30px;
+  flex: 0 0 115px;
+  margin-left: 0px;
   box-sizing: border-box;
-  padding-right: 8px;
+  padding-right: 0px;
   text-align: right;
   font-weight: 600;
   color: #f8f8f6;
   white-space: nowrap;
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
-/* ID 列：160-260（margin-left 40 制造 120-160 空白） */
+/* ---------- 名字列 ---------- */
+
 .chatbox__name {
-  flex: 0 0 100px;
-  margin-left: 40px;
+  flex: 0 0 135px;
+  margin-left: 10px;
   box-sizing: border-box;
   text-align: right;
   font-weight: 700;
+  letter-spacing: 0.4px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.chatbox__name--red   { color: #ff5252; }
+.chatbox__name--red   { color: #AE1318; }
 .chatbox__name--blue  { color: #4d9bff; }
 .chatbox__name--other { color: #5ddf7f; }
 
-/* 消息列：270-600（margin-left 10 制造 260-270 空白） */
+/* ---------- 消息列 ---------- */
+
 .chatbox__text {
-  flex: 0 0 330px;
+  flex: 0 0 360px;
   margin-left: 10px;
   box-sizing: border-box;
   padding-right: 4px;
   color: #f8f8f6;
+  letter-spacing: 0.3px;
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;

@@ -8,7 +8,8 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  padding: 160px 20px 120px;
+  padding: 224px 20px 120px;
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,10 +29,10 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 33.3px;
+  margin-bottom: 15px;
 }
 
-/* SF/F/GF —— 紧凑间距 */
+/* bracket stage —— 紧凑间距 */
 [data-page="mappool"] .mappool-wrapper.is-compact .mapRow {
   margin-bottom: 19px;
 }
@@ -40,18 +41,17 @@
 
 [data-page="mappool"] .mapContainer {
   width: 565px;
-  height: 67px;
+  height: 64px;
   background: no-repeat center center;
   background-size: cover;
-  font-size: 11pt;
+  font-size: 14pt;
   color: #f8f8f6;
-  border-radius: 35px;
   cursor: pointer;
-  transition: box-shadow .3s ease, transform .2s ease;
+  transition: transform .2s ease;
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-  margin: 0 8.5px;
+  margin: 0 7px;
 }
 
 [data-page="mappool"] .mapContainer:hover {
@@ -59,16 +59,10 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
 }
 
-[data-page="mappool"] .mapContainer.blueBorder {
-  box-shadow:
-    inset 0 0 0 4pt #147aff,
-    0 0 0 5pt #147aff;
-}
-
+/* 旧的描边规则清空（描边挪到 .mapContent 上） */
+[data-page="mappool"] .mapContainer.blueBorder,
 [data-page="mappool"] .mapContainer.redBorder {
-  box-shadow:
-    inset 0 0 0 4pt #fa0000,
-    0 0 0 5pt #fa0000;
+  box-shadow: none;
 }
 
 /* ---------- 内容 ---------- */
@@ -78,17 +72,44 @@
   background-color: rgba(0, 0, 0, .4);
   width: 100%;
   height: 100%;
-  border-radius: 35px;
   position: relative;
+
+  /* 内描边：颜色由变量控制，默认透明 */
+  --border-color: transparent;
+  box-shadow: inset 0 0 0 5.5pt var(--border-color);
+  transition: background-color .3s ease, box-shadow .3s ease;
 }
 
+/* 红队 → 红内描边 */
+[data-page="mappool"] .mapContainer.redBorder .mapContent {
+  --border-color:#a80c0c;
+}
+
+/* 蓝队 → 蓝内描边 */
+[data-page="mappool"] .mapContainer.blueBorder .mapContent {
+  --border-color: #147aff;
+}
+
+/* ban 状态下描边变暗 */
+[data-page="mappool"] .mapContainer.redBorder .mapContent.banned {
+  --border-color: rgba(168, 12, 12, 0.6);
+}
+
+[data-page="mappool"] .mapContainer.blueBorder .mapContent.banned {
+  --border-color: rgba(20, 122, 255, 0.6);
+}
+
+/* ban 状态背景变深 + 内部内容变暗 */
 [data-page="mappool"] .mapContent.banned {
   background-color: rgba(0, 0, 0, .8);
 }
 
-[data-page="mappool"] .mapContent.banned .mapMetadata,
-[data-page="mappool"] .mapContent.banned .modImgContainer {
+[data-page="mappool"] .mapContent.banned .mapMetadata {
   opacity: .3;
+}
+
+[data-page="mappool"] .mapContent.banned .modImgContainer {
+  opacity: .6;
 }
 
 /* ---------- 闪烁 ---------- */
@@ -105,34 +126,61 @@
   animation: flashWhite 4s ease-in-out;
 }
 
-/* ---------- 元数据 ---------- */
+/* ---------- 元数据（左对齐） ---------- */
 
 [data-page="mappool"] .mapMetadata {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-grow: 1;
+  min-width: 0; 
   padding: 0 10px;
+}
+
+[data-page="mappool"] .mapMetadata > .bold {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
 }
 
 [data-page="mappool"] .mapDetailsContainer {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 5px;
+  flex-wrap: nowrap;
+  margin-top: 1px;
   width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 [data-page="mappool"] .mapDetails {
-  margin: 0 10px;
-  font-size: 10pt;
-  text-align: center;
+  margin: 0 20px 0 0;
+  font-size: 12pt;
+  text-align: left;
+  max-width: 200px;
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 300;
+}
+
+[data-page="mappool"] .mapDetails .bold {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ---------- mod 图标 ---------- */
 
 [data-page="mappool"] .modImgContainer {
+  position: relative;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -152,6 +200,32 @@
   object-fit: contain;
 }
 
+[data-page="mappool"] .protectImg {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+
+  /* 初始：滑出卡片右缘，透明 */
+  transform: translate(calc(100% + 40px), -50%);
+  opacity: 0;
+  will-change: transform;
+
+  transition:
+    transform .4s cubic-bezier(0.34, 1.3, 0.64, 1),
+    opacity .2s ease;
+}
+
+[data-page="mappool"] .mapContent.is-protected .protectImg {
+  transform: translate(0, -50%);
+  opacity: 1;
+}
+
 [data-page="mappool"] .banMap {
   min-width: 20px;
   height: 100%;
@@ -162,33 +236,43 @@
   font-weight: 700;
 }
 
+/* 当前谱面聚焦高亮 */
+[data-page="mappool"] .mapContainer.is-focused {
+  animation: mapCardFocus 1.6s ease;
+}
+
+@keyframes mapCardFocus {
+  0%   { box-shadow: 0 0 0 0    rgba(246, 219, 0, 0.9),
+                     0 0 0 0    rgba(246, 219, 0, 0.55); }
+  60%  { box-shadow: 0 0 0 12px rgba(246, 219, 0, 0),
+                     0 0 0 22px rgba(246, 219, 0, 0); }
+  100% { box-shadow: none; }
+}
+
 /* =========================================
    Mappool 控制面板（位于 sidebar 底部）
    ========================================= */
 
 .mappool-panel {
   margin-top: auto;
-  padding-top: 16px;
+  padding-top: 12px;
   border-top: 1px solid #1c2230;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 }
 
 .mappool-panel[hidden] {
   display: none !important;
 }
 
-.mappool-panel__title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #c9d5e6;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
+.mappool-panel__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-/* ---------- 轮次选择器 ---------- */
+/* ---------- 图池选择器 ---------- */
 
 .mappool-panel .round-selector {
   width: 100%;
@@ -241,7 +325,7 @@
 
 .mappool-panel .options-container {
   position: absolute;
-  bottom: calc(100% + 4px);        /* 面板在底部，下拉往上展开更合理 */
+  bottom: calc(100% + 4px);
   left: 0;
   right: 0;
   background: #1a2130;
@@ -278,7 +362,7 @@
 
 .mappool-panel .mp-btn {
   width: 100%;
-  height: 42px;
+  height: 38px;
   padding: 0 14px;
   border-radius: 8px;
   border: 1px solid #232b39;
@@ -290,6 +374,7 @@
   font-family: inherit;
   cursor: pointer;
   transition: all .15s ease;
+  margin: 0;
 }
 
 .mappool-panel .mp-btn:hover {
@@ -320,27 +405,26 @@
 }
 
 .mappool-panel .mp-btn--red-pick {
-  background: rgba(255, 142, 142, .12);
-  color: #ff8e8e;
-  border-color: rgba(255, 142, 142, .35);
+  background: rgba(255, 107, 107, .12);
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, .35);
 }
 .mappool-panel .mp-btn--red-pick:hover {
-  background: rgba(255, 142, 142, .2);
+  background: rgba(255, 107, 107, .2);
 }
 
 .mappool-panel .mp-btn--blue-pick {
-  background: rgba(107, 168, 255, .12);
-  color: #6ba8ff;
-  border-color: rgba(107, 168, 255, .35);
+  background: rgba(77, 150, 255, .12);
+  color: #4d96ff;
+  border-color: rgba(77, 150, 255, .35);
 }
 .mappool-panel .mp-btn--blue-pick:hover {
-  background: rgba(107, 168, 255, .2);
+  background: rgba(77, 150, 255, .2);
 }
 
 .mappool-panel .mp-btn--reset {
   background: #232b39;
   color: #dbe6f5;
-  margin-top: 4px;
 }
 .mappool-panel .mp-btn--reset:hover {
   background: #2d3648;
@@ -350,14 +434,31 @@
   background: rgba(246, 219, 0, .12);
   color: #F6DB00;
   border-color: rgba(246, 219, 0, .35);
-  margin-top: 4px;
 }
 .mappool-panel .mp-btn--reload:hover {
   background: rgba(246, 219, 0, .2);
 }
 
+.mappool-panel .mp-btn--red-protect {
+  background: rgba(255, 107, 107, .12);
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, .35);
+}
+.mappool-panel .mp-btn--red-protect:hover {
+  background: rgba(255, 107, 107, .2);
+}
+
+.mappool-panel .mp-btn--blue-protect {
+  background: rgba(77, 150, 255, .12);
+  color: #4d96ff;
+  border-color: rgba(77, 150, 255, .35);
+}
+.mappool-panel .mp-btn--blue-protect:hover {
+  background: rgba(77, 150, 255, .2);
+}
+
 /* =========================================
-   Mappool 顶部队伍 HUD
+   Mappool 顶部队伍 HUD（旧样式，保留以免影响）
    ========================================= */
 
 [data-page="mappool"] .mp-teams {
@@ -428,4 +529,172 @@
 [data-page="mappool"] .mp-star.is-active {
   color: #F6DB00;
   text-shadow: 0 0 10px rgba(246, 219, 0, 0.55);
+}
+
+/* =========================================
+   Mappool 页玩家名 + 实心条
+   ========================================= */
+
+[data-page="mappool"] .mp-players {
+  position: absolute;
+  top: 155px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 5;
+  pointer-events: none;
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+/* 红队：HUD 里 avatar(80)+gap(10)+container(30)，信息起点 ≈ 120 */
+[data-page="mappool"] .mp-players--left {
+  left: 120px;
+}
+
+/* 蓝队：镜像 */
+[data-page="mappool"] .mp-players--right {
+  right: 120px;
+}
+
+[data-page="mappool"] .mp-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  pointer-events: auto;
+}
+
+[data-page="mappool"] .mp-player__name {
+  font-size: 22px;
+  font-weight: 600;
+  color: #f8f8f6;
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.95),
+    0 0 12px rgba(0, 0, 0, 0.75);
+}
+
+[data-page="mappool"] .mp-player__bars {
+  display: flex;
+  align-items: center;
+  gap:6px;
+  cursor: pointer;
+  user-select: none;
+  pointer-events: auto;
+}
+
+[data-page="mappool"] .mp-player__bar {
+  display: block;
+  width: 30px;
+  height: 10px;
+  background: #AE1318;             /* 红队色 */
+  flex-shrink: 0;
+}
+
+/* 蓝队：镜像（名字在右、条在左）+ 蓝色条 */
+[data-page="mappool"] .mp-players--right .mp-player {
+  flex-direction: row-reverse;
+}
+
+[data-page="mappool"] .mp-players--right .mp-player__bars {
+  flex-direction: row-reverse;
+}
+
+[data-page="mappool"] .mp-players--right .mp-player__bar {
+  background: #1661AB;
+}
+
+[data-page="mappool"] .mp-players--right .mp-player__name {
+  text-align: right;
+}
+
+/* =========================================
+   玩家长条：叉号
+   ========================================= */
+
+[data-page="mappool"] .mp-player__cross {
+  display: block;
+  width: 25px;
+  height: 10px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+[data-page="mappool"] .mp-player__cross::before,
+[data-page="mappool"] .mp-player__cross::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 5px;
+  background: #AE1318; 
+  border-radius: 1px;
+  transform-origin: center center;
+}
+
+[data-page="mappool"] .mp-player__cross::before {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+[data-page="mappool"] .mp-player__cross::after {
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+/* 蓝队的叉 */
+[data-page="mappool"] .mp-players--right .mp-player__cross::before,
+[data-page="mappool"] .mp-players--right .mp-player__cross::after {
+  background: #1661AB;
+}
+
+/* =========================================
+   组内横排（protect + ban 同行）
+   ========================================= */
+
+.mappool-panel__group--row {
+  flex-direction: row;
+  gap: 4px;
+}
+.mappool-panel__group--row .mp-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 15px;
+  letter-spacing: 0.8px;
+}
+
+/* =========================================
+   先选方
+   ========================================= */
+
+.first-picker-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.first-picker-options {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 8px 12px;
+  background: #141922;
+  border: 1px solid #232b39;
+  border-radius: 8px;
+}
+
+.first-picker-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #dbe6f5;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.first-picker-options input[type="radio"] {
+  accent-color: #4d9bff;
+  cursor: pointer;
 }

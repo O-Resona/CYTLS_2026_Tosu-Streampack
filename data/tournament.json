@@ -216,28 +216,36 @@
       "beatmaps": [
         {
           "mods": "LM1",
-          "specialmods": ["Grow", "Hidden" ],
+          "specialmods": [
+            "Grow",
+            "Hidden"
+          ],
           "beatmapInfo": {
             "onlineId": 5718836,
-            "difficultyName": "#10 (China)",
+            "difficultyName": "Chinese Twisted Axis",
             "metadata": {
+              "artist": "Annabel",
               "title": "helical symmetry",
               "author": {
                 "username": "Endministrator"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2569870/covers/cover.jpg?1785333659"
+              "cover": "https://assets.ppy.sh/beatmaps/2569870/covers/cover.jpg?1790601507"
             }
           }
         },
         {
           "mods": "LM2",
-          "specialmods": ["Wiggle", "Wind Up" ],
+          "specialmods": [
+            "Wiggle",
+            "Wind Up"
+          ],
           "beatmapInfo": {
             "onlineId": 4397534,
             "difficultyName": "PAJWOJ & TWOJA STARA Collab Insane",
             "metadata": {
+              "artist": "Nekomata Master+",
               "title": "Spiral2005",
               "author": {
                 "username": "PAJWOJ, TWOJA STARA"
@@ -250,11 +258,16 @@
         },
         {
           "mods": "LM3",
-          "specialmods": ["Easy", "Approach Different",  "Synesthesia" ],
+          "specialmods": [
+            "Easy",
+            "Approach Different",
+            "Synesthesia"
+          ],
           "beatmapInfo": {
             "onlineId": 3701191,
             "difficultyName": "Oni",
             "metadata": {
+              "artist": "Nishigomi Kakumi",
               "title": "Shin - Garyou Tensei",
               "author": {
                 "username": "Neto"
@@ -267,11 +280,14 @@
         },
         {
           "mods": "LM4",
-          "specialmods": ["Deflate" ],
+          "specialmods": [
+            "Deflate"
+          ],
           "beatmapInfo": {
             "onlineId": 5906334,
             "difficultyName": "kanor's Rua^",
             "metadata": {
+              "artist": "Roselia",
               "title": "Charles",
               "author": {
                 "username": "kanor"
@@ -288,6 +304,7 @@
             "onlineId": 1839789,
             "difficultyName": "Fragment Collab",
             "metadata": {
+              "artist": "Traktion",
               "title": "Gid V",
               "author": {
                 "username": "EphemeralFetish, Hikaru Rose"
@@ -304,6 +321,7 @@
             "onlineId": 5628158,
             "difficultyName": "MASSIVE",
             "metadata": {
+              "artist": "GigaP feat. Kagamine Len",
               "title": "Gigantic O.T.N",
               "author": {
                 "username": "[Crz]Makii"
@@ -320,6 +338,7 @@
             "onlineId": 5458857,
             "difficultyName": "Wild Dance",
             "metadata": {
+              "artist": "Reol",
               "title": "Ooedoranvu feat. nqrse -10th annual edition-",
               "author": {
                 "username": "Chaoslitz, Pho"
@@ -336,6 +355,7 @@
             "onlineId": 5468706,
             "difficultyName": "myon",
             "metadata": {
+              "artist": "ShinRa-Bansho",
               "title": "Noumiso Rigid Girl",
               "author": {
                 "username": "ameponzu"
@@ -352,6 +372,7 @@
             "onlineId": 4211614,
             "difficultyName": "O",
             "metadata": {
+              "artist": "SOUND HOLIC feat. Nana Takahashi",
               "title": "SAMSARA",
               "author": {
                 "username": "Firika"
@@ -368,6 +389,7 @@
             "onlineId": 4890090,
             "difficultyName": "Atalanta's Extra",
             "metadata": {
+              "artist": "Shade feat. Katakiri Rekka",
               "title": "The Last Edge",
               "author": {
                 "username": "Atalanta"
@@ -384,6 +406,7 @@
             "onlineId": 5610434,
             "difficultyName": "hyperbola",
             "metadata": {
+              "artist": "THE ENTIRE EARTH",
               "title": "conic",
               "author": {
                 "username": "Wispy"
@@ -401,6 +424,7 @@
             "onlineId": 4976023,
             "difficultyName": "Blossom",
             "metadata": {
+              "artist": "Jay Chou",
               "title": "Floral Sea",
               "author": {
                 "username": "App, MarioKartya"
@@ -418,6 +442,7 @@
             "onlineId": 1744010,
             "difficultyName": "Reform's Insane",
             "metadata": {
+              "artist": "PSYQUI",
               "title": "Hype feat. Such (lapix Remix)",
               "author": {
                 "username": "Kujinn"
@@ -434,6 +459,7 @@
             "onlineId": 5605910,
             "difficultyName": "Sorairo",
             "metadata": {
+              "artist": "Hayakore Tatsumi",
               "title": "TatsumiyaTEK #05",
               "author": {
                 "username": "saido39, Azukimi"
@@ -794,7 +820,7 @@
     {
       "id": "swiss-round-3",
       "name": "Swiss Round 3",
-      "mappool": "swiss-1",
+      "mappool": "swiss-2",
       "bestOf": 11
     },
     {
@@ -834,8 +860,8 @@
       "roundId": "swiss-round-1",
       "team1Acronym": "貓鴨",
       "team2Acronym": "左右手",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 1,
       "date": "2026-10-03T19:00:00+08:00"
     },
     {

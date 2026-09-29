@@ -12,10 +12,12 @@ import { initShowcaseCountdown } from './pages/showcaseCountdown.js';
 import { initMatchCountdown }    from './pages/matchCountdown.js';
 import { initPlaying }           from './pages/playing.js';
 import { initBracket }           from './pages/bracket.js';
+import { initSchedule }          from './pages/schedule.js';
 import { initWinner }            from './pages/winner.js';
 import { TeamHud }               from './components/teamHud.js';
 import { ChatBox } from './components/chatBox.js';
 import { LogoBadge } from './components/logoBadge.js';
+import { WinnerWatcher } from './services/winnerWatcher.js'; 
 
 /* =========================================
    1. 创建服务实例
@@ -50,6 +52,11 @@ const pages = {
     init: () => initBracket({ tournamentData }),
     bg: 'alt',
   },
+  'schedule': {
+    html: 'pages/schedule.html',
+    init: () => initSchedule({ tournamentData }),
+    bg: 'alt',
+  },
   'match-countdown': {
     html: 'pages/match-countdown.html',
     init: () => initMatchCountdown({ tournamentData }),
@@ -57,7 +64,7 @@ const pages = {
   },
   'mappool': {
     html: 'pages/mappool.html',
-    init: () => initMappool({ tournamentData, osuSocket }),
+    init: () => initMappool({ tournamentData, osuSocket, tokenStore }),
     bg: 'alt',
     hud: true,
     logoBadge: true,
@@ -72,7 +79,8 @@ const pages = {
   },
   'winner': {
     html: 'pages/winner.html',
-    init: () => initWinner(),
+    init: () => initWinner({ tournamentData }),
+    bg: 'alt',
     logoBadge: true,
   },
   'showcase-countdown': {
@@ -155,9 +163,12 @@ async function boot() {
     deps: { osuSocket, tokenStore, tournamentState, mapInfo, tournamentData, teamHud, chatBox , logoBadge }
   });
 
+  const winnerWatcher = new WinnerWatcher({ tournamentData, router });
+  winnerWatcher.start(); 
+
   window.app = {
     osuSocket, tokenStore, tournamentState, mapInfo, tournamentData,
-    router, teamHud, chatBox, logoBadge
+    router, teamHud, chatBox, logoBadge, winnerWatcher,
   };
 }
 

@@ -81,7 +81,8 @@ export class OsuSocket {
 
       // ---------- 打图状态 ----------
       const isPlaying = this._detectPlaying(data);
-      this._emit('playing', isPlaying);
+      const roundPlayers = this._extractRoundPlayers(data);
+      this._emit('playing', isPlaying, roundPlayers);
 
       // ---------- 实时比分：从 ipcClients 累加 ----------
       let left  = 0;
@@ -126,6 +127,37 @@ export class OsuSocket {
     if (!Array.isArray(clients) || clients.length === 0) return false;
 
     return clients.some(c => typeof c?.gameplay?.score === 'number');
+  }
+
+  /* =========================================
+     本局参与的玩家
+     ========================================= */
+  _extractRoundPlayers(data) {
+    const clients = data?.tourney?.ipcClients;
+    if (!Array.isArray(clients)) return [];
+
+    const out = [];
+    for (const c of clients) {
+      const score = c?.gameplay?.score;
+      if (typeof score !== 'number') continue;
+
+      const name =
+        c?.user?.name ??
+        c?.user?.username ??
+        c?.name ??
+        c?.username ??
+        c?.player?.name ??
+        '';
+      if (!name) continue;
+
+      let team = c?.team;
+      if (team === 0) team = 'left';
+      if (team === 1) team = 'right';
+      if (team !== 'left' && team !== 'right') continue;
+
+      out.push({ name, team });
+    }
+    return out;
   }
 
   /* =========================================

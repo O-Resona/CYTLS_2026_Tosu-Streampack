@@ -471,18 +471,13 @@
 
 .bracket-panel {
   margin-top: auto;
-  padding-top: 16px;
+  padding-top: 12px;
   border-top: 1px solid #1c2230;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 .bracket-panel[hidden] { display: none !important; }
-.bracket-panel__title {
-  font-size: 18px; font-weight: 700;
-  color: #c9d5e6; letter-spacing: 2px;
-  text-transform: uppercase; margin-bottom: 4px;
-}
 .bracket-panel__row { display: flex; flex-direction: column; gap: 6px; }
 .bracket-panel__label {
   font-size: 16px; color: #a5b3c7;
@@ -517,3 +512,33 @@
 .bp-btn:hover { background: #1a2130; border-color: #2f3a4d; }
 .bp-btn--reset { background: #232b39; color: #dbe6f5; margin-top: 4px; }
 .bp-btn--reset:hover { background: #2d3648; }
+
+/* =========================================
+   危险按钮：清除所有本地修改
+   ========================================= */
+
+.bp-btn--danger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+
+  background: rgba(255, 80, 80, .12);
+  color: #ff6b6b;
+  border-color: rgba(255, 80, 80, .4);
+}
+.bp-btn--danger:hover {
+  background: rgba(255, 80, 80, .22);
+  border-color: rgba(255, 80, 80, .65);
+}
+.bp-btn--danger:active {
+  background: rgba(255, 80, 80, .3);
+}
+
+.bp-btn__icon {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  transform: translateY(-1px);
+}

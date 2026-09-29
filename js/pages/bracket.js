@@ -9,13 +9,13 @@ const GROUPS = [
     columns: [
       { id: 'swiss-r1', matcher: /swiss\s*round\s*1\b/i, count: 8 },
       { id: 'swiss-r2', matcher: /swiss\s*round\s*2\b/i, count: 8 },
-      { id: 'swiss-r3', matcher: /swiss\s*round\s*3\b/i, count: 8 },
     ],
   },
   {
     id: 'swiss-2',
     title: 'SWISS PHASE Ⅱ',
     columns: [
+      { id: 'swiss-r3', matcher: /swiss\s*round\s*3\b/i, count: 8 },
       { id: 'swiss-r4', matcher: /swiss\s*round\s*4\b/i, count: 6 },
       { id: 'swiss-r5', matcher: /swiss\s*round\s*5\b/i, count: 3 },
     ],
@@ -52,6 +52,7 @@ let _selTeam1 = null;
 let _selTeam2 = null;
 let _inpDate  = null;
 let _btnReset = null;
+let _btnClearAll = null;
 
 let _tx = 0, _isDragging = false, _movedThisDrag = false;
 let _startX = 0, _startTx = 0, _dragInited = false;
@@ -97,6 +98,7 @@ export function initBracket({ tournamentData }) {
   _selTeam2 = _panel?.querySelector('#bpTeam2');
   _inpDate  = _panel?.querySelector('#bpDate');
   _btnReset = _panel?.querySelector('#bpReset');
+  _btnClearAll = _panel?.querySelector('#bpClearAll');
 
   if (_panel) { fillTeamSelects(); bindPanelEvents(); }
 
@@ -141,6 +143,31 @@ function setCurrentMatchId(id) {
     if (id == null) localStorage.removeItem(CURRENT_MATCH_KEY);
     else            localStorage.setItem(CURRENT_MATCH_KEY, String(id));
   } catch (e) { console.warn('[Bracket] write failed:', e); }
+}
+
+/* ---------- 清除所有本地状态 ---------- */
+
+const LOCAL_KEYS_PREFIX = 'cyt';
+const LOCAL_KEYS_EXTRA  = [
+  'mapBPActions',
+  'mapProtectActions',
+];
+
+function clearAllLocalState() {
+  try {
+    const toRemove = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k) continue;
+      if (k.startsWith(LOCAL_KEYS_PREFIX) || LOCAL_KEYS_EXTRA.includes(k)) {
+        toRemove.push(k);
+      }
+    }
+    toRemove.forEach(k => localStorage.removeItem(k));
+  } catch (e) {
+    console.warn('[Bracket] 清除本地状态失败:', e);
+  }
 }
 
 /* ---------- 渲染 ---------- */
@@ -576,6 +603,22 @@ function bindPanelEvents() {
     if (_currentMatchId == null) return;
     _tournamentData.clearMatchOverride(_currentMatchId);
     renderAll();
+  });
+
+  _btnClearAll?.addEventListener('click', () => {
+    const ok = window.confirm(
+      '将清除本机上的所有比赛操作信息，包括：\n' +
+      '· 当前选中的比赛\n' +
+      '· 队伍 / 日期覆盖\n' +
+      '· BP（protect / ban / pick）\n' +
+      '· 玩家长条消耗\n' +
+      '· 先选方设置\n' +
+      '· Winner 记录\n\n' +
+      '此操作不可撤销，确定继续？'
+    );
+    if (!ok) return;
+    clearAllLocalState();
+    location.reload();
   });
 }
 
