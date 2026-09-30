@@ -24,13 +24,15 @@
   gap: 3px;
   font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   zoom: 1.3; 
+
+  isolation: isolate;
 }
 
 [data-page="match-countdown"] .mc-side--right {
   width: 500px;
 }
 
-/* ---------- 头像：内容正上方 250px ---------- */
+/* ---------- 头像---------- */
 
 [data-page="match-countdown"] .mc-avatar {
   position: absolute;
@@ -140,4 +142,66 @@
 [data-page="match-countdown"] #mcTeam1P2,
 [data-page="match-countdown"] #mcTeam2P2 {
   margin-top: -8px;
+}
+
+/* ---------- 光圈容器（stack） ---------- */
+
+[data-page="match-countdown"] .mc-halo-stack {
+  position: absolute;
+  top: -150px;
+  left: 50px;
+  transform: translate(-50%, -50%);
+  width: 620px;                  /* 想大改这里，两个 video 会跟着变 */
+  height: 620px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- 两个 video 叠在同一位置 ---------- */
+
+[data-page="match-countdown"] .mc-halo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+
+  /* opacity 由 JS 逐帧控制，不要用 CSS transition */
+  opacity: 0;
+}
+
+/* =========================================
+   左上角标题
+   ========================================= */
+
+[data-page="match-countdown"] .mc-title {
+  position: absolute;
+  top: 110px;
+  left: 140px;
+  z-index: 3;
+
+  color: #ffffff;
+  font-family: 'SourceHanSerif', "Songti SC", "SimSun", serif;
+  font-size: 28px;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+[data-page="match-countdown"] .mc-title__round {
+  display: block;
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.85;
 }

@@ -10,6 +10,10 @@
  *
  * 自动加星逻辑仍在本文件：
  *   打图结束比较双方比分，赢家调用 teamHud.incrementStar()
+ *
+ * 打图结束 7s 后判断切页：
+ *   - 决胜（任一队 >= ceil(bestOf/2)）→ winner
+ *   - 否则 → mappool
  */
 
 import { MapCard }    from '../components/mapCard.js';
@@ -20,9 +24,10 @@ const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 /* lazer mp 实测：0 = 打图中 */
 const PLAYING_IPC_STATE = 0;
 
-const EXIT_DELAY  = 4000;
-const A_TO_B_FADE = 500;
-const B_TO_A_FADE = 500;
+const EXIT_DELAY        = 4000;   /* 打图结束 → 聊天框/地图卡动画 */
+const PAGE_RETURN_DELAY = 7000;   /* 打图结束 → 判断切页 */
+const A_TO_B_FADE       = 500;
+const B_TO_A_FADE       = 500;
 
 export function initPlaying({
   tokenStore,
@@ -82,12 +87,16 @@ export function initPlaying({
   let currentIpcState = 11;
   let currentStage = null;
   let exitTimer = null;
+  let pageSwitchTimer = null;
   let transitionToken = 0;
   let hasInitStage = false;
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const cancelExitTimer = () => {
     if (exitTimer) { clearTimeout(exitTimer); exitTimer = null; }
+  };
+  const cancelPageSwitchTimer = () => {
+    if (pageSwitchTimer) { clearTimeout(pageSwitchTimer); pageSwitchTimer = null; }
   };
 
   /* =========================================
@@ -251,6 +260,50 @@ export function initPlaying({
   }
 
   /* =========================================
+     当前比赛
+     ========================================= */
+
+  function getCurrentMatchId() {
+    try {
+      const v = localStorage.getItem(CURRENT_MATCH_KEY);
+      return v ? Number(v) : null;
+    } catch { return null; }
+  }
+
+  function loadCurrentMatch() {
+    const id = getCurrentMatchId();
+    if (id == null) return null;
+    return tournamentData.getMatch(id);
+  }
+
+  /* =========================================
+     打图结束 7s 后的切页判断
+     ========================================= */
+
+  function decideReturnPage() {
+    /* 只在还在 playing 页时执行，避免覆盖用户手动导航或 winnerWatcher 的跳转 */
+    const activePage = document.querySelector('.page.active');
+    if (activePage?.dataset.page !== 'playing') return;
+
+    const match = loadCurrentMatch();
+    if (!match) {
+      window.app?.router?.show('mappool');
+      return;
+    }
+
+    const round = tournamentData.getRound(match.roundId);
+    const bestOf = Number(round?.bestOf) || 9;
+    const maxStars = Math.ceil(bestOf / 2);
+
+    const s1 = Number(match.team1Score) || 0;
+    const s2 = Number(match.team2Score) || 0;
+
+    /* 任一方达到决胜分 → winner；否则回 mappool */
+    const reached = (s1 >= maxStars) || (s2 >= maxStars);
+    window.app?.router?.show(reached ? 'winner' : 'mappool');
+  }
+
+  /* =========================================
      打图状态（osuSocket 'playing' 事件传入 boolean）
      ========================================= */
 
@@ -270,7 +323,8 @@ export function initPlaying({
     currentIpcState = newState;
 
     if (isPlaying) {
-      // 进入打图：立即 block + A
+      // 进入打图：立即 block + A；取消上一次排好的切页
+      cancelPageSwitchTimer();
       chatBox?.block();
       previousScores.left  = scores.left;
       previousScores.right = scores.right;
@@ -283,27 +337,17 @@ export function initPlaying({
       exitTimer = setTimeout(() => {
         exitTimer = null;
         chatBox?.unblock();
-        chatBox?.show();            // 立即显形（applyHud 会再 show 一次，也无所谓）
+        chatBox?.show();
         transitionToB();
       }, EXIT_DELAY);
+
+      // 打图结束 7s 后切页：决胜 → winner，否则回 mappool
+      cancelPageSwitchTimer();
+      pageSwitchTimer = setTimeout(() => {
+        pageSwitchTimer = null;
+        decideReturnPage();
+      }, PAGE_RETURN_DELAY);
     }
-  }
-
-  /* =========================================
-     当前比赛
-     ========================================= */
-
-  function getCurrentMatchId() {
-    try {
-      const v = localStorage.getItem(CURRENT_MATCH_KEY);
-      return v ? Number(v) : null;
-    } catch { return null; }
-  }
-
-  function loadCurrentMatch() {
-    const id = getCurrentMatchId();
-    if (id == null) return null;
-    return tournamentData.getMatch(id);
   }
 
   /* =========================================
@@ -346,12 +390,12 @@ export function initPlaying({
     refresh();
     if (hasInitStage) {
       setStageImmediate(currentIpcState === PLAYING_IPC_STATE ? 'A' : 'B');
-      if (isA) chatBox?.hide();
     }
   });
 
   pageEl.addEventListener('page:deactivated', () => {
     cancelExitTimer();
+    cancelPageSwitchTimer();
   });
 
   window.addEventListener('storage', (e) => {

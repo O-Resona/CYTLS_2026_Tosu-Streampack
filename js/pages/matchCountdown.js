@@ -5,12 +5,16 @@
  * 在画面中央两侧显示 RED / BLUE TEAM + 队名 + seed + 两名队员。
  */
 
+import { initHaloCrossfade } from '../components/haloCrossfade.js';
+
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 const OVERRIDE_KEY      = 'cyt2026.matchOverrides';
 
 export function initMatchCountdown({ tournamentData }) {
   const pageEl = document.querySelector('[data-page="match-countdown"]');
   if (!pageEl) return;
+
+  initHaloCrossfade();
 
   const refs = {
     team1Name:   pageEl.querySelector('#mcTeam1Name'),
@@ -23,6 +27,7 @@ export function initMatchCountdown({ tournamentData }) {
     team2P1:     pageEl.querySelector('#mcTeam2P1'),
     team2P2:     pageEl.querySelector('#mcTeam2P2'),
     team2Avatar: pageEl.querySelector('#mcTeam2Avatar'),
+    roundName:   pageEl.querySelector('#mcRoundName'),
   };
 
   /* 与 teamHud 相同的头像加载逻辑（jpg / png 兜底） */
@@ -106,6 +111,11 @@ export function initMatchCountdown({ tournamentData }) {
       return;
     }
 
+    if (refs.roundName) {
+      const round = tournamentData.getRound(match.roundId);
+      refs.roundName.textContent = round?.name || '';
+    }
+
     renderSide(match, 'left');
     renderSide(match, 'right');
   }
@@ -118,9 +128,9 @@ export function initMatchCountdown({ tournamentData }) {
       if (refs[k]) refs[k].textContent = k.includes('Name') ? '—' : '';
     });
 
-    /* 头像清空 */
     if (refs.team1Avatar) { refs.team1Avatar.removeAttribute('src'); refs.team1Avatar.style.opacity = '0'; }
     if (refs.team2Avatar) { refs.team2Avatar.removeAttribute('src'); refs.team2Avatar.style.opacity = '0'; }
+    if (refs.roundName) refs.roundName.textContent = '';
   }
 
   render();

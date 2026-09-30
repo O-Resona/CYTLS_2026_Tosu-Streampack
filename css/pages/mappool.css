@@ -203,7 +203,7 @@
 [data-page="mappool"] .protectImg {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 100px;
   height: 46px;
   width: auto;
   object-fit: contain;
@@ -211,8 +211,8 @@
   z-index: 5;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
 
-  /* 初始：滑出卡片右缘，透明 */
-  transform: translate(calc(100% + 40px), -50%);
+  /* 初始：滑到卡片外 */
+  transform: translate(calc(100% + 150px), -50%);
   opacity: 0;
   will-change: transform;
 

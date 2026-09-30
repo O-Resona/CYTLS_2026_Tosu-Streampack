@@ -40,40 +40,52 @@ export function createRouter({ pages, deps }) {
     });
   }
 
-
   /* ---------- 应用背景 ---------- */
 
-function applyBackground(pageName) {
-  const cfg = pages[pageName] || {};
+  function applyBackground(pageName) {
+    const cfg = pages[pageName] || {};
 
-  // ---------- 视频 ----------
-  const videoKey = cfg.video || 'main';
-  bgVideos.forEach(v => {
-    const show = (v.dataset.bg === videoKey);
-    v.style.display = show ? '' : 'none';
-
-    if (show) {
-      v.muted = true;
-      v.play().catch(() => {});
+    // ---------- 视频 ----------
+    let videoKey;
+    if (typeof cfg.video === 'function') {
+      try { videoKey = cfg.video(); } catch { videoKey = 'main'; }
     } else {
-      v.pause();
+      videoKey = cfg.video || 'main';
     }
-  });
+    if (!videoKey) videoKey = 'main';
 
-  // ---------- 图片 ----------
-  const imageKey = cfg.bg || 'main';
-  bgImages.forEach(img => {
-    img.style.display = (img.dataset.bg === imageKey) ? '' : 'none';
-  });
+    bgVideos.forEach(v => {
+      const show = (v.dataset.bg === videoKey);
+      v.style.display = show ? '' : 'none';
 
-  // ---------- 覆盖层 ----------
-  if (bgCover) {
-    const cover = typeof cfg.cover === 'number' ? cfg.cover : 0;
-    const color = cfg.coverColor || '#ffffff';
-    bgCover.style.background = color;
-    bgCover.style.opacity = String(cover);
+      if (show) {
+        v.muted = true;
+        v.play().catch(() => {});
+      } else {
+        v.pause();
+      }
+    });
+
+    // ---------- 图片 ----------
+    const imageKey = cfg.bg || 'main';
+    bgImages.forEach(img => {
+      img.style.display = (img.dataset.bg === imageKey) ? '' : 'none';
+    });
+
+    // ---------- 覆盖层 ----------
+    if (bgCover) {
+      const cover = typeof cfg.cover === 'number' ? cfg.cover : 0;
+      const color = cfg.coverColor || '#ffffff';
+      bgCover.style.background = color;
+      bgCover.style.opacity = String(cover);
+    }
   }
-}
+
+  /* 重新应用当前页的背景（供页面内部触发） */
+  function refreshBackground(pageName) {
+    const name = pageName || currentPage;
+    if (name) applyBackground(name);
+  }
 
 /* ---------- 应用 HUD 显隐 ---------- */
 
@@ -204,5 +216,5 @@ function applyHud(pageName) {
   const initial = buttons[0]?.dataset.target;
   if (initial) show(initial);
 
-  return { show };
+  return { show, refreshBackground };
 }

@@ -860,9 +860,9 @@
       "roundId": "swiss-round-1",
       "team1Acronym": "貓鴨",
       "team2Acronym": "左右手",
-      "team1Score": 5,
-      "team2Score": 1,
-      "date": "2026-10-03T19:00:00+08:00"
+      "team1Score": null,
+      "team2Score": null,
+      "date": "2026-10-04T21:00:00+08:00"
     },
     {
       "id": 2,
@@ -880,7 +880,7 @@
       "team2Acronym": "doro",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-03T21:00:00+08:00"
+      "date": "2026-10-04T20:00:00+08:00"
     },
     {
       "id": 4,
@@ -889,7 +889,7 @@
       "team2Acronym": "2yo",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-03T22:00:00+08:00"
+      "date": "2026-10-04T22:00:00+08:00"
     },
     {
       "id": 5,
@@ -898,7 +898,7 @@
       "team2Acronym": "BB",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-04T19:00:00+08:00"
+      "date": "2026-10-02T20:00:00+08:00"
     },
     {
       "id": 6,
@@ -907,7 +907,7 @@
       "team2Acronym": "0傾",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-04T20:00:00+08:00"
+      "date": "2026-09-30T23:00:00+08:00"
     },
     {
       "id": 7,
@@ -916,7 +916,7 @@
       "team2Acronym": "什麼",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-04T21:00:00+08:00"
+      "date": "2026-10-03T20:00:00+08:00"
     },
     {
       "id": 8,
@@ -925,7 +925,7 @@
       "team2Acronym": "zjb",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-04T22:00:00+08:00"
+      "date": "2026-10-03T21:00:00+08:00"
     },
     {
       "id": 9,

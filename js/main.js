@@ -17,7 +17,7 @@ import { initWinner }            from './pages/winner.js';
 import { TeamHud }               from './components/teamHud.js';
 import { ChatBox } from './components/chatBox.js';
 import { LogoBadge } from './components/logoBadge.js';
-import { WinnerWatcher } from './services/winnerWatcher.js'; 
+import { WinnerWatcher } from './services/winnerWatcher.js';
 
 /* =========================================
    1. 创建服务实例
@@ -32,7 +32,7 @@ const tournamentData  = new TournamentData();
 /* teamHud 是全局单例，先声明，boot() 里赋值 */
 let teamHud = null;
 let chatBox = null;
-let logoBadge = null; 
+let logoBadge = null;
 
 /* =========================================
    2. 接线：osu 消息 → store
@@ -43,7 +43,33 @@ osuSocket.on('ipcState', state  => tournamentState.setIpcState(state));
 osuSocket.connect();
 
 /* =========================================
-   3. 页面注册表
+   3. winner 页背景视频：红队获胜 → red，否则 main
+   ========================================= */
+
+function getWinnerBgVideo() {
+  try {
+    const idStr = localStorage.getItem('cyt2026.currentMatchId');
+    if (!idStr) return 'main';
+    const id = Number(idStr);
+    if (!Number.isFinite(id)) return 'main';
+
+    const match = tournamentData.getMatch(id);
+    if (!match) return 'main';
+
+    const round = tournamentData.getRound(match.roundId);
+    const bestOf = Number(round?.bestOf) || 9;
+    const maxStars = Math.ceil(bestOf / 2);
+
+    const s1 = Number(match.team1Score) || 0;
+    const s2 = Number(match.team2Score) || 0;
+
+    if (s1 >= maxStars && s1 > s2) return 'red';
+    return 'main';
+  } catch { return 'main'; }
+}
+
+/* =========================================
+   4. 页面注册表
    ========================================= */
 
 const pages = {
@@ -81,7 +107,7 @@ const pages = {
     html: 'pages/winner.html',
     init: () => initWinner({ tournamentData }),
     bg: 'alt',
-    logoBadge: true,
+    video: getWinnerBgVideo,       // ← 红队获胜时切换为红色系背景
   },
   'showcase-countdown': {
     html: 'pages/showcase-countdown.html',
@@ -96,7 +122,7 @@ const pages = {
 };
 
 /* =========================================
-   4. 全局背景视频
+   5. 全局背景视频
    ========================================= */
 
 function initBgVideo() {
@@ -130,7 +156,7 @@ function initBgVideo() {
 }
 
 /* =========================================
-   5. 启动
+   6. 启动
    ========================================= */
 
 async function boot() {
@@ -160,11 +186,11 @@ async function boot() {
 
   const router = createRouter({
     pages,
-    deps: { osuSocket, tokenStore, tournamentState, mapInfo, tournamentData, teamHud, chatBox , logoBadge }
+    deps: { osuSocket, tokenStore, tournamentState, mapInfo, tournamentData, teamHud, chatBox, logoBadge }
   });
 
   const winnerWatcher = new WinnerWatcher({ tournamentData, router });
-  winnerWatcher.start(); 
+  winnerWatcher.start();
 
   window.app = {
     osuSocket, tokenStore, tournamentState, mapInfo, tournamentData,
@@ -179,7 +205,7 @@ if (document.readyState === 'loading') {
 }
 
 /* =========================================
-   6. Stage 自适应缩放
+   7. Stage 自适应缩放
    ========================================= */
 
 const STAGE_W = 2200;

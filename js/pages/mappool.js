@@ -5,6 +5,8 @@
  *
  * 图池会跟随当前选中比赛所属轮次自动切换。
  * protect 与 ban/pick 互相独立；自动与手动操作共存，手动可覆盖。
+ *
+ * pick 成功执行后 5s 自动切到 playing 页。
  */
 
 import { AutoBp } from '../services/autoBp.js';
@@ -17,6 +19,11 @@ const MOD_ICONS = {
   DT: 'src/mods/DT.png',
   FM: 'src/mods/FM.png',
   TB: 'src/mods/TB.png',
+};
+
+const PROTECT_ICONS = {
+  red:  'src/mods/protect_red.png',
+  blue: 'src/mods/protect_blue.png',
 };
 
 const STORAGE_KEY_LOCAL          = 'mapBPActions';
@@ -35,6 +42,8 @@ const MAPPool_LAYOUTS = {
   'swiss-2': [3, 2, 3, 2, 2, 3, 1],
   'bracket': [3, 3, 3, 1, 3, 3, 3, 1],
 };
+
+const PICK_TO_PLAYING_DELAY = 5000;
 
 function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -86,6 +95,29 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   let currentPool = pools[0] || null;
   let currentMode = 'redProtect';
   let maps        = [];
+
+  /* ---------- pick → playing 延迟切换 ---------- */
+
+  let _pickSwitchTimer = null;
+
+  function schedulePlayingSwitch() {
+    /* 只在 mappool 页操作时跳转 */
+    const activePage = document.querySelector('.page.active');
+    if (activePage?.dataset.page !== 'mappool') return;
+
+    if (_pickSwitchTimer) clearTimeout(_pickSwitchTimer);
+    _pickSwitchTimer = setTimeout(() => {
+      _pickSwitchTimer = null;
+      window.app?.router?.show('playing');
+    }, PICK_TO_PLAYING_DELAY);
+  }
+
+  function cancelPlayingSwitch() {
+    if (_pickSwitchTimer) {
+      clearTimeout(_pickSwitchTimer);
+      _pickSwitchTimer = null;
+    }
+  }
 
   const mapStates     = new Map();   // mapId -> { action:'ban'|'pick', team }
   const protectStates = new Map();   // mapId -> { team }
@@ -393,6 +425,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     card.dataset.mods     = map.rawMods;
     if (map.bg) card.style.backgroundImage = `url('${map.bg}')`;
 
+    /* 默认给红队 protect 图标；实际使用时会按 team 切 src */
     card.innerHTML = `
       <div class="mapContent">
         <div class="banMap"></div>
@@ -407,7 +440,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
           <div class="modImgWrapper">
             <img src="${MOD_ICONS[map.mod] || MOD_ICONS.NM}" alt="${escapeHtml(map.mod)}">
           </div>
-          <img class="protectImg" src="src/mods/protect.png" alt="protect">
+          <img class="protectImg" src="${PROTECT_ICONS.red}" alt="protect">
         </div>
       </div>
     `;
@@ -429,6 +462,14 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     return wrapper.querySelector(`.mapContainer[data-mods="${mods}"]`);
   }
 
+  /* 按队伍切换 protect 图标 */
+  function setProtectIcon(content, team) {
+    const img = content?.querySelector('.protectImg');
+    if (!img) return;
+    const next = PROTECT_ICONS[team] || PROTECT_ICONS.red;
+    if (img.getAttribute('src') !== next) img.setAttribute('src', next);
+  }
+
   /* 通用应用：手动 = toggle，自动 = 幂等设置 */
   function applyCardAction(card, action, team, { toggle }) {
     if (!card) return;
@@ -446,6 +487,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       }
       protectStates.set(mapId, { team });
       content.classList.add('is-protected');
+      setProtectIcon(content, team);
       saveProtectState(mapTitle, { team });
       return;
     }
@@ -466,6 +508,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
 
     mapStates.set(mapId, { action, team });
     saveMapState(mapTitle, { action, team });
+
+    /* pick 成功执行 → 5s 后切到 playing */
+    if (action === 'pick') schedulePlayingSwitch();
   }
 
   function handleMapClick(card) {
@@ -609,6 +654,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
   function applyProtectState(content, mapId, state) {
     content.classList.add('is-protected');
+    setProtectIcon(content, state.team);
     protectStates.set(mapId, { team: state.team });
   }
 
@@ -637,6 +683,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   function resetAll() {
+    cancelPlayingSwitch();
     wrapper.querySelectorAll('.mapContainer').forEach(card => {
       card.classList.remove('redBorder', 'blueBorder');
       card.querySelector('.mapContent').classList.remove('banned', 'is-protected');
@@ -651,6 +698,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   function reloadFromJson() {
+    cancelPlayingSwitch();
     localStorage.removeItem(STORAGE_KEY_LOCAL);
     localStorage.removeItem(STORAGE_KEY_SHARED);
     localStorage.removeItem(STORAGE_KEY_PROTECT_LOCAL);

@@ -1,20 +1,28 @@
 <section class="page" data-page="winner">
 
-  <div class="wc-layout" id="wcLayout" hidden>
+  <div class="wc-halo-stack" id="wcHaloRed">
+    <video class="wc-halo" muted playsinline preload="auto" src="src/circle_red.webm"></video>
+    <video class="wc-halo" muted playsinline preload="auto" src="src/circle_red.webm"></video>
+  </div>
 
-    <img class="wc-avatar" id="wcAvatar" alt="">
+  <div class="wc-halo-stack" id="wcHaloBlue">
+    <video class="wc-halo" muted playsinline preload="auto" src="src/circle_blue.webm"></video>
+    <video class="wc-halo" muted playsinline preload="auto" src="src/circle_blue.webm"></video>
+  </div>
 
-    <div class="wc-row wc-row--tag">
-      <span class="wc-tag" id="wcTag">team red</span>
+  <img class="wc-avatar" id="wcAvatar" alt="">
+
+  <div class="wc-wrap">
+    <div class="wc-title">Carry Yourself Tournament:<br>Lazer Scramble</div>
+    <div class="wc-round" id="wcRoundName"></div>
+    <div class="wc-winner-label">WINNER</div>
+    <div class="wc-layout" id="wcLayout" hidden>
+      <div class="wc-row wc-row--tag"><span class="wc-tag" id="wcTag">team red</span></div>
+      <div class="wc-row wc-row--name" id="wcName">—</div>
+      <div class="wc-row wc-row--seed" id="wcSeed"></div>
+      <div class="wc-row wc-row--player" id="wcP1"></div>
+      <div class="wc-row wc-row--player" id="wcP2"></div>
     </div>
-
-    <div class="wc-row wc-row--name" id="wcName">—</div>
-
-    <div class="wc-row wc-row--seed" id="wcSeed"></div>
-
-    <div class="wc-row wc-row--player" id="wcP1"></div>
-    <div class="wc-row wc-row--player" id="wcP2"></div>
-
   </div>
 
 </section>
