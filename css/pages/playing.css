@@ -12,14 +12,22 @@
   content: "";
   position: absolute;
   left: 0;
+  bottom: 192px;
+  width: 50%;
+  height: 8px;
+  background: #AE1318;
+  z-index: 10;
+  pointer-events: none;
+}
+
+[data-page="playing"] .pl-stage::after {
+  content: "";
+  position: absolute;
   right: 0;
   bottom: 192px;
+  width: 50%;
   height: 8px;
-  background: linear-gradient(
-    to right,
-    #AE1318 0%,   #AE1318 50%,
-    #1661AB 50%,  #1661AB 100%
-  );
+  background: #1661AB;
   z-index: 10;
   pointer-events: none;
 }
@@ -30,10 +38,11 @@
 
 [data-page="playing"] .pl-green-screen {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   top: 160px;
   bottom: 200px;
+  width: 100%;             /* 由 JS 动态覆盖 */
   background: #00ff00;
   z-index: 1;
   pointer-events: none;
@@ -101,10 +110,11 @@
 [data-page="playing"] .pl-score--left,
 [data-page="playing"] .pl-score--right {
   color: #f8f8f6;
-  font-family: 'Core Sans CR 15 Thin', Arial, sans-serif;
-  text-shadow: 0 0 30px rgba(248, 248, 246, 0.25);
+  font-family: 'SourceHanSerif', "Songti SC", "SimSun", serif;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(248, 248, 246, 0.25);
 }
-
 /* 领先方分数下移 5px（落后方带 .is-light，不受影响） */
 [data-page="playing"] .pl-score:not(.is-light) {
   transform: translateY(4px);
@@ -112,8 +122,8 @@
 
 [data-page="playing"] .pl-score.is-light {
   font-size: 45px;
-  font-family: 'Core Sans CR 25 Light', Arial, sans-serif;
-  font-weight: 400;  
+  font-family: 'SourceHanSerif', "Songti SC", "SimSun", serif;
+  font-weight: 400;
 }
 
 /* ---------- 分差 ---------- */
@@ -151,6 +161,11 @@
   opacity: 0;
 }
 
+/* 打图结束：分数条先单独淡出 */
+[data-page="playing"] .pl-stage.is-scores-hiding .pl-scores {
+  opacity: 0;
+}
+
 /* =========================================
    底部：地图卡片 / 四维
    ========================================= */
@@ -172,7 +187,7 @@
   height: 100px;
   z-index: 2;
   opacity: 1;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, left 0.5s ease, bottom 0.5s ease;
 }
 
 [data-page="playing"] .pl-stage.state-b .pl-map-card {
@@ -200,4 +215,11 @@
 .page[data-page="playing"] {
   z-index: 5;
   pointer-events: none; 
+}
+
+/* chat 出现时 stats panel 用不透明底色，避免被条纹干扰 */
+[data-page="playing"] .pl-stats-panel.is-solid {
+  background: #161616;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }

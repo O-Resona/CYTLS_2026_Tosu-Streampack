@@ -145,7 +145,6 @@ export class ChatBox {
       const nameEl = document.createElement('span');
       nameEl.className = `chatbox__name chatbox__name--${side}`;
       nameEl.textContent = name;
-      nameEl.title = name;
 
       const textEl = document.createElement('span');
       textEl.className = 'chatbox__text';

@@ -107,6 +107,23 @@
         </button>
       </div>
 
+      <!-- =====================================================
+           绿幕宽度面板：仅 playing 页面激活时显示
+           ===================================================== -->
+      <div class="green-panel" id="greenPanel" hidden>
+
+        <div class="green-panel__label">GREEN WIDTH</div>
+
+        <input type="range" class="green-panel__range" id="plGreenWidth"
+               min="960" max="1920" step="10" value="1920">
+
+        <div class="green-panel__value" id="plGreenWidthVal">1920 px</div>
+
+        <input type="number" class="green-panel__input" id="plGreenWidthInput"
+               min="960" max="1920" step="10" value="1920"
+               autocomplete="off">
+
+      </div>
     </aside>
 
     <!-- =====================================================
@@ -163,9 +180,19 @@
         <div class="chatbox__messages" id="globalChatMessages"></div>
       </div>
 
+      <div class="chatbox" id="globalChatBox">
+        <div class="chatbox__messages" id="globalChatMessages"></div>
+      </div>
+
+      <!-- 自动切页转场层（ 上下滑入） -->
+      <div class="auto-transition" id="autoTransition" hidden>
+        <img class="auto-cut-top"    src="src/cut_top.png"    alt="">
+        <img class="auto-cut-bottom" src="src/cut_bottom.png" alt="">
+      </div>
+
       <div class="global-logo" id="globalLogo">
         <img class="global-logo__img" src="src/logo.png" alt="">
-        <div class="global-logo__badge" id="globalLogoBadge"></div>
+        <img class="global-logo__badge" id="globalLogoBadge" alt="">
       </div>
 
       <div class="final-fore" id="finalFore" hidden>

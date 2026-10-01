@@ -404,3 +404,30 @@
   border-radius: 0;
   pointer-events: none;
 }
+
+/* 时间列：颜色调亮 */
+[data-page="schedule"] .sch-match__time {
+  font-size: 16px;
+  font-weight: 700;
+  color: #dbe6f5; 
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* 左队：靠右（贴近 VS） */
+[data-page="schedule"] .sch-match__team--left {
+  justify-content: flex-end; 
+}
+
+/* 右队：靠左（贴近 VS） */
+[data-page="schedule"] .sch-match__team--right {
+  justify-content: flex-start;
+}
+
+/* seed：颜色调亮 */
+[data-page="schedule"] .sch-match__seed {
+  font-size: 15px;
+  color: #dbe6f5; 
+  font-weight: 400;
+  flex-shrink: 0;
+}

@@ -30,7 +30,6 @@ export function initMatchCountdown({ tournamentData }) {
     roundName:   pageEl.querySelector('#mcRoundName'),
   };
 
-  /* 与 teamHud 相同的头像加载逻辑（jpg / png 兜底） */
   function setAvatar(imgEl, team) {
     if (!imgEl) return;
 
@@ -43,33 +42,21 @@ export function initMatchCountdown({ tournamentData }) {
     }
 
     const base = team.acronym;
-    const candidates = [
-      `src/ava/${base}.jpg`,
-      `src/ava/${base}.png`,
-    ];
-
     imgEl.style.opacity = '0';
     imgEl.alt = base;
 
-    let i = 0;
-    const tryNext = () => {
-      if (i >= candidates.length) {
-        imgEl.style.opacity = '0';
-        imgEl.onload = null;
-        imgEl.onerror = null;
-        return;
-      }
-      const path = candidates[i++];
-      imgEl.onerror = () => tryNext();
-      imgEl.onload = () => {
-        imgEl.style.opacity = '1';
-        imgEl.onload = null;
-        imgEl.onerror = null;
-      };
-      imgEl.src = path;
+    imgEl.onload = () => {
+      imgEl.style.opacity = '1';
+      imgEl.onload = null;
+      imgEl.onerror = null;
+    };
+    imgEl.onerror = () => {
+      imgEl.style.opacity = '0';
+      imgEl.onload = null;
+      imgEl.onerror = null;
     };
 
-    tryNext();
+    imgEl.src = `src/ava/${base}.png`;
   }
 
   function pickCurrentMatch() {

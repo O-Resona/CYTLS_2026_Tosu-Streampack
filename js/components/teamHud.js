@@ -59,37 +59,22 @@ export class TeamHud {
       return;
     }
 
-    /* 依次尝试 .jpg / .png */
     const base = team.acronym;
-    const candidates = [
-      `src/ava/${base}.jpg`,
-      `src/ava/${base}.png`,
-    ];
-
     imgEl.style.opacity = '0';
     imgEl.alt = base;
 
-    let i = 0;
-    const tryNext = () => {
-      if (i >= candidates.length) {
-        imgEl.style.opacity = '0';
-        imgEl.onload = null;
-        imgEl.onerror = null;
-        return;
-      }
-      const path = candidates[i++];
-      imgEl.onerror = () => {
-        tryNext();
-      };
-      imgEl.onload = () => {
-        imgEl.style.opacity = '1';
-        imgEl.onload = null;
-        imgEl.onerror = null;
-      };
-      imgEl.src = path;
+    imgEl.onload = () => {
+      imgEl.style.opacity = '1';
+      imgEl.onload = null;
+      imgEl.onerror = null;
+    };
+    imgEl.onerror = () => {
+      imgEl.style.opacity = '0';
+      imgEl.onload = null;
+      imgEl.onerror = null;
     };
 
-    tryNext();
+    imgEl.src = `src/ava/${base}.png`;
   }
 
   /* ---------- 星星 = match 比分 ---------- */

@@ -6,10 +6,15 @@
  * 图池会跟随当前选中比赛所属轮次自动切换。
  * protect 与 ban/pick 互相独立；自动与手动操作共存，手动可覆盖。
  *
- * pick 成功执行后 5s 自动切到 playing 页。
+ * pick 成功执行后 5s 自动切到 playing 页（带 bg4 上下滑入转场）。
+ *
+ * 手动操作会通过 syncFromUI 覆盖 AutoBp 内部状态，纠正误判。
+ *
+ * TB 图：protect / ban 一律忽略；pick 时统一紫框，不分队伍。
  */
 
 import { AutoBp } from '../services/autoBp.js';
+import { playAutoTransition } from '../services/autoTransition.js';
 
 const MOD_ICONS = {
   LM: 'src/mods/LM.png',
@@ -42,8 +47,6 @@ const MAPPool_LAYOUTS = {
   'swiss-2': [3, 2, 3, 2, 2, 3, 1],
   'bracket': [3, 3, 3, 1, 3, 3, 3, 1],
 };
-
-const PICK_TO_PLAYING_DELAY = 5000;
 
 function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -101,14 +104,15 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   let _pickSwitchTimer = null;
 
   function schedulePlayingSwitch() {
-    /* 只在 mappool 页操作时跳转 */
     const activePage = document.querySelector('.page.active');
     if (activePage?.dataset.page !== 'mappool') return;
 
     if (_pickSwitchTimer) clearTimeout(_pickSwitchTimer);
     _pickSwitchTimer = setTimeout(() => {
       _pickSwitchTimer = null;
-      window.app?.router?.show('playing');
+      playAutoTransition(() => {
+        window.app?.router?.show('playing');
+      });
     }, PICK_TO_PLAYING_DELAY);
   }
 
@@ -119,7 +123,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     }
   }
 
-  const mapStates     = new Map();   // mapId -> { action:'ban'|'pick', team }
+  const mapStates     = new Map();   // mapId -> { action:'ban'|'pick', team:'red'|'blue'|'tb' }
   const protectStates = new Map();   // mapId -> { team }
 
   if (!pools.length) {
@@ -192,10 +196,10 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     savePlayerRounds(all);
   }
   function getMaxStarsForMatch(match) {
-    if (!match) return 5;
+    if (!match) return 4;
     const round = tournamentData.getRound(match.roundId);
     const bestOf = Number(round?.bestOf) || 9;
-    return Math.ceil(bestOf / 2);
+    return Math.ceil(bestOf / 2) - 1;
   }
 
   function renderBars(container, name, matchId, maxStars) {
@@ -299,7 +303,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
      本局结束自动消耗
      ========================================= */
 
-  let _lastPlayingState = false;
+  let _lastPlayingState = null;
   let _lastRoundPlayers = [];
 
   function handleRoundEnd() {
@@ -311,15 +315,23 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const t2 = match.team2Acronym ? tournamentData.getTeam(match.team2Acronym) : null;
     const maxStars = getMaxStarsForMatch(match);
 
+    const norm = s => String(s ?? '').trim().toLowerCase();
+    const findPlayer = (team, name) => {
+      const n = norm(name);
+      return (team?.players || []).find(p => norm(p.username) === n) || null;
+    };
+
     for (const p of _lastRoundPlayers) {
       const name = p?.name;
       if (!name) continue;
-      const inT1 = t1?.players?.some(pl => pl.username === name);
-      const inT2 = t2?.players?.some(pl => pl.username === name);
-      if (!inT1 && !inT2) continue;
-      const used = getUsed(id, name);
+
+      const matched = findPlayer(t1, name) || findPlayer(t2, name);
+      if (!matched) continue;
+
+      const canonical = matched.username;
+      const used = getUsed(id, canonical);
       if (used >= maxStars) continue;
-      setUsed(id, name, used + 1);
+      setUsed(id, canonical, used + 1);
     }
     _lastRoundPlayers = [];
     renderPlayers();
@@ -327,13 +339,29 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
 
   function bindOsuEvents() {
     if (!osuSocket) return;
+
     osuSocket.on('playing', (isPlaying, roundPlayers) => {
+      /* 记录本局参与的玩家（原有） */
       if (isPlaying && Array.isArray(roundPlayers) && roundPlayers.length) {
         _lastRoundPlayers = roundPlayers;
       }
+
+      /* 打图结束自动消耗（原有） */
       if (_lastPlayingState === true && isPlaying === false) handleRoundEnd();
+
+      /* 新增：刚进图（false → true）且当前在 mappool 页 → 切到 playing */
+      if (isPlaying && _lastPlayingState === false) {
+        const activePage = document.querySelector('.page.active');
+        if (activePage?.dataset.page === 'mappool') {
+          playAutoTransition(() => {
+            window.app?.router?.show('playing');
+          });
+        }
+      }
+
       _lastPlayingState = isPlaying;
     });
+
     window.addEventListener('storage', (e) => {
       if (e.key === 'cyt2026.currentMatchId') {
         _lastPlayingState = false;
@@ -425,7 +453,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     card.dataset.mods     = map.rawMods;
     if (map.bg) card.style.backgroundImage = `url('${map.bg}')`;
 
-    /* 默认给红队 protect 图标；实际使用时会按 team 切 src */
     card.innerHTML = `
       <div class="mapContent">
         <div class="banMap"></div>
@@ -462,7 +489,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     return wrapper.querySelector(`.mapContainer[data-mods="${mods}"]`);
   }
 
-  /* 按队伍切换 protect 图标 */
   function setProtectIcon(content, team) {
     const img = content?.querySelector('.protectImg');
     if (!img) return;
@@ -470,12 +496,22 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     if (img.getAttribute('src') !== next) img.setAttribute('src', next);
   }
 
-  /* 通用应用：手动 = toggle，自动 = 幂等设置 */
+  function isTBMap(card) {
+    const mods = card?.dataset?.mods || '';
+    return /^TB/i.test(mods);
+  }
+
   function applyCardAction(card, action, team, { toggle }) {
     if (!card) return;
     const content  = card.querySelector('.mapContent');
     const mapId    = card.dataset.mapId;
     const mapTitle = card.dataset.mapTitle;
+    const isTB     = isTBMap(card);
+
+    /* TB 图：protect / ban 一律忽略 */
+    if (isTB && (action === 'protect' || action === 'ban')) return;
+
+    /* ---------- protect ---------- */
 
     if (action === 'protect') {
       const existing = protectStates.get(mapId);
@@ -483,34 +519,83 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
         protectStates.delete(mapId);
         content.classList.remove('is-protected');
         removeProtectState(mapTitle);
+        if (toggle) syncAutoBpToAuto('clear', null, mapId);
         return;
       }
       protectStates.set(mapId, { team });
       content.classList.add('is-protected');
       setProtectIcon(content, team);
       saveProtectState(mapTitle, { team });
+      if (toggle) syncAutoBpToAuto('protect', team, mapId);
       return;
     }
 
-    const existing = mapStates.get(mapId);
-    if (toggle && existing && existing.team === team && existing.action === action) {
-      card.classList.remove('redBorder', 'blueBorder');
+    /* ---------- ban ---------- */
+
+    if (action === 'ban') {
+      const existing = mapStates.get(mapId);
+      if (toggle && existing && existing.team === team && existing.action === action) {
+        card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
+        content.classList.remove('banned');
+        mapStates.delete(mapId);
+        removeMapState(mapTitle);
+        if (toggle) syncAutoBpToAuto('clear', null, mapId);
+        return;
+      }
+
+      card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
+      card.classList.add(team === 'red' ? 'redBorder' : 'blueBorder');
+      content.classList.add('banned');
+      triggerFlashAnimation(content);
+
+      mapStates.set(mapId, { action, team });
+      saveMapState(mapTitle, { action, team });
+
+      if (toggle) syncAutoBpToAuto(action, team, mapId);
+      return;
+    }
+
+    /* ---------- pick ---------- */
+
+    if (action === 'pick') {
+      const existing = mapStates.get(mapId);
+
+      /* TB：不分队伍，统一紫框 */
+      if (isTB) {
+        if (toggle && existing && existing.action === 'pick') {
+          card.classList.remove('purpleBorder');
+          mapStates.delete(mapId);
+          removeMapState(mapTitle);
+          return;
+        }
+        card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
+        card.classList.add('purpleBorder');
+        triggerFlashAnimation(content);
+
+        mapStates.set(mapId, { action: 'pick', team: 'tb' });
+        saveMapState(mapTitle, { action: 'pick', team: 'tb' });
+        return;
+      }
+
+      /* 普通图 pick */
+      if (toggle && existing && existing.team === team && existing.action === action) {
+        card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
+        mapStates.delete(mapId);
+        removeMapState(mapTitle);
+        if (toggle) syncAutoBpToAuto('clear', null, mapId);
+        return;
+      }
+
+      card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
+      card.classList.add(team === 'red' ? 'redBorder' : 'blueBorder');
       content.classList.remove('banned');
-      mapStates.delete(mapId);
-      removeMapState(mapTitle);
-      return;
+      triggerFlashAnimation(content);
+
+      mapStates.set(mapId, { action, team });
+      saveMapState(mapTitle, { action, team });
+
+      if (toggle) syncAutoBpToAuto('pick', team, mapId);
     }
-
-    card.classList.remove('redBorder', 'blueBorder');
-    card.classList.add(team === 'red' ? 'redBorder' : 'blueBorder');
-    content.classList.toggle('banned', action === 'ban');
-    if (toggle) triggerFlashAnimation(content);
-
-    mapStates.set(mapId, { action, team });
-    saveMapState(mapTitle, { action, team });
-
-    /* pick 成功执行 → 5s 后切到 playing */
-    if (action === 'pick') schedulePlayingSwitch();
   }
 
   function handleMapClick(card) {
@@ -527,18 +612,21 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const content  = card.querySelector('.mapContent');
 
     const hasBorder  = card.classList.contains('redBorder')
-                    || card.classList.contains('blueBorder');
+                    || card.classList.contains('blueBorder')
+                    || card.classList.contains('purpleBorder');
     const hasBanned  = content.classList.contains('banned');
     const hasProtect = content.classList.contains('is-protected');
     if (!hasBorder && !hasBanned && !hasProtect) return;
 
-    card.classList.remove('redBorder', 'blueBorder');
+    card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
     content.classList.remove('banned', 'is-protected');
 
     mapStates.delete(mapId);
     protectStates.delete(mapId);
     removeMapState(mapTitle);
     removeProtectState(mapTitle);
+
+    syncAutoBpToAuto('clear', null, mapId);
   }
 
   function triggerFlashAnimation(el) {
@@ -564,6 +652,54 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       redPick:     btnRedPick,
       bluePick:    btnBluePick,
     }[mode])?.classList.add('active');
+  }
+
+  /* =========================================
+     UI → AutoBp 同步
+     ========================================= */
+
+  /* 从 UI 读取完整 BP 状态快照（mods 为 key） */
+  function buildUISnapshotForAutoBp() {
+    const protects = { red: [], blue: [] };
+    const bans     = { red: [], blue: [] };
+    const picks    = { red: [], blue: [] };
+
+    wrapper.querySelectorAll('.mapContainer').forEach(card => {
+      const mapId = card.dataset.mapId;
+      const mods  = card.dataset.mods;
+      if (!mapId || !mods) return;
+
+      const ps = protectStates.get(mapId);
+      if (ps) protects[ps.team].push(mods);
+
+      const ms = mapStates.get(mapId);
+      if (ms) {
+        if (ms.action === 'ban' && (ms.team === 'red' || ms.team === 'blue')) {
+          bans[ms.team].push(mods);
+        } else if (ms.action === 'pick' && (ms.team === 'red' || ms.team === 'blue')) {
+          picks[ms.team].push(mods);
+        }
+      }
+    });
+
+    return { protects, bans, picks };
+  }
+
+  /* 把 UI 最新状态同步给 autoBp */
+  function syncAutoBpToAuto(action, side, mapId) {
+    if (!autoBp) return;
+
+    const snapshot = buildUISnapshotForAutoBp();
+
+    if (action === 'clear') {
+      snapshot.lastAction = { action: 'clear' };
+    } else {
+      const card = wrapper.querySelector(`.mapContainer[data-map-id="${mapId}"]`);
+      const mods = card?.dataset.mods || '';
+      snapshot.lastAction = { action, side, mods };
+    }
+
+    autoBp.syncFromUI(snapshot);
   }
 
   /* =========================================
@@ -626,7 +762,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       const mods     = card.dataset.mods;
       const content  = card.querySelector('.mapContent');
 
-      card.classList.remove('redBorder', 'blueBorder');
+      card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
       content.classList.remove('banned', 'is-protected');
       mapStates.delete(mapId);
       protectStates.delete(mapId);
@@ -648,8 +784,12 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   function applyBpState(card, content, mapId, state) {
-    card.classList.add(state.team === 'red' ? 'redBorder' : 'blueBorder');
-    content.classList.toggle('banned', state.action === 'ban');
+    if (state.team === 'tb') {
+      card.classList.add('purpleBorder');
+    } else {
+      card.classList.add(state.team === 'red' ? 'redBorder' : 'blueBorder');
+      content.classList.toggle('banned', state.action === 'ban');
+    }
     mapStates.set(mapId, { action: state.action, team: state.team });
   }
   function applyProtectState(content, mapId, state) {
@@ -683,9 +823,8 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   function resetAll() {
-    cancelPlayingSwitch();
     wrapper.querySelectorAll('.mapContainer').forEach(card => {
-      card.classList.remove('redBorder', 'blueBorder');
+      card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
       card.querySelector('.mapContent').classList.remove('banned', 'is-protected');
     });
     mapStates.clear();
@@ -695,10 +834,18 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     localStorage.removeItem(STORAGE_KEY_PROTECT_LOCAL);
     localStorage.removeItem(STORAGE_KEY_PROTECT_SHARED);
     autoBp?.reset();
+
+    if (autoBp) {
+      autoBp.syncFromUI({
+        protects: { red: [], blue: [] },
+        bans:     { red: [], blue: [] },
+        picks:    { red: [], blue: [] },
+        lastAction: { action: 'clear' },
+      });
+    }
   }
 
   function reloadFromJson() {
-    cancelPlayingSwitch();
     localStorage.removeItem(STORAGE_KEY_LOCAL);
     localStorage.removeItem(STORAGE_KEY_SHARED);
     localStorage.removeItem(STORAGE_KEY_PROTECT_LOCAL);
@@ -718,23 +865,33 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   function handleAutoAction(action, side, mods) {
     const card = findCardByMods(mods);
     if (!card) return;
+
+    /* 自动操作 → 同步左侧控制面板高亮 */
+    const modeName = side === 'red'
+      ? (action === 'protect' ? 'redProtect'
+       : action === 'ban'     ? 'redBan'
+       :                        'redPick')
+      : (action === 'protect' ? 'blueProtect'
+       : action === 'ban'     ? 'blueBan'
+       :                        'bluePick');
+    setMode(modeName);
+
     applyCardAction(card, action, side, { toggle: false });
   }
 
   function initAutoBp() {
-    if (!tokenStore) return;   /* tokenStore 缺失则不启用自动 BP */
+    if (!tokenStore) return;
     autoBp = new AutoBp({
       tournamentData,
       osuSocket,
       tokenStore,
       onAction:      handleAutoAction,
       onStateChange: (state) => {
-        /* 可以在这里做 UI 反馈，暂不实现 */
+        /* UI 反馈预留 */
       },
     });
     autoBp.start();
 
-    /* 先选方 */
     if (radioFirstRed)  radioFirstRed.checked  = true;
     if (radioFirstBlue) radioFirstBlue.checked = false;
     const savedPicker = getFirstPickerFromStorage();

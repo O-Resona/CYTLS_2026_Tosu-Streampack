@@ -18,14 +18,15 @@
 
 import { MapCard }    from '../components/mapCard.js';
 import { StatsPanel } from '../components/statsPanel.js';
+import { playAutoTransition } from '../services/autoTransition.js';
 
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 
 /* lazer mp 实测：0 = 打图中 */
 const PLAYING_IPC_STATE = 0;
 
-const EXIT_DELAY        = 4000;   /* 打图结束 → 聊天框/地图卡动画 */
-const PAGE_RETURN_DELAY = 7000;   /* 打图结束 → 判断切页 */
+const EXIT_DELAY        = 800;   /* 打图结束 → 聊天框/地图卡动画 */
+const PAGE_RETURN_DELAY = 1100;   /* 打图结束 → 判断切页 */
 const A_TO_B_FADE       = 500;
 const B_TO_A_FADE       = 500;
 
@@ -58,6 +59,152 @@ export function initPlaying({
     box2:     pageEl.querySelector('.pl-score-box--right'),
     scoresEl: pageEl.querySelector('.pl-scores'),
   };
+
+  /* =========================================
+     分数数字的平滑缓冲
+     ========================================= */
+
+  const SCORE_SMOOTH = 0.15;
+  const scoreAnim = {
+    left:  { current: 0, target: 0, raf: null },
+    right: { current: 0, target: 0, raf: null },
+  };
+
+  function scoreEl(side) {
+    return side === 'left' ? el.score1 : el.score2;
+  }
+
+  /* 千分位格式化：1234567 → "1,234,567" */
+  function formatScore(n) {
+    const v = Math.round(Number(n) || 0);
+    return v.toLocaleString('en-US');
+  }
+
+  function jumpScore(side, value) {
+    const s = scoreAnim[side];
+    if (s.raf) { cancelAnimationFrame(s.raf); s.raf = null; }
+    s.current = value;
+    s.target  = value;
+    const node = scoreEl(side);
+    if (node) node.textContent = formatScore(s.current);
+    updateDiffText();
+  }
+
+  function animateScoreTo(side) {
+    const s = scoreAnim[side];
+    if (s.raf) return;
+
+    const step = () => {
+      const diff = s.target - s.current;
+
+      if (Math.abs(diff) < 0.5) {
+        s.current = s.target;
+        const node = scoreEl(side);
+        if (node) node.textContent = formatScore(s.current);
+        s.raf = null;
+        updateDiffText(); 
+        return;
+      }
+
+      s.current += diff * SCORE_SMOOTH;
+      const node = scoreEl(side);
+      if (node) node.textContent = formatScore(s.current);
+      updateDiffText(); 
+      s.raf = requestAnimationFrame(step);
+    };
+
+    s.raf = requestAnimationFrame(step);
+  }
+
+  /* 分差数字：用平滑中的分数计算，跟随缓动 */
+  function updateDiffText() {
+    const l = Math.round(scoreAnim.left.current);
+    const r = Math.round(scoreAnim.right.current);
+    const d = Math.abs(l - r);
+    const leadingLeft  = d > 0 && l > r;
+    const leadingRight = d > 0 && r > l;
+
+    if (el.diff1) {
+      el.diff1.textContent = leadingRight ? `-${formatScore(d)}` : '';
+      el.diff1.classList.toggle('is-visible', leadingRight);
+    }
+    if (el.diff2) {
+      el.diff2.textContent = leadingLeft ? `-${formatScore(d)}` : '';
+      el.diff2.classList.toggle('is-visible', leadingLeft);
+    }
+  }
+
+  /* =========================================
+     绿幕宽度（px 制，960 ~ 1920）
+     ========================================= */
+
+  const greenEl      = pageEl.querySelector('.pl-green-screen');
+  const greenPanel   = document.getElementById('greenPanel');
+  const greenRangeEl = document.getElementById('plGreenWidth');
+  const greenValEl   = document.getElementById('plGreenWidthVal');
+  const greenInputEl = document.getElementById('plGreenWidthInput');
+
+  const GREEN_WIDTH_KEY = 'cyt2026.greenWidth';
+  const GREEN_MIN = 960;
+  const GREEN_MAX = 1920;
+
+  function clampGreen(v) {
+    const n = Number(v);
+    if (!Number.isFinite(n)) return GREEN_MAX;
+    return Math.min(GREEN_MAX, Math.max(GREEN_MIN, Math.round(n)));
+  }
+
+  function applyGreenWidth(v) {
+    const val = clampGreen(v);
+
+    if (greenEl) greenEl.style.width = val + 'px';
+    if (greenRangeEl && greenRangeEl.value !== String(val)) {
+      greenRangeEl.value = String(val);
+    }
+    if (greenInputEl && document.activeElement !== greenInputEl
+                    && greenInputEl.value !== String(val)) {
+      greenInputEl.value = String(val);
+    }
+    if (greenValEl) greenValEl.textContent = val + ' px';
+
+    try { localStorage.setItem(GREEN_WIDTH_KEY, String(val)); } catch {}
+  }
+
+  /* 读取已保存值（旧数据是 50~100 的百分比 → 判为无效，用默认 1920） */
+  function loadSavedGreen() {
+    const raw = Number(localStorage.getItem(GREEN_WIDTH_KEY));
+    return (raw >= GREEN_MIN && raw <= GREEN_MAX) ? raw : GREEN_MAX;
+  }
+
+  if (greenRangeEl) {
+    applyGreenWidth(loadSavedGreen());
+
+    greenRangeEl.addEventListener('input', () => {
+      applyGreenWidth(greenRangeEl.value);
+    });
+  }
+
+  if (greenInputEl) {
+    /* 输入时实时跟随（输入框还在聚焦中，所以不反写它自己） */
+    greenInputEl.addEventListener('input', () => {
+      const raw = greenInputEl.value;
+      if (raw === '' || raw === '-') return;
+      applyGreenWidth(raw);
+    });
+
+    /* 失焦时钳到合法值并回写 */
+    greenInputEl.addEventListener('blur', () => {
+      applyGreenWidth(greenInputEl.value);
+    });
+
+    /* 回车也是同样的处理 */
+    greenInputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        greenInputEl.blur();
+      }
+    });
+  }
 
   /* =========================================
      地图卡片 + 四维
@@ -107,8 +254,13 @@ export function initPlaying({
     transitionToken++;
     cancelExitTimer();
     stageEl.classList.remove('is-transitioning-to-a', 'is-transitioning-to-b');
-    if (state === 'A') stageEl.classList.remove('state-b');
-    else               stageEl.classList.add('state-b');
+    if (state === 'A') {
+      stageEl.classList.remove('state-b');
+      statsEl?.classList.remove('is-solid');
+    } else {
+      stageEl.classList.add('state-b');
+      statsEl?.classList.add('is-solid');
+    }
     currentStage = state;
   }
 
@@ -117,13 +269,28 @@ export function initPlaying({
     const token = ++transitionToken;
     cancelExitTimer();
 
+    /* 阶段 1：分数条开始淡出（0.4s） */
+    stageEl.classList.add('is-scores-hiding');
+
+    /* 阶段 2：分数条淡出 150ms 后，mapcard 也开始淡出（0.5s） */
+    await sleep(150);
+    if (token !== transitionToken) return;
     stageEl.classList.add('is-transitioning-to-b');
-    await sleep(A_TO_B_FADE);
+
+    /* 阶段 3：等 mapcard 淡出完成 → 换位置 → 淡入 + chat 同时淡入 */
+    await sleep(A_TO_B_FADE);      /* 500ms */
     if (token !== transitionToken) return;
 
     stageEl.classList.add('state-b');
-    stageEl.classList.remove('is-transitioning-to-b');
+    stageEl.classList.remove('is-transitioning-to-b', 'is-scores-hiding');
     currentStage = 'B';
+
+    /* chat 出现 → stats panel 加不透明底色 */
+    statsEl?.classList.add('is-solid');
+
+    /* chat 与 mapcard 淡入同时启动 */
+    chatBox?.unblock();
+    chatBox?.show();
 
     await sleep(A_TO_B_FADE);
     if (token !== transitionToken) return;
@@ -138,8 +305,11 @@ export function initPlaying({
     await sleep(B_TO_A_FADE);
     if (token !== transitionToken) return;
 
-    stageEl.classList.remove('state-b', 'is-transitioning-to-a');
+    stageEl.classList.remove('state-b', 'is-transitioning-to-a', 'is-scores-hiding');
     currentStage = 'A';
+
+    /* chat 隐藏 → stats panel 恢复半透明 */
+    statsEl?.classList.remove('is-solid');
 
     await sleep(B_TO_A_FADE);
     if (token !== transitionToken) return;
@@ -151,34 +321,43 @@ export function initPlaying({
 
   function computeBarWidth(diff) {
     if (diff <= 0) return 0;
+
+    /* 0 ~ 10w：最敏感，线性 → 0 ~ 400px */
+    if (diff <= 100000) {
+      return (diff / 100000) * 400;
+    }
+
+    /* 10w ~ 30w：增长变慢（缓出）→ 400 ~ 620px */
     if (diff <= 300000) {
-      return (diff / 300000) * 400;
-    }
-    if (diff <= 600000) {
-      const t = (diff - 300000) / 300000;
+      const t = (diff - 100000) / 200000;
       const eased = 1 - Math.pow(1 - t, 2);
-      return 400 + eased * 300;
+      return 400 + eased * 220;
     }
+
+    /* 30w ~ 40w：极慢 → 620 ~ 700px */
+    if (diff <= 400000) {
+      const t = (diff - 300000) / 100000;
+      return 620 + t * 80;
+    }
+
+    /* 40w+：封顶 */
     return 700;
   }
 
   function renderScores() {
-    el.score1.textContent = String(scores.left);
-    el.score2.textContent = String(scores.right);
+    /* 数字：平滑变动（不改 textContent，交给动画） */
+    scoreAnim.left.target  = scores.left;
+    scoreAnim.right.target = scores.right;
+    animateScoreTo('left');
+    animateScoreTo('right');
 
+    /* 以下全部用真实分数即时判定 */
     const diff = Math.abs(scores.left - scores.right);
     const leadingLeft  = diff > 0 && scores.left  > scores.right;
     const leadingRight = diff > 0 && scores.right > scores.left;
 
-    /* ---------- class 切换（toggle 不会重复触发） ---------- */
-
     el.score1.classList.toggle('is-light', leadingRight);
     el.score2.classList.toggle('is-light', leadingLeft);
-
-    el.diff1.textContent = leadingRight ? `-${diff}` : '';
-    el.diff2.textContent = leadingLeft  ? `-${diff}` : '';
-    el.diff1.classList.toggle('is-visible', leadingRight);
-    el.diff2.classList.toggle('is-visible', leadingLeft);
 
     el.scoresEl.classList.toggle('is-left-leading',  leadingLeft);
     el.scoresEl.classList.toggle('is-right-leading', leadingRight);
@@ -204,8 +383,6 @@ export function initPlaying({
       el.bar.style.backgroundColor = '#1661AB';
       el.bar.style.transform = 'translateX(0)';
     }
-
-    /* ---------- 分数盒位移 ---------- */
 
     if (leadingLeft) {
       const w1 = el.score1.offsetWidth || 0;
@@ -281,13 +458,13 @@ export function initPlaying({
      ========================================= */
 
   function decideReturnPage() {
-    /* 只在还在 playing 页时执行，避免覆盖用户手动导航或 winnerWatcher 的跳转 */
+    /* 只在还在 playing 页时执行 */
     const activePage = document.querySelector('.page.active');
     if (activePage?.dataset.page !== 'playing') return;
 
     const match = loadCurrentMatch();
     if (!match) {
-      window.app?.router?.show('mappool');
+      playAutoTransition(() => window.app?.router?.show('mappool'));
       return;
     }
 
@@ -298,9 +475,12 @@ export function initPlaying({
     const s1 = Number(match.team1Score) || 0;
     const s2 = Number(match.team2Score) || 0;
 
-    /* 任一方达到决胜分 → winner；否则回 mappool */
+    /* 决胜局 → 交给 winnerWatcher，本函数不切页 */
     const reached = (s1 >= maxStars) || (s2 >= maxStars);
-    window.app?.router?.show(reached ? 'winner' : 'mappool');
+    if (reached) return;
+
+    /* 非决胜局 → 回 mappool */
+    playAutoTransition(() => window.app?.router?.show('mappool'));
   }
 
   /* =========================================
@@ -331,17 +511,15 @@ export function initPlaying({
       isNewRound = false;
       transitionToA();
     } else {
-      // 打图结束：延迟 4s → unblock + 显示 + B
+      // 打图结束：延迟 4s → 依次执行 分数条隐藏 → mapcard 移动 → chat 出现
       handleRoundEnd();
       cancelExitTimer();
       exitTimer = setTimeout(() => {
         exitTimer = null;
-        chatBox?.unblock();
-        chatBox?.show();
-        transitionToB();
+        transitionToB();   // chat 在 transitionToB 末尾显示
       }, EXIT_DELAY);
 
-      // 打图结束 7s 后切页：决胜 → winner，否则回 mappool
+      // 打图结束 7s 后切页
       cancelPageSwitchTimer();
       pageSwitchTimer = setTimeout(() => {
         pageSwitchTimer = null;
@@ -360,8 +538,10 @@ export function initPlaying({
     if (!currentMatch) {
       scores.left  = 0;
       scores.right = 0;
-      el.score1.textContent = '0';
-      el.score2.textContent = '0';
+
+      jumpScore('left',  0);
+      jumpScore('right', 0);
+
       el.diff1.textContent = '';
       el.diff2.textContent = '';
       el.diff1.classList.remove('is-visible');
@@ -371,6 +551,10 @@ export function initPlaying({
 
     scores.left  = Number(currentMatch.team1Score) || 0;
     scores.right = Number(currentMatch.team2Score) || 0;
+
+    /* 切换比赛 / 首次激活时直接跳到真实分数，不做动画 */
+    jumpScore('left',  scores.left);
+    jumpScore('right', scores.right);
 
     renderScores();
   }
@@ -391,16 +575,22 @@ export function initPlaying({
     if (hasInitStage) {
       setStageImmediate(currentIpcState === PLAYING_IPC_STATE ? 'A' : 'B');
     }
+    if (greenPanel) greenPanel.hidden = false;
   });
 
   pageEl.addEventListener('page:deactivated', () => {
     cancelExitTimer();
     cancelPageSwitchTimer();
+    if (greenPanel) greenPanel.hidden = true;
   });
 
   window.addEventListener('storage', (e) => {
     if (e.key === CURRENT_MATCH_KEY) refresh();
   });
+
+  if (pageEl.classList.contains('active') && greenPanel) {
+    greenPanel.hidden = false;
+  }
 
   if (osuSocket) {
     osuSocket.on('playing',  handlePlaying);

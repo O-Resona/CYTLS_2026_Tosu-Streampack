@@ -51,7 +51,6 @@ export function initShowcaseCountdown({ tournamentData } = {}) {
      判断 / 计算
      ========================================= */
 
-  /* 该场比赛"未开始"：队伍空 或 无比分 */
   function isMatchNotStarted(m) {
     return !m.team1Acronym
         || !m.team2Acronym
@@ -67,7 +66,6 @@ export function initShowcaseCountdown({ tournamentData } = {}) {
     return matches.every(isMatchNotStarted);
   }
 
-  /* 返回：{ label, mappoolId, time } */
   function pickCurrentPhase() {
     if (!tournamentData) return null;
 
@@ -78,7 +76,6 @@ export function initShowcaseCountdown({ tournamentData } = {}) {
       }
     }
 
-    /* 所有阶段都开始了 → 显示最后一个阶段 */
     const last = PHASES[PHASES.length - 1];
     const pool = tournamentData.getMappool(last.mappoolId);
     return { label: last.label, mappoolId: last.mappoolId, time: pool?.time || '' };
@@ -92,13 +89,11 @@ export function initShowcaseCountdown({ tournamentData } = {}) {
     const info = pickCurrentPhase();
     if (!info) return;
 
-    /* Swiss Phase I → 特殊两行标题 */
     const isSwiss1 = info.mappoolId === 'swiss-1';
     const titleHTML = isSwiss1
       ? 'Qual Results &amp;<br>Swiss Phase I Showcase'
       : `${info.label} Showcase`;
 
-    /* 存储用纯文本（供其它页面读） */
     const titlePlain = isSwiss1
       ? 'Qual Results & Swiss Phase I Showcase'
       : `${info.label} Showcase`;
@@ -106,12 +101,10 @@ export function initShowcaseCountdown({ tournamentData } = {}) {
     if (elTitle)    elTitle.innerHTML = titleHTML;
     if (elSubtitle) elSubtitle.textContent = SUBTITLE;
 
-    /* 广播给其它页面 */
     try { localStorage.setItem(TITLE_STORAGE_KEY, titlePlain); } catch (e) {
       console.warn('[ShowcaseCountdown] 写入 localStorage 失败:', e);
     }
 
-    /* 目标时间 */
     if (info.time) {
       const t = new Date(info.time).getTime();
       targetTime = Number.isFinite(t) ? t : 0;
@@ -190,8 +183,20 @@ export function initShowcaseCountdown({ tournamentData } = {}) {
 }
 
 /* =========================================
-   最终转场：Countdown → Showcase（保持原逻辑）
+   最终转场：Countdown → Showcase
    ========================================= */
+
+const TRANSITION_TIMING = {
+  bgIn:     0,      // bg4 淡入（2.5s）
+  bg3Out:   600,    // bg3 淡出 + bg4 变亮
+  switch:   2000,   // ← bg4 完全淡入后立即切到 showcase（观众看不到切换）
+  textIn:   2100,   // text.png 淡入
+  text2In:  2800,   // text2.png 淡入
+  cutsShow: 4700,   // cut 滑入（0.5s → 5000 完成）
+  hideOld:  5150,   // 隐藏 bg/text/text2（cut 已快闭合）
+  cutsIn:   5350,   // cut 滑出（0.4s）
+  cleanup:  5750,   // 清理
+};
 
 function playFinalTransition() {
   const finalBg   = document.getElementById('finalBg');
@@ -204,75 +209,83 @@ function playFinalTransition() {
   finalBg.classList.remove('is-bg3-out', 'is-visible');
   finalFore.classList.remove(
     'is-text-in', 'is-text2-in',
-    'is-cuts-show', 'is-cuts-in', 'is-text-out'
+    'is-cuts-show', 'is-cuts-in', 'is-text-out',
+    'is-old-hidden'
   );
   void finalBg.offsetWidth;
 
-  /* ---------- t=0 ---------- */
+  /* ---------- 各阶段 ---------- */
 
-  /* finalBg 淡入（2.5s CSS transition），把视频盖住 */
-  finalBg.classList.add('is-visible');
+  setTimeout(() => {
+    finalBg.classList.add('is-visible');
+    const currentPage = document.querySelector('.page.active');
+    if (currentPage) currentPage.classList.add('is-fading-out');
+  }, TRANSITION_TIMING.bgIn);
 
-  /* 当前 page 淡出（2s CSS animation） */
-  const currentPage = document.querySelector('.page.active');
-  if (currentPage) currentPage.classList.add('is-fading-out');
-
-  /* bg3 淡出（2s）+ bg4 变亮（1s），延后 600ms 启动 */
   setTimeout(() => {
     finalBg.classList.add('is-bg3-out');
-  }, 600);
+  }, TRANSITION_TIMING.bg3Out);
 
-  /* ---------- 文字淡入 ---------- */
-
-  /* t=2800  text.png  淡入 */
   setTimeout(() => {
     finalFore.classList.add('is-text-in');
-  }, 2800);
+  }, TRANSITION_TIMING.textIn);
 
-  /* t=3500  text2.png 淡入 */
   setTimeout(() => {
     finalFore.classList.add('is-text2-in');
-  }, 3500);
+  }, TRANSITION_TIMING.text2In);
 
-  /* ---------- cut 显示 + text 消失 ---------- */
-
-  /* t=4500  cut 淡入（0.5s），同时让 text/text2 开始消失（0.3s） */
   setTimeout(() => {
     finalFore.classList.add('is-cuts-show');
-    finalFore.classList.add('is-text-out');       // ← 从 7500 提前到 4500
-  }, 4500);
+    finalFore.classList.add('is-text-out');
+  }, TRANSITION_TIMING.cutsShow);
 
-  /* t=5000  切到 showcase（cut 已完全不透明） */
-  setTimeout(() => {
-    window.app?.router?.show('showcase');
-  }, 5000);
+  setTimeout(async () => {
+    const router = window.app?.router;
+    if (router) {
+      await router.show('showcase');
+    }
 
-  /* ---------- cut 分离 ---------- */
+    /* 禁用 showcase 页的 fadeIn，让它瞬间完全显示 */
+    const sc = document.querySelector('[data-page="showcase"]');
+    if (sc) {
+      sc.style.opacity   = '1';
+    }
+  }, TRANSITION_TIMING.switch);
 
-  /* t=6000  cut 上下分离（1.2s），露出 showcase */
   setTimeout(() => {
     finalBg.hidden = true;
-    finalFore.classList.add('is-cuts-in');
-  }, 6000);
+    finalFore.classList.add('is-old-hidden');
+  }, TRANSITION_TIMING.hideOld);
 
-  /* t=7300  分离完成 → 立即清理（原本 9000） */
+  setTimeout(() => {
+    finalFore.classList.add('is-cuts-in');
+  }, TRANSITION_TIMING.cutsIn);
+
+  /* cut 滑出完成 → 清理 */
   setTimeout(() => {
     finalFore.hidden = true;
     finalBg.hidden = true;
     finalBg.classList.remove('is-bg3-out', 'is-visible');
     finalFore.classList.remove(
       'is-text-in', 'is-text2-in',
-      'is-cuts-show', 'is-cuts-in', 'is-text-out'
+      'is-cuts-show', 'is-cuts-in', 'is-text-out',
+      'is-old-hidden'
     );
+
+    /* 恢复 showcase 页的 inline style（下次进入时还能正常 fadeIn） */
+    const sc = document.querySelector('[data-page="showcase"]');
+    if (sc) {
+      sc.style.removeProperty('animation');
+      sc.style.removeProperty('opacity');
+    }
+
     document.querySelectorAll('.page.is-fading-out').forEach(p => {
       p.classList.remove('is-fading-out');
     });
-  }, 7300);
+  }, TRANSITION_TIMING.cleanup);
 }
 
 /* 调试：控制台执行 window.triggerFinalTransition() 立即触发转场 */
 if (typeof window !== 'undefined') {
-  window.triggerFinalTransition = () => {
-    playFinalTransition();
-  };
+  window.triggerFinalTransition = playFinalTransition;
 }

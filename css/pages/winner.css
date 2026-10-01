@@ -16,11 +16,10 @@
   user-select: none;
 }
 
-/* ---------- 标题：两行右对齐 ---------- */
+/* ---------- 标题：左对齐 ---------- */
 
 [data-page="winner"] .wc-title {
   align-self: stretch;
-  text-align: right;
 
   color: #ffffff;
   font-family: 'SourceHanSerif', "Songti SC", "SimSun", serif;
@@ -57,8 +56,8 @@
 
   color: #ffffff;
   font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
-  font-size: 90px;
-  font-weight: 1000;
+  font-size: 100px;
+  font-weight: 700;
   letter-spacing: 2px;
   line-height: 1;
   text-shadow:
@@ -111,37 +110,6 @@
 [data-page="winner"] .wc-halo-stack {
   position: absolute;
 
-  top: 580px;
-  left: 540px;
-  transform: translate(-50%, -50%);
-
-  width: 400px;
-  height: 400px;
-
-  z-index: 2;
-  pointer-events: none;
-}
-
-[data-page="winner"] .wc-halo-stack[hidden] { display: none !important; }
-
-[data-page="winner"] .wc-halo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-  opacity: 0;
-}
-
-/* ---------- 头像旋转光环（与 match info 一致） ---------- */
-
-/* ---------- 头像旋转光环 ---------- */
-
-[data-page="winner"] .wc-halo-stack {
-  position: absolute;
-
   /* 头像 top:470 / left:430 / 220×220 → 中心 (540, 580) */
   top: 560px;
   left: 560px;
@@ -149,10 +117,10 @@
 
   width: 1800px;
   height: 1800px;
-  z-index: 2;                    /* 低于头像(3)，圈在头像背后 */
+  z-index: 2;
   pointer-events: none;
 
-  opacity: 0;                    /* 默认隐藏，JS 用内联 opacity 切换 */
+  opacity: 0;
   transition: opacity .3s ease;
 }
 

@@ -17,7 +17,7 @@
   display: flex;
   align-items: flex-start;
   gap: 40px;
-  padding: 75px 0 40px 40px;   
+  padding: 40px 0 40px 40px;   
   height: 100%;
   box-sizing: border-box;
   will-change: transform;
@@ -122,9 +122,9 @@
 }
 
 [data-page="bracket"] .br-match.is-selected {
-  border-color: #F6DB00;
+  border-color: #ffffff;
   box-shadow:
-    0 0 16px rgba(246, 219, 0, 0.4),
+    0 0 0 4px #ffffff,
     0 4px 12px rgba(0, 0, 0, 0.28);
 }
 
@@ -303,6 +303,15 @@
   text-align: right;
   opacity: 0.85;
 }
+[data-page="bracket"] .br-scores-row__bu {
+  flex: 0 0 auto;
+  font-size: 16px;
+  font-weight: 600;
+  color: #dbe6f5;  
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
 [data-page="bracket"] .br-scores-row__name {
   flex: 1 1 auto;
   min-width: 0;
@@ -358,6 +367,8 @@
     ".      .      f8     gf9  "
     "sf4    f7     .      .    ";
   align-items: start;
+
+  position: relative;
 }
 
 /* ---------- 大标题 BRACKET STAGE ---------- */
@@ -441,7 +452,7 @@
 }
 
 [data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: f5"] {
-  transform: translate(35px, -100px);
+  transform: translate(315px, -100px);
 }
 
 [data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: f6"] {
@@ -453,7 +464,7 @@
 }
 
 [data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: f8"] {
-  transform: translate(-35px, -330px);
+  transform: translate(-15px, -330px);
 }
 
 [data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: gf9"] {
@@ -541,4 +552,69 @@
   font-size: 18px;
   line-height: 1;
   transform: translateY(-1px);
+}
+
+/* =========================================
+   标记线上方的战绩标签
+   ========================================= */
+
+[data-page="bracket"] .br-match__mark-label {
+  position: absolute;
+  bottom: calc(100% + 4px);          /* 距框顶 4px，紧贴线上方 */
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #f8f8f6;
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", system-ui, sans-serif;
+  text-shadow: 0 0 14px rgba(77, 155, 255, .45);
+
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+}
+
+/* 给带标记的框留出上方空间，避免标签和上面一行重叠 */
+[data-page="bracket"] .br-match--mark-green,
+[data-page="bracket"] .br-match--mark-white,
+[data-page="bracket"] .br-match--mark-red {
+  margin-top: 30px;
+}
+
+/* =========================================
+   每列独立垂直微调
+   ========================================= */
+
+[data-page="bracket"] .br-column[data-col-id="swiss-r1"] {
+  margin-top: 45px;
+}
+[data-page="bracket"] .br-column[data-col-id="swiss-r2"] {
+  margin-top: 25px;
+}
+[data-page="bracket"] .br-column[data-col-id="swiss-r3"] {
+  margin-top: 8px;
+}
+[data-page="bracket"] .br-column[data-col-id="swiss-r4"] {
+  margin-top: 152px;
+}
+[data-page="bracket"] .br-column[data-col-id="swiss-r5"] {
+  margin-top: 296px;
+}
+
+/* =========================================
+   Bracket Stage 连接线
+   ========================================= */
+
+[data-page="bracket"] .br-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
 }

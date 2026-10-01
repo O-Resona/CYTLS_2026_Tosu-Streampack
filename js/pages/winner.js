@@ -64,12 +64,9 @@ export function initWinner({ tournamentData } = {}) {
     }
   }
 
-  /* =========================================
-     头像：jpg / png 兜底
-     ========================================= */
-
   function setAvatar(imgEl, team) {
     if (!imgEl) return;
+
     if (!team?.acronym) {
       imgEl.removeAttribute('src');
       imgEl.style.opacity = '0';
@@ -79,29 +76,21 @@ export function initWinner({ tournamentData } = {}) {
     }
 
     const base = team.acronym;
-    const candidates = [`src/ava/${base}.jpg`, `src/ava/${base}.png`];
-
     imgEl.style.opacity = '0';
     imgEl.alt = base;
 
-    let i = 0;
-    const tryNext = () => {
-      if (i >= candidates.length) {
-        imgEl.style.opacity = '0';
-        imgEl.onload = null;
-        imgEl.onerror = null;
-        return;
-      }
-      const path = candidates[i++];
-      imgEl.onerror = () => tryNext();
-      imgEl.onload = () => {
-        imgEl.style.opacity = '1';
-        imgEl.onload = null;
-        imgEl.onerror = null;
-      };
-      imgEl.src = path;
+    imgEl.onload = () => {
+      imgEl.style.opacity = '1';
+      imgEl.onload = null;
+      imgEl.onerror = null;
     };
-    tryNext();
+    imgEl.onerror = () => {
+      imgEl.style.opacity = '0';
+      imgEl.onload = null;
+      imgEl.onerror = null;
+    };
+
+    imgEl.src = `src/ava/${base}.png`;
   }
 
   /* =========================================

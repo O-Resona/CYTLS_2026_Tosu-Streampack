@@ -2,16 +2,16 @@
  * AutoBp —— 从聊天消息与地图切换中自动解析 protect / ban / pick
  *
  * 触发流程：
- *   1. 检测到 Guest 发送 "... rolled x points out of 100" → 进入就绪
- *   2. 就绪后，本队队员发含 mods 标识（如 "hd2"、"hd 2"，忽略空格/大小写）的消息
- *      → 按顺序执行该队的 protect / ban 序列
- *      swiss-1 / swiss-2：['protect', 'ban']
- *      bracket：          ['protect', 'ban', 'ban']
+ *   1. Guest 发送 "... rolled x points out of 100" → 进入就绪
+ *   2. 就绪后，本队队员发含 mods 标识的消息 → 按序列执行该队的 protect / ban 序列
  *   3. 两队序列执行完 → 进入 pick 阶段
  *   4. pick 阶段：监听当前地图变化，轮流标记为队伍的 pick
  *
  * 外部通过 onAction(type, side, mods) 处理实际操作。
- * 自动触发的动作都会被后续手动点击覆盖。
+ *
+ * 手动操作通过 syncFromUI() 覆盖内部状态，纠正误判：
+ *   - autoBp 不再维护 cursor，进度完全由 protect / bans / picks 的实际内容决定
+ *   - 手动改 UI 后调 syncFromUI，autoBp 采纳 UI 为准
  */
 
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
@@ -27,11 +27,12 @@ export class AutoBp {
     this.tournamentData = tournamentData;
     this.osuSocket      = osuSocket;
     this.tokenStore     = tokenStore;
-    this.onAction       = onAction;        // (action, side, mods) => void
-    this.onStateChange  = onStateChange;   // (state) => void
+    this.onAction       = onAction;
+    this.onStateChange  = onStateChange;
 
     this._unsubChat = null;
     this._unsubMap  = null;
+    this._sequenceLength = 0;
 
     this._reset();
   }
@@ -42,15 +43,16 @@ export class AutoBp {
 
   _reset() {
     this.started     = false;
-    this.phase       = 'idle';      // idle | protect-ban | pick
-    this.firstPicker = 'red';       // red | blue
+    this.phase       = 'idle';
+    this.firstPicker = 'red';
+    this._sequenceLength = 0;
 
     this.teams = {
-      red:  { sequence: [], cursor: 0, protect: null, bans: [], picks: [] },
-      blue: { sequence: [], cursor: 0, protect: null, bans: [], picks: [] },
+      red:  { sequence: [], protect: null, bans: [], picks: [] },
+      blue: { sequence: [], protect: null, bans: [], picks: [] },
     };
 
-    this.pickTurn     = null;
+    this.pickTurn       = null;
     this._lastPickMapId = null;
   }
 
@@ -62,7 +64,6 @@ export class AutoBp {
   setFirstPicker(side) {
     if (side !== 'red' && side !== 'blue') return;
     this.firstPicker = side;
-    /* pick 阶段尚未开始 → 提前记录，开始时用此值 */
     if (this.phase !== 'pick') this.pickTurn = side;
     this._emitChange();
   }
@@ -96,16 +97,36 @@ export class AutoBp {
     const seq = SEQUENCES[round?.mappool];
     if (!seq) return false;
 
+    this._sequenceLength = seq.length;
+
     for (const side of ['red', 'blue']) {
       const t = this.teams[side];
       t.sequence = seq.slice();
-      t.cursor   = 0;
       t.protect  = null;
       t.bans     = [];
       t.picks    = [];
     }
     this.pickTurn = this.firstPicker;
     return true;
+  }
+
+  /* =========================================
+     内部判断（基于实际 set，不用 cursor）
+     ========================================= */
+
+  /* 该队下一步该做什么，null 表示已完成 */
+  _nextActionFor(side) {
+    const t = this.teams[side];
+    if (!this._sequenceLength) return null;
+    if (!t.protect) return 'protect';
+    const needBans = this._sequenceLength - 1;
+    if (t.bans.length < needBans) return 'ban';
+    return null;
+  }
+
+  _bothDone() {
+    return this._nextActionFor('red') === null
+        && this._nextActionFor('blue') === null;
   }
 
   /* =========================================
@@ -133,6 +154,7 @@ export class AutoBp {
     if (this.phase === 'protect-ban') {
       this._handleProtectBan(name, text);
     }
+    /* pick 阶段不处理聊天，走 mapid 变化 */
   }
 
   _isGuestRolled(name, text) {
@@ -143,16 +165,15 @@ export class AutoBp {
   _handleProtectBan(name, text) {
     const side = this._findSideOfPlayer(name);
     if (!side) return;
-    const team = this.teams[side];
-    if (!team || team.cursor >= team.sequence.length) return;
+
+    const action = this._nextActionFor(side);
+    if (!action) return;               // 该队已完成
 
     const mods = this._extractMods(text);
-    if (!mods) return;
+    if (!mods) return;                 // 识别失败 → 忽略，不动状态
     if (this._modsUsed(mods)) return;
 
-    const action = team.sequence[team.cursor];
-    team.cursor++;
-
+    const team = this.teams[side];
     if (action === 'protect') team.protect = mods;
     else if (action === 'ban') team.bans.push(mods);
 
@@ -163,11 +184,6 @@ export class AutoBp {
       this.pickTurn = this.firstPicker;
     }
     this._emitChange();
-  }
-
-  _bothDone() {
-    return this.teams.red.cursor  >= this.teams.red.sequence.length
-        && this.teams.blue.cursor >= this.teams.blue.sequence.length;
   }
 
   _findSideOfPlayer(name) {
@@ -195,6 +211,7 @@ export class AutoBp {
     for (const bm of pool.beatmaps) {
       const mods = bm.mods;
       if (!mods) continue;
+      if (/^tb/i.test(mods)) continue;   /* ← 跳过 TB */
       const needle = mods.toLowerCase().replace(/\s+/g, '');
       if (normalized.includes(needle)) return mods;
     }
@@ -204,8 +221,8 @@ export class AutoBp {
   _modsUsed(mods) {
     const r = this.teams.red;
     const b = this.teams.blue;
-    return r.protect === mods || r.bans.includes(mods)
-        || b.protect === mods || b.bans.includes(mods);
+    return r.protect === mods || r.bans.includes(mods) || r.picks.includes(mods)
+        || b.protect === mods || b.bans.includes(mods) || b.picks.includes(mods);
   }
 
   /* =========================================
@@ -230,8 +247,6 @@ export class AutoBp {
 
     const mods = bm.mods;
     if (this._modsUsed(mods)) return;
-    if (this.teams.red.picks.includes(mods)
-     || this.teams.blue.picks.includes(mods)) return;
 
     this._lastPickMapId = idStr;
 
@@ -241,6 +256,53 @@ export class AutoBp {
     this.onAction?.('pick', side, mods);
 
     this.pickTurn = side === 'red' ? 'blue' : 'red';
+    this._emitChange();
+  }
+
+  /* =========================================
+     手动同步：以 UI 状态为准
+     ========================================= */
+
+  /**
+   * 手动操作后调用，用 UI 的完整状态覆盖内部 set。
+   * 手动修正会被 autoBp 采纳，后续自动判定基于最新 UI。
+   *
+   * @param {{
+   *   protects?: { red: string[], blue: string[] },
+   *   bans?:     { red: string[], blue: string[] },
+   *   picks?:    { red: string[], blue: string[] },
+   *   lastAction?: { action: 'protect'|'ban'|'pick'|'clear', side?: 'red'|'blue', mods?: string }
+   * }} snapshot
+   */
+  syncFromUI(snapshot = {}) {
+    if (!this.started) return;
+
+    const { protects, bans, picks, lastAction } = snapshot;
+
+    for (const side of ['red', 'blue']) {
+      const t = this.teams[side];
+      if (protects) t.protect = protects[side]?.[0] || null;
+      if (bans)     t.bans    = Array.isArray(bans[side]) ? [...bans[side]] : [];
+      if (picks)    t.picks   = Array.isArray(picks[side]) ? [...picks[side]] : [];
+    }
+
+    /* 根据最新 set 重判阶段 */
+    if (this._bothDone()) {
+      if (this.phase !== 'pick') {
+        this.phase = 'pick';
+        this.pickTurn = this.firstPicker;
+      }
+    } else {
+      if (this.phase === 'pick') {
+        this.phase = 'protect-ban';    // 手动退回
+      }
+    }
+
+    /* 手动 pick 后翻转 pickTurn，让下一次自动 pick 归另一方 */
+    if (lastAction?.action === 'pick' && lastAction.side) {
+      this.pickTurn = lastAction.side === 'red' ? 'blue' : 'red';
+    }
+
     this._emitChange();
   }
 

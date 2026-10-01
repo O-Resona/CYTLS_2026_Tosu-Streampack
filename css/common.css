@@ -12,8 +12,8 @@
 
 @font-face {
   font-family: 'SourceHanSerif';
-  src: url('../fonts/SourceHanSerif-VF.ttf.ttc') format('truetype');
-  font-weight: 100 900;
+  src: url('../fonts/SourceHanSansCN-Regular.otf') format('opentype');
+  font-weight: 400;
   font-style: normal;
   font-display: block;
 }
@@ -217,6 +217,11 @@ body {
   animation: fadeOutSlow 2s ease forwards !important;
 }
 
+.page.is-transition-hidden {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 @keyframes fadeOutSlow {
   from { opacity: 1; }
   to   { opacity: 0; }
@@ -258,7 +263,7 @@ body {
 .final-bg {
   position: absolute;
   inset: 0;
-  z-index: 3;                    /* 低于 .page(4)，高于全局 cover(2) */
+  z-index: 6;                    /* 低于 .page(4)，高于全局 cover(2) */
   pointer-events: none;
   overflow: hidden;
 
@@ -267,11 +272,12 @@ body {
 }
 
 .final-bg.is-visible {
-  opacity: 0.9;
+  opacity: 1;
 }
 
 .final-bg[hidden] {
   display: none !important;
+  transition: none !important;
 }
 
 .final-bg img {
@@ -287,13 +293,13 @@ body {
 .ft-bg4 {
   z-index: 1;
   filter: brightness(0.25);      /* 初始：明显偏暗 */
-  transition:ease-out 1s linear;
+  transition:ease-out 0.5s linear;
   will-change: filter;
 }
 
 .ft-bg3 {
   z-index: 2;
-  transition: opacity 2s cubic-bezier(0.9, 0, 0.95, 0.5);
+  transition: opacity 1s cubic-bezier(0.9, 0, 0.95, 0.5);
 }
 
 .final-bg.is-bg3-out .ft-bg4 {
@@ -353,42 +359,46 @@ body {
   height: 540px;
   object-fit: cover;
   z-index: 3;
-  opacity: 0;
   transform: translateY(0);
-  transition:
-    transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity   0.5s ease;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
   user-select: none;
 }
 
-/* 上半屏：显示 cut_full 的上半部分 */
+/* 上半屏：初始在屏幕上方外面 */
 .ft-cut-top {
   top: 0;
   object-position: center top;
+  transform: translateY(-100%);
 }
 
-/* 下半屏：显示 cut_full 的下半部分 */
+/* 下半屏：初始在屏幕下方外面 */
 .ft-cut-bottom {
   top: 540px;
   object-position: center bottom;
+  transform: translateY(100%);
 }
 
-/* 进入 cut 阶段：淡入覆盖 */
+/* 滑入：合成完整画面 */
 .final-fore.is-cuts-show .ft-cut-top,
 .final-fore.is-cuts-show .ft-cut-bottom {
-  opacity: 1;
+  transform: translateY(0);
 }
 
-/* 分离：上片上移、下片下移，露出 showcase */
-.final-fore.is-cuts-in .ft-cut-top    { transform: translateY(-100%); }
-.final-fore.is-cuts-in .ft-cut-bottom { transform: translateY(100%);  }
+/* 滑出：上下分离，露出 showcase（0.4s） */
+.final-fore.is-cuts-in .ft-cut-top {
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.final-fore.is-cuts-in .ft-cut-bottom {
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* text/text2 消失（cut 对齐后触发） */
-.final-fore.is-text-out .ft-text,
-.final-fore.is-text-out .ft-text2 {
-  opacity: 0;
-  transition: opacity 1.3s ease;
+/* cut 闭合后，彻底干掉 text/text2（不留 opacity 过渡） */
+.final-fore.is-old-hidden .ft-text,
+.final-fore.is-old-hidden .ft-text2 {
+  display: none !important;
 }
 
 /* =========================================
@@ -469,7 +479,7 @@ body {
   height: auto;
   display: flex;
   align-items: center;
-  padding: 8px 14px 3px 6px;
+  padding: 5px 14px 5px 6px;
   font-size: 24px;
   font-weight: 440;
   letter-spacing: 0.5px;
@@ -502,7 +512,7 @@ body {
   width: 32px;
   height: 32px;
   border: 3px solid #f8f8f6;
-  border-radius: 1px;
+  border-radius: 2px;
   background: transparent;
   box-sizing: border-box;
   cursor: pointer;
@@ -548,7 +558,7 @@ body {
 
 .global-hud__row--name {
   height: 38px;
-  padding: 5px 14px 3px 6px;
+  padding: 3px 14px 3px 6px;
   background: #f8f8f6;
   color: #1a1a1a;
   font-size: 24px;
@@ -728,7 +738,7 @@ body {
 
 .chatbox__name--red   { color: #AE1318; }
 .chatbox__name--blue  { color: #4d9bff; }
-.chatbox__name--other { color: #5ddf7f; }
+.chatbox__name--other { color: #b88aff; }
 
 /* ---------- 消息列 ---------- */
 
@@ -750,7 +760,7 @@ body {
 
 .global-logo {
   position: absolute;
-  top: -65px;
+  top: -60px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -767,34 +777,204 @@ body {
 }
 
 .global-logo__img {
-  height: 250px;
+  height: 240px;
   width: auto;
   object-fit: contain;
   display: block;
   user-select: none;
 }
 
+/* 轮次框：直接用图片，无边框无背景 */
 .global-logo__badge {
-  margin-top: -75px;
-  min-height: 34px;
-  padding: 1px 35px;
-  background: #0d14bd;
-  color: #f8f8f6;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border-radius: 4px;
-  box-sizing: border-box;
-  white-space: nowrap;
-  line-height: 1.2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-top: -76px;
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  user-select: none;
   transition: opacity 0.3s ease;
 }
 
-/* 空内容时不显示背景，避免空蓝框 */
-.global-logo__badge:empty {
+/* 没有 src（未选中比赛 / 无匹配图）→ 隐藏 */
+.global-logo__badge:not([src]),
+.global-logo__badge[src=""] {
   opacity: 0;
+}
+
+/* =========================================
+   自动切页转场（cut 上下滑入 / 滑出）
+   ========================================= */
+
+.auto-transition {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.auto-transition[hidden] {
+  display: none !important;
+}
+
+/* 上半屏 cut：初始在屏幕上方外，滑入到 0，再滑出到上方外 */
+.auto-cut-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 540px;
+  object-fit: cover;
+  object-position: center top;
+  pointer-events: none;
+  user-select: none;
+  transform: translateY(-100%);
+  will-change: transform;
+}
+
+/* 下半屏 cut：初始在屏幕下方外，滑入到 0，再滑出到下方外 */
+.auto-cut-bottom {
+  position: absolute;
+  top: 540px;
+  left: 0;
+  width: 1920px;
+  height: 540px;
+  object-fit: cover;
+  object-position: center bottom;
+  pointer-events: none;
+  user-select: none;
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+/* 播放时：两个 cut 各自滑入 → 停 → 滑出 */
+.auto-transition.is-playing .auto-cut-top {
+  animation: autoCutTop 1s ease-in-out both;
+}
+.auto-transition.is-playing .auto-cut-bottom {
+  animation: autoCutBottom 1s ease-in-out both;
+}
+
+/* 500ms 滑入 → 100ms 停 → 400ms 滑出（共 1000ms） */
+@keyframes autoCutTop {
+  0%   { transform: translateY(-100%); }
+  50%  { transform: translateY(0);     }   /* 500 / 1000 */
+  60%  { transform: translateY(0);     }   /* 600 / 1000 */
+  100% { transform: translateY(-100%); }
+}
+
+@keyframes autoCutBottom {
+  0%   { transform: translateY(100%);  }
+  50%  { transform: translateY(0);     }
+  60%  { transform: translateY(0);     }
+  100% { transform: translateY(100%);  }
+}
+
+/* =========================================
+   绿幕宽度面板（sidebar 底部）
+   ========================================= */
+
+.green-panel {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 360px;
+  padding: 16px;
+  border-top: 1px solid #1c2230;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  background: linear-gradient(180deg, #10141c 0%, #0b0e14 100%);
+  z-index: 5;
+}
+
+.green-panel[hidden] {
+  display: none !important;
+}
+
+.green-panel__label {
+  font-size: 20px;
+  color: #5ddf7f;  
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.green-panel__range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #1a2130;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.green-panel__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #4d9bff;
+  border-radius: 50%;
+  border: 2px solid #f8f8f6;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(77, 155, 255, 0.55);
+}
+
+.green-panel__range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #4d9bff;
+  border-radius: 50%;
+  border: 2px solid #f8f8f6;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(77, 155, 255, 0.55);
+}
+
+.green-panel__value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f8f8f6;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.green-panel__input {
+  width: 100%;
+  padding: 8px 10px;
+  background: #1a2130;
+  border: 1px solid #232b39;
+  color: #e6eefc;
+  border-radius: 6px;
+  font-size: 22px;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+  box-sizing: border-box;
+  font-variant-numeric: tabular-nums;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.green-panel__input:focus {
+  border-color: #5ddf7f;
+  box-shadow: 0 0 0 2px rgba(93, 223, 127, 0.25);
+}
+
+/* 去掉 number 输入框的上下小箭头（Chrome/Safari/Edge） */
+.green-panel__input::-webkit-outer-spin-button,
+.green-panel__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.green-panel__input[type="number"] {
+  -moz-appearance: textfield;
 }

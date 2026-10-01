@@ -7,17 +7,17 @@ const GROUPS = [
     id: 'swiss-1',
     title: 'SWISS PHASE Ⅰ',
     columns: [
-      { id: 'swiss-r1', matcher: /swiss\s*round\s*1\b/i, count: 8 },
-      { id: 'swiss-r2', matcher: /swiss\s*round\s*2\b/i, count: 8 },
+      { id: 'swiss-r1', matcher: /swiss\s*round\s*1\b/i, groups: [8] },
+      { id: 'swiss-r2', matcher: /swiss\s*round\s*2\b/i, groups: [4, 4] },
     ],
   },
   {
     id: 'swiss-2',
     title: 'SWISS PHASE Ⅱ',
     columns: [
-      { id: 'swiss-r3', matcher: /swiss\s*round\s*3\b/i, count: 8 },
-      { id: 'swiss-r4', matcher: /swiss\s*round\s*4\b/i, count: 6 },
-      { id: 'swiss-r5', matcher: /swiss\s*round\s*5\b/i, count: 3 },
+      { id: 'swiss-r3', matcher: /swiss\s*round\s*3\b/i, groups: [2, 4, 2] },
+      { id: 'swiss-r4', matcher: /swiss\s*round\s*4\b/i, groups: [3, 3] },
+      { id: 'swiss-r5', matcher: /swiss\s*round\s*5\b/i, groups: [3] },
     ],
   },
   {
@@ -38,6 +38,19 @@ const TOP_MARKS = {
   'swiss-r3': { 0: 'green', 2: 'white', 6: 'red' },
   'swiss-r4': { 0: 'green', 3: 'red' },
   'swiss-r5': { 0: 'green' },
+};
+
+/* 每条标记线上方的战绩标签（colId:idx → 文本） */
+const TOP_MARK_LABELS = {
+  'swiss-r1:0': '0 - 0',
+  'swiss-r2:0': '1 - 0',
+  'swiss-r2:4': '0 - 1',
+  'swiss-r3:0': '2 - 0',
+  'swiss-r3:2': '1 - 1',
+  'swiss-r3:6': '0 - 2',
+  'swiss-r4:0': '2 - 1',
+  'swiss-r4:3': '2 - 1',
+  'swiss-r5:0': '2 - 2',
 };
 
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
@@ -270,7 +283,146 @@ function buildBracketStageGroup() {
   grid.appendChild(buildBracketPos('grand-finals', 0, 'gf9'));
 
   gEl.appendChild(grid);
+
+  /* 布局稳定后：先对齐端点，再画线 */
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      drawBracketLines(gEl);
+    });
+  });
+
   return gEl;
+}
+
+/* =========================================
+   Bracket Stage：连接线 + 端点对齐
+   ========================================= */
+
+/* 画连接线：胜者亮白、败者暗白 */
+function drawBracketLines(groupEl) {
+  const gridEl = groupEl.querySelector('.br-bracket-grid');
+  if (!gridEl) return;
+
+  groupEl.querySelectorAll('.br-lines').forEach(el => el.remove());
+
+  const svgNs = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNs, 'svg');
+  svg.setAttribute('class', 'br-lines');
+
+  const gridRect = gridEl.getBoundingClientRect();
+  const scale = getStageScale() || 1;
+
+  const rectOf = (area) => {
+    const el = gridEl.querySelector(`.br-match[style*="grid-area: ${area}"]`);
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return {
+      left:   (r.left   - gridRect.left) / scale,
+      top:    (r.top    - gridRect.top)  / scale,
+      right:  (r.right  - gridRect.left) / scale,
+      bottom: (r.bottom - gridRect.top)  / scale,
+      w: r.width  / scale,
+      h: r.height / scale,
+      cx: (r.left + r.right)  / 2 / scale - gridRect.left / scale,
+      cy: (r.top  + r.bottom) / 2 / scale - gridRect.top  / scale,
+    };
+  };
+
+  /* 横向折线：从 from 右侧中点，到 to 左侧中点 */
+  const addPathH = (from, to, color, width) => {
+    if (!from || !to) return;
+    const x1 = from.right;
+    const y1 = from.top + from.h / 2;
+    const x2 = to.left;
+    const y2 = to.top + to.h / 2;
+    const midX = (x1 + x2) / 2;
+
+    const path = document.createElementNS(svgNs, 'path');
+    path.setAttribute('d',
+      `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', String(width));
+    path.setAttribute('stroke-linejoin', 'round');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+  };
+
+  /* 竖向直线：从 from 顶边中点，到 to 底边中点 */
+  const addPathV = (from, to, color, width) => {
+    if (!from || !to) return;
+    const x1 = from.left + from.w / 2;
+    const y1 = from.top;
+    const x2 = to.left + to.w / 2;
+    const y2 = to.bottom;
+
+    const path = document.createElementNS(svgNs, 'path');
+    path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', String(width));
+    path.setAttribute('stroke-linejoin', 'round');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+  };
+
+  /* 竖向直线（可整体上/下偏移）：从 from 顶边中点，到 to 底边中点 */
+  const addPathVOffset = (from, to, color, width, offsetY = 0) => {
+    if (!from || !to) return;
+    const x1 = from.left + from.w / 2;
+    const y1 = from.top + offsetY;
+    const x2 = to.left + to.w / 2;
+    const y2 = to.bottom + offsetY;
+
+    const path = document.createElementNS(svgNs, 'path');
+    path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', String(width));
+    path.setAttribute('stroke-linejoin', 'round');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+  };
+
+  const sf1 = rectOf('sf1');
+  const sf2 = rectOf('sf2');
+  const sf3 = rectOf('sf3');
+  const sf4 = rectOf('sf4');
+  const f5  = rectOf('f5');
+  const f6  = rectOf('f6');
+  const f7  = rectOf('f7');
+  const f8  = rectOf('f8');
+  const gf9  = rectOf('gf9');
+  const gf10 = rectOf('gf10');
+
+  /* ---------- 已有：WB / LB 半决赛连线 ---------- */
+  addPathH(sf1, f5, '#ffffff', 3);
+  addPathH(sf2, f5, '#ffffff', 3);
+  addPathH(sf3, f6, '#ffffff', 3);
+  addPathH(sf4, f7, '#ffffff', 3);
+
+  /* 败者：暗白 */
+  addPathH(sf1, f6, 'rgba(255,255,255,0.35)', 2);
+  addPathH(sf2, f7, 'rgba(255,255,255,0.35)', 2);
+
+  /* ---------- 新增：LB 决赛与 GF ---------- */
+  /* f6 / f7 → f8：亮白（LB 决赛） */
+  addPathH(f6, f8, '#ffffff', 3);
+  addPathH(f7, f8, '#ffffff', 3);
+
+  /* f5 → gf10：亮白（WB 冠军进 GF） */
+  addPathH(f5, gf10, '#ffffff', 3);
+
+  /* f5 → gf9：暗白（WB 冠军输掉后掉到 LB 决赛入口） */
+  addPathH(f5, gf9, 'rgba(255,255,255,0.35)', 2);
+
+  /* f8 → gf9：亮白（LB 决赛胜者进 GF） */
+  addPathH(f8, gf9, '#ffffff', 3);
+
+  /* gf9 → gf10：亮白竖线，从 gf9 顶部中心到 gf10 底部中心 */
+  addPathVOffset(gf9, gf10, '#ffffff', 3, -2);
+
+  gridEl.appendChild(svg);
 }
 
 function makeLabel(text, area) {
@@ -343,9 +495,21 @@ function buildColumn(col) {
   const bodyEl = document.createElement('div');
   bodyEl.className = 'br-column__body';
 
-  for (let i = 0; i < col.count; i++) {
-    bodyEl.appendChild(buildMatch(col, i));
-  }
+  /* 兼容旧配置：只有 count 时视为单组 */
+  const groups = col.groups || [col.count || 0];
+  let idx = 0;
+
+  groups.forEach((size, gi) => {
+    if (gi > 0) {
+      const spacer = document.createElement('div');
+      spacer.className = 'br-column__gap';
+      bodyEl.appendChild(spacer);
+    }
+    for (let i = 0; i < size; i++, idx++) {
+      bodyEl.appendChild(buildMatch(col, idx));
+    }
+  });
+
   columnEl.appendChild(bodyEl);
   return columnEl;
 }
@@ -357,7 +521,18 @@ function buildMatch(col, idx) {
   matchEl.dataset.matchIdx = String(idx);
 
   const mark = TOP_MARKS[col.id]?.[idx];
-  if (mark) matchEl.classList.add(`br-match--mark-${mark}`);
+  if (mark) {
+    matchEl.classList.add(`br-match--mark-${mark}`);
+
+    /* 线上方战绩标签 */
+    const label = TOP_MARK_LABELS[`${col.id}:${idx}`];
+    if (label) {
+      const labelEl = document.createElement('div');
+      labelEl.className = 'br-match__mark-label';
+      labelEl.textContent = label;
+      matchEl.appendChild(labelEl);
+    }
+  }
 
   const match = findMatchForSlot(col.id, idx);
   fillMatchElement(matchEl, match);
@@ -405,7 +580,8 @@ function fillMatchElement(matchEl, match) {
     if (_movedThisDrag) return;
     if (_currentMatchId === match.id) setCurrentMatchId(null);
     else                              setCurrentMatchId(match.id);
-    renderAll();
+    refreshSelection();
+    refreshPanel();
   });
 }
 
@@ -479,7 +655,11 @@ function buildScoresColumn() {
     const name = document.createElement('span');
     name.className = 'br-scores-row__name';
     name.textContent = t.fullName || t.acronym || '';
-    name.title = t.fullName || t.acronym || ''; 
+    name.title = t.fullName || t.acronym || '';
+
+    const bu = document.createElement('span');
+    bu.className = 'br-scores-row__bu';
+    bu.textContent = `BU ${t.bu}`;
 
     const record = document.createElement('span');
     record.className = 'br-scores-row__record';
@@ -487,6 +667,7 @@ function buildScoresColumn() {
 
     row.appendChild(seed);
     row.appendChild(name);
+    row.appendChild(bu);
     row.appendChild(record);
     bodyEl.appendChild(row);
   });
@@ -495,12 +676,13 @@ function buildScoresColumn() {
   return col;
 }
 
-/* 胜场降序 → 败场升序 → seed 升序 */
+/* 排序规则：大场胜利降序 → BU 分降序 → 预选赛种子升序 */
 function computeStandings() {
   if (!_tournamentData) return [];
-  const teams = _tournamentData.getTeams();
+  const teams   = _tournamentData.getTeams();
   const matches = _tournamentData.getMatches();
 
+  /* ---------- 1. 各队胜负 ---------- */
   const stats = new Map();
   teams.forEach(t => stats.set(t.acronym, { wins: 0, losses: 0 }));
 
@@ -509,20 +691,45 @@ function computeStandings() {
     if (s1 == null || s2 == null) return;
     const a = m.team1Acronym, b = m.team2Acronym;
     if (!a || !b || !stats.has(a) || !stats.has(b)) return;
+    if (Number(s1) === Number(s2)) return;   /* 平局不计 */
 
-    if (s1 > s2)      { stats.get(a).wins++;   stats.get(b).losses++; }
-    else if (s2 > s1) { stats.get(b).wins++;   stats.get(a).losses++; }
+    if (Number(s1) > Number(s2)) {
+      stats.get(a).wins++;   stats.get(b).losses++;
+    } else {
+      stats.get(b).wins++;   stats.get(a).losses++;
+    }
   });
 
+  /* ---------- 2. BU：所有对阵过的对手的（胜 - 负）之和 ---------- */
+  const buMap = new Map();
+  teams.forEach(t => buMap.set(t.acronym, 0));
+
+  matches.forEach(m => {
+    const s1 = m.team1Score, s2 = m.team2Score;
+    if (s1 == null || s2 == null) return;
+    const a = m.team1Acronym, b = m.team2Acronym;
+    if (!a || !b || !stats.has(a) || !stats.has(b)) return;
+
+    const netA = stats.get(a).wins - stats.get(a).losses;
+    const netB = stats.get(b).wins - stats.get(b).losses;
+
+    /* a 打过 b → a 的 BU 加上 b 的净胜场；反之亦然 */
+    buMap.set(a, (buMap.get(a) || 0) + netB);
+    buMap.set(b, (buMap.get(b) || 0) + netA);
+  });
+
+  /* ---------- 3. 合并 + 排序 ---------- */
   return teams.map(t => ({
     acronym:  t.acronym,
     fullName: t.fullName || t.acronym || '',
     seed:     Number(t.seed) || 999,
-    ...stats.get(t.acronym),
+    wins:     stats.get(t.acronym).wins,
+    losses:   stats.get(t.acronym).losses,
+    bu:       buMap.get(t.acronym) || 0,
   })).sort((a, b) => {
-    if (b.wins   !== a.wins)   return b.wins   - a.wins;
-    if (a.losses !== b.losses) return a.losses - b.losses;
-    return a.seed - b.seed;
+    if (b.wins !== a.wins) return b.wins - a.wins;   /* 大场胜利多者靠前 */
+    if (b.bu   !== a.bu)   return b.bu   - a.bu;     /* BU 高者靠前 */
+    return a.seed - b.seed;                          /* 种子小者靠前 */
   });
 }
 

@@ -6,117 +6,251 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  padding: 180px 90px 60px;
+  padding: 226px 100px 140px 150px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  gap: 36px;
   font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   box-sizing: border-box;
 }
 
-/* ---------- 轮次分组 ---------- */
+/* ---------- 轮次标题：白底黑字 ---------- */
 
 [data-page="schedule"] .sch-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+[data-page="schedule"] .sch-group__title {
+  display: inline-block;
+  background: #f8f8f6;
+  color: #1a1a1a;
+  font-size: 42px;
+  font-weight: 680;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 18px 5px 13px;
+  line-height: 1.1;
+}
+
+/* ---------- 两列 ---------- */
+
+[data-page="schedule"] .sch-cols {
+  display: flex;
+  gap: 160px;
+  margin-top: 11px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+[data-page="schedule"] .sch-col {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-[data-page="schedule"] .sch-group__title {
-  font-size: 34px;
-  font-weight: 900;
-  letter-spacing: 4px;
+[data-page="schedule"] .sch-col--recent {
+  flex: 0 0 700px;
+  width: 700px;
+  min-width: 0;
+}
+
+[data-page="schedule"] .sch-col--upcoming {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---------- 列标题：白底黑字 ---------- */
+
+[data-page="schedule"] .sch-col__title {
+  display: inline-block;
+  align-self: flex-start;
+  background: #f8f8f6;
+  color: #1a1a1a;
+  font-size: 27px;
+  font-weight: 640;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  color: #f8f8f6;
-  text-shadow:
-    0 0 20px rgba(77, 155, 255, .55),
-    0 4px 16px rgba(0, 0, 0, .55);
-  padding-bottom: 4px;
+  padding: 2px 18px 2px 13px;
+  line-height: 1.1;
 }
 
-[data-page="schedule"] .sch-group__list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px 14px;
+[data-page="schedule"] .sch-col__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* ---------- 单场比赛 ---------- */
+/* ---------- COMING UP NEXT ---------- */
+
+[data-page="schedule"] .sch-coming {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+[data-page="schedule"] .sch-coming__title {
+  display: inline-block;
+  background: #f8f8f6;
+  color: #1a1a1a;
+  font-size: 27px;
+  font-weight: 640;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 18px 2px 13px;
+  line-height: 1.1;
+}
+
+[data-page="schedule"] .sch-coming__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- 单场比赛（黑底框 700px） ---------- */
 
 [data-page="schedule"] .sch-match {
   display: grid;
-  grid-template-columns: 150px 1fr 60px 1fr;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 20px;
-  background: rgba(6, 10, 18, 0.4);
-  backdrop-filter: blur(8px) saturate(1.15);
-  -webkit-backdrop-filter: blur(8px) saturate(1.15);
-  border: 1px solid rgba(140, 185, 255, 0.12);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+  grid-template-columns: 120px 1fr 52px 48px 52px 1fr;
+  align-items: stretch;
+  padding: 0;
+  background:#1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 760px;
+  height: 56px;
   cursor: pointer;
   transition: border-color .2s ease, transform .15s ease, box-shadow .2s ease;
+  box-sizing: border-box;
+  opacity: 0.9;
+  margin-left: 30px;
 }
 
 [data-page="schedule"] .sch-match:hover {
-  border-color: rgba(140, 185, 255, 0.35);
+  border-color: rgba(140, 185, 255, 0.5);
   transform: translateY(-1px);
 }
 
 [data-page="schedule"] .sch-match.is-selected {
-  border-color: #F6DB00;
-  box-shadow:
-    0 0 16px rgba(246, 219, 0, 0.4),
-    0 4px 12px rgba(0, 0, 0, 0.28);
+  border-color: #ffffff;
+  box-shadow: 0 0 0 4px #ffffff;
 }
 
-/* 未指定队伍 → 变灰 */
 [data-page="schedule"] .sch-match.is-empty {
-  opacity: 0.45;
+  opacity: 0.5;
 }
 
+/* 时间：黑底白字 */
 [data-page="schedule"] .sch-match__time {
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2a2a;
+  color: #f8f8f6;
+  font-size: 18px;
   font-weight: 700;
-  color: #8996a8;
-  letter-spacing: 1px;
+  letter-spacing: 0.3px;
+  padding: 0 8px;
   white-space: nowrap;
 }
 
+/* 队名：白底黑字 */
 [data-page="schedule"] .sch-match__team {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: 20px;
+  align-items: center;
+  background: #4a4f55;
   color: #f8f8f6;
-  min-width: 0;
-  overflow: hidden;
-}
-
-[data-page="schedule"] .sch-match__team--right {
-  justify-content: flex-end;
-}
-
-[data-page="schedule"] .sch-match__seed {
-  font-size: 15px;
-  color: #8996a8;
-  font-weight: 400;
-  flex-shrink: 0;
-}
-
-[data-page="schedule"] .sch-match__name {
+  font-size: 20px;
   font-weight: 700;
+  padding: 0 12px;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* 红队：右对齐，贴向比分 */
+[data-page="schedule"] .sch-match__team--red {
+  justify-content: center;   
+  text-align: center; 
+}
+
+/* 蓝队：左对齐，贴向比分 */
+[data-page="schedule"] .sch-match__team--blue {
+  justify-content: center;   
+ text-align: center;
+}
+
+/* 比分：黑底白字 */
+[data-page="schedule"] .sch-match__score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2a2a;
+  color: #f8f8f6;
+  font-size: 20px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  padding: 0px 0px 0px 0px;
+}
+
+/* VS：黑底 */
+[data-page="schedule"] .sch-match__vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2a2a;
+  color: #f8f8f6;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+/* ---------- 获胜方样式 ---------- */
+
+/* 获胜方队名：白底黑字 */
+[data-page="schedule"] .sch-match__team--win {
+  background: #f8f8f6;
+  color: #1a1a1a;
+}
+
+/* 红队获胜：比分块红底白字 */
+[data-page="schedule"] .sch-match__score--red-win {
+  background: #AE1318;
+  color: #f8f8f6;
+}
+
+/* 蓝队获胜：比分块蓝底白字 */
+[data-page="schedule"] .sch-match__score--blue-win {
+  background: #1661AB;
+  color: #f8f8f6;
+}
+
+/* ---------- COMING UP NEXT：框 + 相对时间字样 ---------- */
+
+[data-page="schedule"] .sch-coming__row {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+[data-page="schedule"] .sch-coming__rel {
+  color: #f8f8f6;
+  font-size: 30px;
+  font-weight: 320;
+  letter-spacing: 0.8px;
   white-space: nowrap;
 }
 
-[data-page="schedule"] .sch-match__vs {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 900;
-  color: #4d9bff;
-  letter-spacing: 2px;
+[data-page="schedule"] .sch-coming__rel--started {
+  color: #ffffff;
+}
+
+[data-page="schedule"] .sch-coming__rel--upcoming {
+  color: #ffffff;
 }

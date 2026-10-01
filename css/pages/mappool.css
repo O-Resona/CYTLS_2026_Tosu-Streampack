@@ -54,11 +54,6 @@
   margin: 0 7px;
 }
 
-[data-page="mappool"] .mapContainer:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
-}
-
 /* 旧的描边规则清空（描边挪到 .mapContent 上） */
 [data-page="mappool"] .mapContainer.blueBorder,
 [data-page="mappool"] .mapContainer.redBorder {
@@ -110,6 +105,11 @@
 
 [data-page="mappool"] .mapContent.banned .modImgContainer {
   opacity: .6;
+}
+
+/* TB（赛点图）：不属于任何一方，深紫内描边 */
+[data-page="mappool"] .mapContainer.purpleBorder .mapContent {
+  --border-color: #5a1aad; 
 }
 
 /* ---------- 闪烁 ---------- */
@@ -209,7 +209,6 @@
   object-fit: contain;
   pointer-events: none;
   z-index: 5;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
 
   /* 初始：滑到卡片外 */
   transform: translate(calc(100% + 150px), -50%);
@@ -383,7 +382,11 @@
 }
 
 .mappool-panel .mp-btn.active {
-  box-shadow: 0 0 0 2px #4d9bff;
+  border-color: #F6DB00;
+  box-shadow:
+    0 0 0 3px #F6DB00,
+    0 0 18px rgba(246, 219, 0, 0.55),
+    inset 0 0 12px rgba(246, 219, 0, 0.15);
 }
 
 .mappool-panel .mp-btn--red {
