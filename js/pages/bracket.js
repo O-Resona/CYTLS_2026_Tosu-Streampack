@@ -676,7 +676,7 @@ function buildScoresColumn() {
   return col;
 }
 
-/* 排序规则：大场胜利降序 → BU 分降序 → 预选赛种子升序 */
+/* 排序规则：净胜场数降序 → BU 分降序 → 预选赛种子升序 */
 function computeStandings() {
   if (!_tournamentData) return [];
   const teams   = _tournamentData.getTeams();
@@ -719,17 +719,21 @@ function computeStandings() {
   });
 
   /* ---------- 3. 合并 + 排序 ---------- */
-  return teams.map(t => ({
-    acronym:  t.acronym,
-    fullName: t.fullName || t.acronym || '',
-    seed:     Number(t.seed) || 999,
-    wins:     stats.get(t.acronym).wins,
-    losses:   stats.get(t.acronym).losses,
-    bu:       buMap.get(t.acronym) || 0,
-  })).sort((a, b) => {
-    if (b.wins !== a.wins) return b.wins - a.wins;   /* 大场胜利多者靠前 */
-    if (b.bu   !== a.bu)   return b.bu   - a.bu;     /* BU 高者靠前 */
-    return a.seed - b.seed;                          /* 种子小者靠前 */
+  return teams.map(t => {
+    const s = stats.get(t.acronym);
+    return {
+      acronym:  t.acronym,
+      fullName: t.fullName || t.acronym || '',
+      seed:     Number(t.seed) || 999,
+      wins:     s.wins,
+      losses:   s.losses,
+      net:      s.wins - s.losses,       /* ← 新增：净胜场 */
+      bu:       buMap.get(t.acronym) || 0,
+    };
+  }).sort((a, b) => {
+    if (b.net !== a.net) return b.net - a.net;   /* 净胜场多者靠前 */
+    if (b.bu  !== a.bu)  return b.bu  - a.bu;    /* BU 高者靠前 */
+    return a.seed - b.seed;                       /* 种子小者靠前 */
   });
 }
 

@@ -14,17 +14,24 @@ import { ReconnectingWebSocket } from './reconnectingWebSocket.js';
  *   'gameplay'  实时比分 { left, right }
  *   'chat'      聊天消息数组
  *   'tokens'    token 批量更新
+ *   'previewPlaying' 是否离开打图会话（边沿触发，true = 离开）
  *
- * 打图判断依据（lazer mp 观战）：
+ * 打图判断依据（lazer mp 观战实测）：
  *   - bm.time.current 在 (0, full) 之间
  *   - 且至少一个 ipcClients 玩家的 gameplay.score 是数字
  *   - 预览模式下 gameplay 缺失，score 为 undefined → 非打图
+ *
+ * 离开打图会话判断（用于「spector 退出 result」）：
+ *   - ipcClients 为空，或其中没有任何玩家带数字 score
+ *   注意：menu.bm 的字段在整个流程（打图中 / result / 退出）
+ *   都不变，不能用它判断。
  */
 export class OsuSocket {
   constructor(url) {
     this.url = url;
     this.socket = null;
     this._handlers = new Map();
+    this._lastMapCleared = null;
   }
 
   /* =========================================
@@ -84,13 +91,12 @@ export class OsuSocket {
       const roundPlayers = this._extractRoundPlayers(data);
       this._emit('playing', isPlaying, roundPlayers);
 
-      // ---------- 地图被关闭（spector 退出 result / 回到未选图）----------
-      // 信号：bm.id === -1 或 md5 为空
-      const bmId  = data.menu?.bm?.id;
-      const bmMd5 = data.menu?.bm?.md5;
-      const mapCleared = (bmId === -1 || bmId == null || bmId === 0 || !bmMd5);
-
-      this._emit('previewPlaying', mapCleared);
+      // ---------- 是否离开打图会话（边沿触发） ----------
+      const mapCleared = this._isMapCleared(data);
+      if (mapCleared !== this._lastMapCleared) {
+        this._lastMapCleared = mapCleared;
+        this._emit('previewPlaying', mapCleared);
+      }
 
       // ---------- 实时比分：从 ipcClients 累加 ----------
       let left  = 0;
@@ -109,6 +115,12 @@ export class OsuSocket {
       if (Array.isArray(manager.chat)) {
         this._emit('chat', manager.chat);
       }
+    } else {
+      const mapCleared = this._isMapCleared(data);
+      if (mapCleared !== this._lastMapCleared) {
+        this._lastMapCleared = mapCleared;
+        this._emit('previewPlaying', mapCleared);
+      }
     }
 
     // ---------- 地图 tokens ----------
@@ -116,6 +128,16 @@ export class OsuSocket {
     if (tokens && Object.keys(tokens).length) {
       this._emit('tokens', tokens);
     }
+  }
+
+  /* =========================================
+     「离开打图会话」判定
+     ========================================= */
+
+  _isMapCleared(data) {
+    const clients = data?.tourney?.ipcClients;
+    if (!Array.isArray(clients) || clients.length === 0) return true;
+    return !clients.some(c => typeof c?.gameplay?.score === 'number');
   }
 
   /* =========================================
@@ -140,6 +162,7 @@ export class OsuSocket {
   /* =========================================
      本局参与的玩家
      ========================================= */
+
   _extractRoundPlayers(data) {
     const clients = data?.tourney?.ipcClients;
     if (!Array.isArray(clients)) return [];

@@ -896,8 +896,8 @@
       "roundId": "swiss-round-1",
       "team1Acronym": "3125",
       "team2Acronym": "BB",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 3,
       "date": "2026-10-02T20:00:00+08:00"
     },
     {

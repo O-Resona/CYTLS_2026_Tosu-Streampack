@@ -13,8 +13,7 @@
  *
  * 打图结束后的切页：
  *   - 决胜（任一队 >= ceil(bestOf/2)）→ 交给 winnerWatcher
- *   - 非决胜 → PAGE_RETURN_DELAY 兜底回 mappool
- *   - 提前切：spector 退出 result、预览重新开始播放 → 立即回 mappool
+ *   - 非决胜 → 只在 spector 退出 result（previewPlaying=true）时切回 mappool
  */
 
 import { MapCard }    from '../components/mapCard.js';
@@ -27,7 +26,6 @@ const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 const PLAYING_IPC_STATE = 0;
 
 const EXIT_DELAY        = 10000;    /* 打图结束 → 聊天框/地图卡动画 */
-const PAGE_RETURN_DELAY = 17000;   /* 打图结束 → 判断切页（兜底） */
 const A_TO_B_FADE       = 500;
 const B_TO_A_FADE       = 500;
 
@@ -230,16 +228,15 @@ export function initPlaying({
   let currentIpcState = 11;
   let currentStage = null;
   let exitTimer = null;
-  let pageSwitchTimer = null;
   let transitionToken = 0;
   let hasInitStage = false;
+
+  /* 本轮打图是否已结束（等待 spector 退出 result） */
+  let _roundEnded = false;
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const cancelExitTimer = () => {
     if (exitTimer) { clearTimeout(exitTimer); exitTimer = null; }
-  };
-  const cancelPageSwitchTimer = () => {
-    if (pageSwitchTimer) { clearTimeout(pageSwitchTimer); pageSwitchTimer = null; }
   };
 
   /* =========================================
@@ -466,7 +463,7 @@ export function initPlaying({
   }
 
   /* =========================================
-     切页判断（兜底）
+     切页判断
      ========================================= */
 
   function decideReturnPage() {
@@ -506,29 +503,34 @@ export function initPlaying({
     currentIpcState = newState;
 
     if (isPlaying) {
-      // 进入打图：立即 block + A；取消上一次排好的切页
-      cancelPageSwitchTimer();
+      // 进入打图
       chatBox?.block();
       previousScores.left  = scores.left;
       previousScores.right = scores.right;
       isNewRound = false;
+      _roundEnded = false;              // 新一轮开始，清标记
       transitionToA();
     } else {
       // 打图结束：延迟 → 依次 分数条隐藏 → mapcard 移动 → chat 出现
       handleRoundEnd();
+      _roundEnded = true;               // 标记本轮已结束，等待 spector 退出 result
       cancelExitTimer();
       exitTimer = setTimeout(() => {
         exitTimer = null;
         transitionToB();
       }, EXIT_DELAY);
-
-      // 打图结束 → 兜底切页
-      cancelPageSwitchTimer();
-      pageSwitchTimer = setTimeout(() => {
-        pageSwitchTimer = null;
-        decideReturnPage();
-      }, PAGE_RETURN_DELAY);
     }
+  }
+
+  /* =========================================
+     spector 退出 result → 触发切页
+     ========================================= */
+
+  function handlePreviewPlaying(mapCleared) {
+    if (!mapCleared) return;            // 只在"离开会话"时响应
+    if (!_roundEnded) return;           // 本轮还没打完，忽略
+    _roundEnded = false;                // 一次性，防重复触发
+    decideReturnPage();
   }
 
   /* =========================================
@@ -582,7 +584,6 @@ export function initPlaying({
 
   pageEl.addEventListener('page:deactivated', () => {
     cancelExitTimer();
-    cancelPageSwitchTimer();
     if (greenPanel) greenPanel.hidden = true;
   });
 
@@ -595,7 +596,8 @@ export function initPlaying({
   }
 
   if (osuSocket) {
-    osuSocket.on('playing',  handlePlaying);
-    osuSocket.on('gameplay', handleGameplay);
+    osuSocket.on('playing',        handlePlaying);
+    osuSocket.on('gameplay',       handleGameplay);
+    osuSocket.on('previewPlaying', handlePreviewPlaying);
   }
 }
