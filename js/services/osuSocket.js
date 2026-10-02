@@ -84,6 +84,14 @@ export class OsuSocket {
       const roundPlayers = this._extractRoundPlayers(data);
       this._emit('playing', isPlaying, roundPlayers);
 
+      // ---------- 地图被关闭（spector 退出 result / 回到未选图）----------
+      // 信号：bm.id === -1 或 md5 为空
+      const bmId  = data.menu?.bm?.id;
+      const bmMd5 = data.menu?.bm?.md5;
+      const mapCleared = (bmId === -1 || bmId == null || bmId === 0 || !bmMd5);
+
+      this._emit('previewPlaying', mapCleared);
+
       // ---------- 实时比分：从 ipcClients 累加 ----------
       let left  = 0;
       let right = 0;

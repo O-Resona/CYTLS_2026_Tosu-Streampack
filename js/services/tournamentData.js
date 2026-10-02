@@ -4,14 +4,22 @@
  * 从 data/tournament.json 加载一次，之后不再写盘。
  * 数据更新方式：手动编辑 data/tournament.json，刷新页面即可生效。
  *
- * 数据结构参照 bracket.json，字段说明见 data/tournament.json。
+ * 另从 data/bp.json 加载 BP 操作历史：
+ *   · 已结束的比赛：BP 永远以 bp.json 为准（忽略 localStorage）
+ *   · 未结束的比赛：优先 match 自身字段，回退 bp.json
+ *
+ * 本地覆盖层（localStorage）：
+ *   合并规则 —— tournament.json 里字段有值则用 json，为空则用本地 override。
  */
-const SEED_URL = 'data/tournament.json';
-const OVERRIDE_KEY = 'cyt2026.matchOverrides';
+
+const SEED_URL      = 'data/tournament.json';
+const BP_URL        = 'data/bp.json';
+const OVERRIDE_KEY  = 'cyt2026.matchOverrides';
 
 export class TournamentData {
   constructor() {
     this.data = null;
+    this.bpData = null;
     this._readyPromise = null;
     this._overrides = this._loadOverrides();
   }
@@ -36,6 +44,7 @@ export class TournamentData {
   async init() {
     if (this._readyPromise) return this._readyPromise;
     this._readyPromise = (async () => {
+      /* 1. 加载 tournament.json */
       const res = await fetch(SEED_URL);
       if (!res.ok) throw new Error(`加载 ${SEED_URL} 失败: ${res.status}`);
       this.data = await res.json();
@@ -47,6 +56,17 @@ export class TournamentData {
         round.beatmaps = pool?.beatmaps || [];
       }
 
+      /* 2. 加载 bp.json（可选，失败不阻塞） */
+      try {
+        const bpRes = await fetch(BP_URL);
+        if (bpRes.ok) {
+          this.bpData = await bpRes.json();
+        }
+      } catch (e) {
+        console.warn('[TournamentData] bp.json 加载失败:', e);
+      }
+      if (!this.bpData) this.bpData = { matches: [] };
+
       console.log('[TournamentData] 已加载', SEED_URL);
       return this.data;
     })();
@@ -57,35 +77,21 @@ export class TournamentData {
      顶层读取
      ========================================= */
 
-  /** 完整数据对象 */
-  get() {
-    return this.data;
-  }
-
-  /** meta 段 */
-  getMeta() {
-    return this.data?.meta ?? {};
-  }
-
-  /** ruleset 段 */
-  getRuleset() {
-    return this.data?.ruleset ?? {};
-  }
+  get() { return this.data; }
+  getMeta() { return this.data?.meta ?? {}; }
+  getRuleset() { return this.data?.ruleset ?? {}; }
 
   /* =========================================
      队伍
      ========================================= */
 
-  getTeams() {
-    return this.data?.teams ?? [];
-  }
+  getTeams() { return this.data?.teams ?? []; }
 
   getTeam(acronym) {
     if (!acronym) return null;
     return this.getTeams().find(t => t.acronym === acronym) || null;
   }
 
-  /** 队伍的全名，找不到时回落到 acronym */
   getTeamName(acronym) {
     const team = this.getTeam(acronym);
     return team?.fullName || team?.flagName || acronym || '';
@@ -95,9 +101,7 @@ export class TournamentData {
      轮次
      ========================================= */
 
-  getRounds() {
-    return this.data?.rounds ?? [];
-  }
+  getRounds() { return this.data?.rounds ?? []; }
 
   getRound(id) {
     if (!id) return null;
@@ -113,7 +117,6 @@ export class TournamentData {
       return this.data.mappools;
     }
 
-    /* 回退：从 rounds 反推 unique mappools */
     const map = new Map();
     for (const r of this.getRounds()) {
       const id = r.mappool || r.id;
@@ -140,36 +143,111 @@ export class TournamentData {
   getMatches() {
     const raw = this.data?.matches ?? [];
     if (!Object.keys(this._overrides).length) return raw;
-    return raw.map(m => {
-      const ov = this._overrides[String(m.id)];
-      return ov ? { ...m, ...ov } : m;
-    });
+    return raw.map(m => this.mergeMatch(m, this._overrides[String(m.id)]));
   }
 
   getMatch(id) {
     if (id === undefined || id === null) return null;
     const raw = (this.data?.matches ?? []).find(m => m.id === id);
     if (!raw) return null;
-    const ov = this._overrides[String(id)];
-    return ov ? { ...raw, ...ov } : raw;
+    return this.mergeMatch(raw, this._overrides[String(id)]);
   }
 
-getMatchBP(matchId) {
-  const match = this.getMatch(matchId);
-  if (!match) return { bans: [], picks: [] };
-  return {
-    bans:  Array.isArray(match.bans)  ? match.bans  : [],
-    picks: Array.isArray(match.picks) ? match.picks : [],
-  };
-}
+  /* ---------- 合并：json 有值的字段优先用 json ---------- */
 
-  /** 某轮次下的所有对局（按 matches[].roundId 过滤） */
+  _isEmptyField(v) {
+    if (v === undefined || v === null || v === '') return true;
+    if (Array.isArray(v) && v.length === 0) return true;
+    return false;
+  }
+
+  mergeMatch(raw, ov) {
+    if (!ov) return raw;
+    const out = { ...raw };
+    for (const k of Object.keys(ov)) {
+      /* json 里这个字段为空/缺省 → 用本地 override；否则保留 json 的值 */
+      if (this._isEmptyField(raw[k])) out[k] = ov[k];
+    }
+    return out;
+  }
+
+  /* =========================================
+     BP 数据
+     · 已结束的比赛：永远以 bp.json 为准
+     · 未结束的比赛：优先 match 自身字段，回退 bp.json
+     ========================================= */
+
+  _bpEmpty() {
+    return { bans: [], picks: [], protects: [] };
+  }
+
+  /* 从 match 自身的 bans / picks / protects 读取 */
+  _bpFromMatch(match) {
+    return {
+      bans:     Array.isArray(match?.bans)     ? match.bans     : [],
+      picks:    Array.isArray(match?.picks)    ? match.picks    : [],
+      protects: Array.isArray(match?.protects) ? match.protects : [],
+    };
+  }
+
+  /* 从 data/bp.json 的 actions 读取并转换 */
+  _bpFromBpJson(matchId) {
+    const bpMatch = this.bpData?.matches?.find(m => m.id === matchId);
+    if (!bpMatch?.actions?.length) return null;
+
+    const out = this._bpEmpty();
+    for (const a of bpMatch.actions) {
+      const team = String(a.team || '').toLowerCase();     /* "Red" → "red" */
+      const mods = a.map;
+      const act  = String(a.action || '').toLowerCase();   /* "Ban" → "ban" */
+      if (!team || !mods) continue;
+
+      if (act === 'ban')          out.bans.push({ mods, team });
+      else if (act === 'pick')    out.picks.push({ mods, team });
+      else if (act === 'protect') out.protects.push({ mods, team });
+    }
+    return out;
+  }
+
+  _bpHasData(bp) {
+    return !!bp && (bp.bans.length || bp.picks.length || bp.protects.length);
+  }
+
+  /* 比赛是否已结束（任一方达到决胜分） */
+  _isMatchFinished(match) {
+    if (!match) return false;
+    const round = this.getRound(match.roundId);
+    const bestOf = Number(round?.bestOf) || 9;
+    const maxStars = Math.ceil(bestOf / 2);
+    const s1 = Number(match.team1Score) || 0;
+    const s2 = Number(match.team2Score) || 0;
+    return (s1 >= maxStars) || (s2 >= maxStars);
+  }
+
+  getMatchBP(matchId) {
+    const match = this.getMatch(matchId);
+    const fromMatch = this._bpFromMatch(match);
+    const fromBp    = this._bpFromBpJson(matchId);
+
+    /* ---------- 已结束：bp.json 优先 ---------- */
+    if (this._isMatchFinished(match)) {
+      if (this._bpHasData(fromBp))    return fromBp;
+      if (this._bpHasData(fromMatch)) return fromMatch;
+      return this._bpEmpty();
+    }
+
+    /* ---------- 未结束：match 优先 ---------- */
+    if (this._bpHasData(fromMatch)) return fromMatch;
+    if (this._bpHasData(fromBp))    return fromBp;
+    return this._bpEmpty();
+  }
+
   getMatchesByRound(roundId) {
     return this.getMatches().filter(m => m.roundId === roundId);
   }
 
   /* =========================================
-     比赛覆盖层（直播员手动修正，不影响本地文件）
+     比赛覆盖层
      ========================================= */
 
   setMatchOverride(matchId, patch) {
@@ -190,23 +268,20 @@ getMatchBP(matchId) {
     return matchId != null && !!this._overrides[String(matchId)];
   }
 
-  /** 当前正在进行的对局 */
   getCurrentMatch() {
     return this.getMatches().find(m => m.current) || null;
   }
 
   /* =========================================
-     图池（按轮次）
+     图池查询
      ========================================= */
 
-  /** 某轮次下指定 mod 的图（NM / HD / HR / DT / FM / TB） */
   getBeatmapsByMods(roundId, mods) {
     const round = this.getRound(roundId);
     if (!round) return [];
     return (round.beatmaps || []).filter(b => b.mods === mods);
   }
 
-  /** 通过 beatmapId 查找图，返回 { beatmap, round } */
   findBeatmap(beatmapId) {
     for (const round of this.getRounds()) {
       const found = (round.beatmaps || []).find(
@@ -221,12 +296,10 @@ getMatchBP(matchId) {
      派生
      ========================================= */
 
-  /** 所有出现过的队伍 acronym（用于渲染列/筛选） */
   getAllAcronyms() {
     return this.getTeams().map(t => t.acronym);
   }
 
-  /** 所有 mod 类型 */
   getAllMods() {
     const set = new Set();
     for (const round of this.getRounds()) {

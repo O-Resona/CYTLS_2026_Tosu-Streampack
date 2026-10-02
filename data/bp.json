@@ -1,0 +1,75 @@
+{
+  "matches": [
+    {
+      "id": 6,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "NM3",
+          "winner": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "DT2",
+          "winner": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Blue"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Red"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Red"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Red"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Blue"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Red"
+        }
+      ]
+    }
+  ]
+}

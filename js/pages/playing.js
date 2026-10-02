@@ -11,9 +11,10 @@
  * 自动加星逻辑仍在本文件：
  *   打图结束比较双方比分，赢家调用 teamHud.incrementStar()
  *
- * 打图结束 7s 后判断切页：
- *   - 决胜（任一队 >= ceil(bestOf/2)）→ winner
- *   - 否则 → mappool
+ * 打图结束后的切页：
+ *   - 决胜（任一队 >= ceil(bestOf/2)）→ 交给 winnerWatcher
+ *   - 非决胜 → PAGE_RETURN_DELAY 兜底回 mappool
+ *   - 提前切：spector 退出 result、预览重新开始播放 → 立即回 mappool
  */
 
 import { MapCard }    from '../components/mapCard.js';
@@ -25,8 +26,8 @@ const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 /* lazer mp 实测：0 = 打图中 */
 const PLAYING_IPC_STATE = 0;
 
-const EXIT_DELAY        = 800;   /* 打图结束 → 聊天框/地图卡动画 */
-const PAGE_RETURN_DELAY = 1100;   /* 打图结束 → 判断切页 */
+const EXIT_DELAY        = 8000;    /* 打图结束 → 聊天框/地图卡动画 */
+const PAGE_RETURN_DELAY = 13000;   /* 打图结束 → 判断切页（兜底） */
 const A_TO_B_FADE       = 500;
 const B_TO_A_FADE       = 500;
 
@@ -80,6 +81,24 @@ export function initPlaying({
     return v.toLocaleString('en-US');
   }
 
+  /* 分差数字：用平滑中的分数计算，跟随缓动 */
+  function updateDiffText() {
+    const l = Math.round(scoreAnim.left.current);
+    const r = Math.round(scoreAnim.right.current);
+    const d = Math.abs(l - r);
+    const leadingLeft  = d > 0 && l > r;
+    const leadingRight = d > 0 && r > l;
+
+    if (el.diff1) {
+      el.diff1.textContent = leadingRight ? `-${formatScore(d)}` : '';
+      el.diff1.classList.toggle('is-visible', leadingRight);
+    }
+    if (el.diff2) {
+      el.diff2.textContent = leadingLeft ? `-${formatScore(d)}` : '';
+      el.diff2.classList.toggle('is-visible', leadingLeft);
+    }
+  }
+
   function jumpScore(side, value) {
     const s = scoreAnim[side];
     if (s.raf) { cancelAnimationFrame(s.raf); s.raf = null; }
@@ -102,36 +121,18 @@ export function initPlaying({
         const node = scoreEl(side);
         if (node) node.textContent = formatScore(s.current);
         s.raf = null;
-        updateDiffText(); 
+        updateDiffText();
         return;
       }
 
       s.current += diff * SCORE_SMOOTH;
       const node = scoreEl(side);
       if (node) node.textContent = formatScore(s.current);
-      updateDiffText(); 
+      updateDiffText();
       s.raf = requestAnimationFrame(step);
     };
 
     s.raf = requestAnimationFrame(step);
-  }
-
-  /* 分差数字：用平滑中的分数计算，跟随缓动 */
-  function updateDiffText() {
-    const l = Math.round(scoreAnim.left.current);
-    const r = Math.round(scoreAnim.right.current);
-    const d = Math.abs(l - r);
-    const leadingLeft  = d > 0 && l > r;
-    const leadingRight = d > 0 && r > l;
-
-    if (el.diff1) {
-      el.diff1.textContent = leadingRight ? `-${formatScore(d)}` : '';
-      el.diff1.classList.toggle('is-visible', leadingRight);
-    }
-    if (el.diff2) {
-      el.diff2.textContent = leadingLeft ? `-${formatScore(d)}` : '';
-      el.diff2.classList.toggle('is-visible', leadingLeft);
-    }
   }
 
   /* =========================================
@@ -170,7 +171,6 @@ export function initPlaying({
     try { localStorage.setItem(GREEN_WIDTH_KEY, String(val)); } catch {}
   }
 
-  /* 读取已保存值（旧数据是 50~100 的百分比 → 判为无效，用默认 1920） */
   function loadSavedGreen() {
     const raw = Number(localStorage.getItem(GREEN_WIDTH_KEY));
     return (raw >= GREEN_MIN && raw <= GREEN_MAX) ? raw : GREEN_MAX;
@@ -178,26 +178,22 @@ export function initPlaying({
 
   if (greenRangeEl) {
     applyGreenWidth(loadSavedGreen());
-
     greenRangeEl.addEventListener('input', () => {
       applyGreenWidth(greenRangeEl.value);
     });
   }
 
   if (greenInputEl) {
-    /* 输入时实时跟随（输入框还在聚焦中，所以不反写它自己） */
     greenInputEl.addEventListener('input', () => {
       const raw = greenInputEl.value;
       if (raw === '' || raw === '-') return;
       applyGreenWidth(raw);
     });
 
-    /* 失焦时钳到合法值并回写 */
     greenInputEl.addEventListener('blur', () => {
       applyGreenWidth(greenInputEl.value);
     });
 
-    /* 回车也是同样的处理 */
     greenInputEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -238,6 +234,9 @@ export function initPlaying({
   let transitionToken = 0;
   let hasInitStage = false;
 
+  /* 歌曲预览播放状态（用于 spector 退出 result 后提前切回 mappool） */
+  let _lastPreviewPlaying = null; 
+
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const cancelExitTimer = () => {
     if (exitTimer) { clearTimeout(exitTimer); exitTimer = null; }
@@ -253,7 +252,7 @@ export function initPlaying({
   function setStageImmediate(state) {
     transitionToken++;
     cancelExitTimer();
-    stageEl.classList.remove('is-transitioning-to-a', 'is-transitioning-to-b');
+    stageEl.classList.remove('is-transitioning-to-a', 'is-transitioning-to-b', 'is-scores-hiding');
     if (state === 'A') {
       stageEl.classList.remove('state-b');
       statsEl?.classList.remove('is-solid');
@@ -269,26 +268,24 @@ export function initPlaying({
     const token = ++transitionToken;
     cancelExitTimer();
 
-    /* 阶段 1：分数条开始淡出（0.4s） */
+    /* 阶段 1：分数条开始淡出 */
     stageEl.classList.add('is-scores-hiding');
 
-    /* 阶段 2：分数条淡出 150ms 后，mapcard 也开始淡出（0.5s） */
+    /* 阶段 2：150ms 后 mapcard 也开始淡出 */
     await sleep(150);
     if (token !== transitionToken) return;
     stageEl.classList.add('is-transitioning-to-b');
 
-    /* 阶段 3：等 mapcard 淡出完成 → 换位置 → 淡入 + chat 同时淡入 */
-    await sleep(A_TO_B_FADE);      /* 500ms */
+    /* 阶段 3：mapcard 淡出完成 → 换位置 → 淡入 + chat 同时淡入 */
+    await sleep(A_TO_B_FADE);
     if (token !== transitionToken) return;
 
     stageEl.classList.add('state-b');
     stageEl.classList.remove('is-transitioning-to-b', 'is-scores-hiding');
     currentStage = 'B';
 
-    /* chat 出现 → stats panel 加不透明底色 */
     statsEl?.classList.add('is-solid');
 
-    /* chat 与 mapcard 淡入同时启动 */
     chatBox?.unblock();
     chatBox?.show();
 
@@ -308,15 +305,14 @@ export function initPlaying({
     stageEl.classList.remove('state-b', 'is-transitioning-to-a', 'is-scores-hiding');
     currentStage = 'A';
 
-    /* chat 隐藏 → stats panel 恢复半透明 */
     statsEl?.classList.remove('is-solid');
 
     await sleep(B_TO_A_FADE);
     if (token !== transitionToken) return;
   }
 
-   /* =========================================
-     分数
+  /* =========================================
+     分数条宽度：分段增长
      ========================================= */
 
   function computeBarWidth(diff) {
@@ -327,7 +323,7 @@ export function initPlaying({
       return (diff / 100000) * 400;
     }
 
-    /* 10w ~ 30w：增长变慢（缓出）→ 400 ~ 620px */
+    /* 10w ~ 30w：增长变慢 → 400 ~ 620px */
     if (diff <= 300000) {
       const t = (diff - 100000) / 200000;
       const eased = 1 - Math.pow(1 - t, 2);
@@ -345,13 +341,13 @@ export function initPlaying({
   }
 
   function renderScores() {
-    /* 数字：平滑变动（不改 textContent，交给动画） */
+    /* 数字：平滑变动 */
     scoreAnim.left.target  = scores.left;
     scoreAnim.right.target = scores.right;
     animateScoreTo('left');
     animateScoreTo('right');
 
-    /* 以下全部用真实分数即时判定 */
+    /* 用真实分数判定领先 */
     const diff = Math.abs(scores.left - scores.right);
     const leadingLeft  = diff > 0 && scores.left  > scores.right;
     const leadingRight = diff > 0 && scores.right > scores.left;
@@ -361,6 +357,8 @@ export function initPlaying({
 
     el.scoresEl.classList.toggle('is-left-leading',  leadingLeft);
     el.scoresEl.classList.toggle('is-right-leading', leadingRight);
+
+    /* diff 文本交给 updateDiffText 每帧刷（不在这里写） */
 
     /* ---------- 分数条 ---------- */
 
@@ -397,7 +395,6 @@ export function initPlaying({
     }
   }
 
-  /* 值没变就不写，避免无谓地打断 transition */
   function setBoxTransform(boxEl, value) {
     if (boxEl.dataset.lastTransform === value) return;
     boxEl.dataset.lastTransform = value;
@@ -405,7 +402,7 @@ export function initPlaying({
   }
 
   /* =========================================
-     结算 → 自动加星（走 TeamHud）
+     结算 → 自动加星
      ========================================= */
 
   function handleRoundEnd() {
@@ -453,12 +450,22 @@ export function initPlaying({
     return tournamentData.getMatch(id);
   }
 
+  /* 判断当前比赛是否处于决胜状态 */
+  function isMatchFinished(match) {
+    if (!match) return false;
+    const round = tournamentData.getRound(match.roundId);
+    const bestOf = Number(round?.bestOf) || 9;
+    const maxStars = Math.ceil(bestOf / 2);
+    const s1 = Number(match.team1Score) || 0;
+    const s2 = Number(match.team2Score) || 0;
+    return (s1 >= maxStars) || (s2 >= maxStars);
+  }
+
   /* =========================================
-     打图结束 7s 后的切页判断
+     切页判断（兜底）
      ========================================= */
 
   function decideReturnPage() {
-    /* 只在还在 playing 页时执行 */
     const activePage = document.querySelector('.page.active');
     if (activePage?.dataset.page !== 'playing') return;
 
@@ -468,23 +475,43 @@ export function initPlaying({
       return;
     }
 
-    const round = tournamentData.getRound(match.roundId);
-    const bestOf = Number(round?.bestOf) || 9;
-    const maxStars = Math.ceil(bestOf / 2);
-
-    const s1 = Number(match.team1Score) || 0;
-    const s2 = Number(match.team2Score) || 0;
-
-    /* 决胜局 → 交给 winnerWatcher，本函数不切页 */
-    const reached = (s1 >= maxStars) || (s2 >= maxStars);
-    if (reached) return;
+    /* 决胜局 → 交给 winnerWatcher */
+    if (isMatchFinished(match)) return;
 
     /* 非决胜局 → 回 mappool */
     playAutoTransition(() => window.app?.router?.show('mappool'));
   }
 
   /* =========================================
-     打图状态（osuSocket 'playing' 事件传入 boolean）
+     歌曲预览重新播放 → 提前切回 mappool
+     ========================================= */
+
+  function handlePreviewPlaying(isPreview) {
+    const prev = _lastPreviewPlaying;
+    _lastPreviewPlaying = isPreview;
+
+    /* 只在 false → true 上升沿触发 */
+    if (!isPreview || prev) return;
+
+    /* 只在 still 在 playing 页 */
+    const activePage = document.querySelector('.page.active');
+    if (activePage?.dataset.page !== 'playing') return;
+
+    /* 只在打过图之后的非打图状态 */
+    if (!hasInitStage) return;
+    if (currentIpcState === PLAYING_IPC_STATE) return;
+
+    /* 决胜局不响应预览切页，交给 winnerWatcher */
+    const match = loadCurrentMatch();
+    if (isMatchFinished(match)) return;
+
+    /* 取消已排好的 PAGE_RETURN_DELAY 兜底，立即切回 mappool */
+    cancelPageSwitchTimer();
+    playAutoTransition(() => window.app?.router?.show('mappool'));
+  }
+
+  /* =========================================
+     打图状态
      ========================================= */
 
   function handlePlaying(isPlaying) {
@@ -511,15 +538,15 @@ export function initPlaying({
       isNewRound = false;
       transitionToA();
     } else {
-      // 打图结束：延迟 4s → 依次执行 分数条隐藏 → mapcard 移动 → chat 出现
+      // 打图结束：延迟 → 依次 分数条隐藏 → mapcard 移动 → chat 出现
       handleRoundEnd();
       cancelExitTimer();
       exitTimer = setTimeout(() => {
         exitTimer = null;
-        transitionToB();   // chat 在 transitionToB 末尾显示
+        transitionToB();
       }, EXIT_DELAY);
 
-      // 打图结束 7s 后切页
+      // 打图结束 → 兜底切页
       cancelPageSwitchTimer();
       pageSwitchTimer = setTimeout(() => {
         pageSwitchTimer = null;
@@ -552,7 +579,6 @@ export function initPlaying({
     scores.left  = Number(currentMatch.team1Score) || 0;
     scores.right = Number(currentMatch.team2Score) || 0;
 
-    /* 切换比赛 / 首次激活时直接跳到真实分数，不做动画 */
     jumpScore('left',  scores.left);
     jumpScore('right', scores.right);
 
@@ -593,7 +619,8 @@ export function initPlaying({
   }
 
   if (osuSocket) {
-    osuSocket.on('playing',  handlePlaying);
-    osuSocket.on('gameplay', handleGameplay);
+    osuSocket.on('playing',        handlePlaying);
+    osuSocket.on('gameplay',       handleGameplay);
+    osuSocket.on('previewPlaying', handlePreviewPlaying);
   }
 }
