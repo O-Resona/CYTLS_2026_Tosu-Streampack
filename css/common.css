@@ -481,7 +481,7 @@ body {
   align-items: center;
   padding: 5px 14px 5px 6px;
   font-size: 24px;
-  font-weight: 440;
+  font-weight: 500;
   letter-spacing: 0.5px;
   color: #ffffff;
   line-height: 1;
@@ -511,7 +511,7 @@ body {
   display: inline-block;
   width: 32px;
   height: 32px;
-  border: 3px solid #f8f8f6;
+  border: 2px solid #f8f8f6;
   border-radius: 2px;
   background: transparent;
   box-sizing: border-box;
@@ -549,9 +549,10 @@ body {
 }
 
 .global-hud__star.is-active {
+  border: 1px solid  #fde8b2;
   box-shadow:
-    0 0 2px rgba(248, 248, 246, 0.9),
-    0 0 5px rgba(248, 248, 246, 0.5);
+    0 0 8px rgba(248, 248, 246, 0.9),
+    0 0 12px rgba(248, 248, 246, 0.5);
 }
 
 /* ---------- 第二排：队名 ---------- */
@@ -561,8 +562,8 @@ body {
   padding: 3px 14px 3px 6px;
   background: #f8f8f6;
   color: #1a1a1a;
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 25px;
+  font-weight: 780;
   letter-spacing: 0.3px;
   display: flex;
   align-items: center;
@@ -578,7 +579,7 @@ body {
   background: #f8f8f6;
   color: #1a1a1a;
   font-size: 20px;
-  font-weight: 670;
+  font-weight: 740;
   letter-spacing: 0.5px;
   display: flex;
   align-items: center;

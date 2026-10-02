@@ -16,7 +16,7 @@ const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 const OVERRIDE_KEY      = 'cyt2026.matchOverrides';
 
 const POLL_INTERVAL = 300;    /* 轮询间隔 */
-const FIRE_DELAY    = 18000;   /* 比分稳定后停留多久再切 */
+const FIRE_DELAY    = 16000;   /* 比分稳定后停留多久再切 */
 
 export class WinnerWatcher {
   constructor({ tournamentData, router }) {

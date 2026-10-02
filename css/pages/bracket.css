@@ -12,12 +12,13 @@
 }
 [data-page="bracket"] .br-layout.is-dragging { cursor: grabbing; }
 
-/* ---------- 内容轨道：顶部 -20px ---------- */
+/* ---------- 内容轨道 ---------- */
+
 [data-page="bracket"] .br-track {
   display: flex;
   align-items: flex-start;
-  gap: 40px;
-  padding: 40px 0 40px 40px;   
+  gap: 85px;
+  padding: 40px 0 40px 40px;
   height: 100%;
   box-sizing: border-box;
   will-change: transform;
@@ -25,7 +26,7 @@
 }
 
 [data-page="bracket"] .br-track-spacer {
-  flex: 0 0 50px;
+  flex: 0 0 15px;
   align-self: stretch;
   pointer-events: none;
 }
@@ -56,8 +57,18 @@
 
 [data-page="bracket"] .br-group__columns {
   display: flex;
-  gap: 15px;
+  gap: 15px;                 /* 与 .br-track 保持一致 */
   flex: 1 1 auto;
+}
+
+/* Swiss Phase 标题水平微调（只影响 swiss-1 / swiss-2） */
+
+[data-page="bracket"] .br-group[data-group-id="swiss-1"] .br-group__title {
+  transform: translateX(30px);
+}
+
+[data-page="bracket"] .br-group[data-group-id="swiss-2"] .br-group__title {
+  transform: translateX(75px);
 }
 
 /* =========================================
@@ -86,7 +97,6 @@
   flex: 0 0 auto;
 }
 
-/* 默认紧凑（swiss）*/
 [data-page="bracket"] .br-column__body {
   flex: 1 1 auto;
   display: flex;
@@ -146,13 +156,13 @@
 }
 
 [data-page="bracket"] .br-match--mark-green::before,
-[data-page="bracket"] .br-scores-row--mark-green::before { background: #2ecc40; }
+[data-page="bracket"] .br-scores-row--mark-green::before { background: #01DDEE; }
 
 [data-page="bracket"] .br-match--mark-white::before,
 [data-page="bracket"] .br-scores-row--mark-white::before { background: #f8f8f6; }
 
 [data-page="bracket"] .br-match--mark-red::before,
-[data-page="bracket"] .br-scores-row--mark-red::before   { background: #ff3b30; }
+[data-page="bracket"] .br-scores-row--mark-red::before   { background: #F70638; }
 
 [data-page="bracket"] .br-scores-row--mark-green::before,
 [data-page="bracket"] .br-scores-row--mark-white::before,
@@ -207,14 +217,12 @@
    slot 胜负状态
    ========================================= */
 
-/* 赢：高亮 */
 [data-page="bracket"] .br-slot--win .br-slot__name,
 [data-page="bracket"] .br-slot--win .br-slot__score {
   color: #f8f8f6;
   font-weight: 700;
 }
 
-/* 输：变灰 */
 [data-page="bracket"] .br-slot--lose .br-slot__name,
 [data-page="bracket"] .br-slot--lose .br-slot__score {
   color: #8a94a6;
@@ -224,7 +232,6 @@
   opacity: 0.85;
 }
 
-/* 中立：保持默认（不覆盖） */
 [data-page="bracket"] .br-slot--neutral {
   /* 使用 .br-slot 默认样式 */
 }
@@ -244,22 +251,11 @@
   box-sizing: border-box;
   min-height: 868px;
 
-  margin-left: -12px;
-  margin-right: 10px;  
+  margin-left: 75px;
+  margin-right: 40px;
 }
 
-/* 只保留右侧蓝线：10px 宽，右移 10px */
-[data-page="bracket"] .br-scores-column::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -31px;
-  width: 10px;
-  background: #1661AB;
-}
 
-/* SWISS SCORES 标题：字号和 PHASE 一致 */
 [data-page="bracket"] .br-scores-column__title {
   text-align: center;
   font-size: 50px;
@@ -307,7 +303,7 @@
   flex: 0 0 auto;
   font-size: 16px;
   font-weight: 600;
-  color: #dbe6f5;  
+  color: #dbe6f5;
   letter-spacing: 0.5px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -325,7 +321,6 @@
   font-weight: 800;
   color: #f8f8f6;
 }
-/* 红线以下（#9 及之后）：整体略微变灰 */
 [data-page="bracket"] .br-scores-row--lower {
   opacity: 0.8;
 }
@@ -348,8 +343,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-left: 20px;
   min-width: 1100px;
+  margin-left: -95px; 
 }
 
 [data-page="bracket"] .br-bracket-grid {
@@ -370,8 +365,6 @@
 
   position: relative;
 }
-
-/* ---------- 大标题 BRACKET STAGE ---------- */
 
 [data-page="bracket"] .br-bracket-grid > .br-group__title {
   text-align: center;
@@ -432,11 +425,9 @@
   transform: translateY(-210px);
 }
 
-[data-page="bracket"] .br-bracket-label[style*="grid-area: gf-hdr"] {
-  transform: translate(-30px, );
-}
+/* ---------- 各框在网格内的垂直微调 ---------- */
 
-[data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: sf1"]{
+[data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: sf1"] {
   transform: translateY(-180px);
 }
 
@@ -447,6 +438,7 @@
 [data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: sf3"] {
   transform: translateY(-240px);
 }
+
 [data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: sf4"] {
   transform: translateY(-420px);
 }
@@ -474,7 +466,6 @@
 [data-page="bracket"] .br-bracket-grid > .br-match[style*="grid-area: gf10"] {
   transform: translateY(-100px);
 }
-
 
 /* =========================================
    Bracket 控制面板
@@ -560,7 +551,7 @@
 
 [data-page="bracket"] .br-match__mark-label {
   position: absolute;
-  bottom: calc(100% + 4px);          /* 距框顶 4px，紧贴线上方 */
+  bottom: calc(100% + 4px);
   left: 50%;
   transform: translateX(-50%);
 
@@ -578,7 +569,6 @@
   z-index: 2;
 }
 
-/* 给带标记的框留出上方空间，避免标签和上面一行重叠 */
 [data-page="bracket"] .br-match--mark-green,
 [data-page="bracket"] .br-match--mark-white,
 [data-page="bracket"] .br-match--mark-red {

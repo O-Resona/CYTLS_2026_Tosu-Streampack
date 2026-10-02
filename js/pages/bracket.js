@@ -813,17 +813,6 @@ function bindPanelEvents() {
   });
 
   _btnClearAll?.addEventListener('click', () => {
-    const ok = window.confirm(
-      '将清除本机上的所有比赛操作信息，包括：\n' +
-      '· 当前选中的比赛\n' +
-      '· 队伍 / 日期覆盖\n' +
-      '· BP（protect / ban / pick）\n' +
-      '· 玩家长条消耗\n' +
-      '· 先选方设置\n' +
-      '· Winner 记录\n\n' +
-      '此操作不可撤销，确定继续？'
-    );
-    if (!ok) return;
     clearAllLocalState();
     location.reload();
   });
