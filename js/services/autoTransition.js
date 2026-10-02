@@ -11,9 +11,9 @@
  * 与 final 转场（.final-bg）无关，独立层，互不影响。
  */
 
-const SLIDE_IN  = 500;
-const HOLD      = 100;
-const SLIDE_OUT = 400;
+const SLIDE_IN  = 600;
+const HOLD      = 200;
+const SLIDE_OUT = 500;
 const TOTAL     = SLIDE_IN + HOLD + SLIDE_OUT;
 
 let _el   = null;

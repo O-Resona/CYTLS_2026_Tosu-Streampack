@@ -26,7 +26,7 @@ export function createRouter({ pages, deps }) {
 
   /* ---------- 等待动画结束（带超时兜底） ---------- */
 
-  function waitAnimation(el, timeout = 1400) {
+  function waitAnimation(el, timeout =450) {
     return new Promise(resolve => {
       let done = false;
       const finish = () => {

@@ -201,13 +201,13 @@ body {
 .page.active {
   visibility: visible;
   pointer-events: auto;
-  animation: fadeIn .9s ease both;
+  animation: fadeIn .6s ease both;
 }
 
 .page.is-leaving {
   visibility: visible;
   pointer-events: none;
-  animation: fadeOut .7s ease both;
+  animation: fadeOut .4s ease both;
 }
 
 /* 新增：page 慢速淡出（3s，用于转场） */
@@ -851,25 +851,25 @@ body {
 
 /* 播放时：两个 cut 各自滑入 → 停 → 滑出 */
 .auto-transition.is-playing .auto-cut-top {
-  animation: autoCutTop 1s ease-in-out both;
+  animation: autoCutTop 1.3s ease-in-out both;
 }
 .auto-transition.is-playing .auto-cut-bottom {
-  animation: autoCutBottom 1s ease-in-out both;
+  animation: autoCutBottom 1.3s ease-in-out both;
 }
 
-/* 500ms 滑入 → 100ms 停 → 400ms 滑出（共 1000ms） */
+/* 600ms 滑入 → 200ms 停 → 500ms 滑出（共 1300ms） */
 @keyframes autoCutTop {
-  0%   { transform: translateY(-100%); }
-  50%  { transform: translateY(0);     }   /* 500 / 1000 */
-  60%  { transform: translateY(0);     }   /* 600 / 1000 */
-  100% { transform: translateY(-100%); }
+  0%      { transform: translateY(-100%); }
+  46.15%  { transform: translateY(0);     }   /* 600 / 1300 */
+  61.54%  { transform: translateY(0);     }   /* 800 / 1300 */
+  100%    { transform: translateY(-100%); }
 }
 
 @keyframes autoCutBottom {
-  0%   { transform: translateY(100%);  }
-  50%  { transform: translateY(0);     }
-  60%  { transform: translateY(0);     }
-  100% { transform: translateY(100%);  }
+  0%      { transform: translateY(100%);  }
+  46.15%  { transform: translateY(0);     }
+  61.54%  { transform: translateY(0);     }
+  100%    { transform: translateY(100%);  }
 }
 
 /* =========================================
