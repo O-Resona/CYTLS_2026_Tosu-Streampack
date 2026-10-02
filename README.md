@@ -1,6 +1,6 @@
 \# CYT 2026: Lazer Scramble
 
->\*\*请直接运行CYTLS\_Updater.exe，而不是tosu\*\*，以便检测数据更新，实时更新
+>\*\*请直接运行CYTLS\_Updater.exe，而不是tosu\*\*，以便检测数据更新，实时更新；页面长宽为2200x1080，添加浏览器源时需注意
 
 \---
 
