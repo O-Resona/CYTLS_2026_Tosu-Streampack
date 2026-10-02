@@ -9,6 +9,11 @@
  *
  * mapper 优先取 tournamentData 里的，取不到再用 osu 传来的。
  * specialmods 支持字符串或数组两种写法。
+ *
+ * 同时监听：
+ *   - window 'storage'（跨 tab 改动 BP）
+ *   - window 'bp-actions-changed'（同 tab 内 mappool 手动改动 BP）
+ * 两者都会触发边框刷新。
  */
 
 /* 非 LM 的 mod 图标（文件名不含扩展名） */
@@ -42,6 +47,12 @@ export class MapCard {
       }
     };
     window.addEventListener('storage', this._onStorage);
+
+    /* 同 tab 内 mappool 手动修改 BP → 收到自定义事件刷新边框 */
+    this._onBpChanged = () => {
+      this._applyBorderClass(this._lastMapTitle);
+    };
+    window.addEventListener('bp-actions-changed', this._onBpChanged);
   }
 
   /* =========================================
@@ -266,5 +277,6 @@ export class MapCard {
 
   destroy() {
     window.removeEventListener('storage', this._onStorage);
+    window.removeEventListener('bp-actions-changed', this._onBpChanged);
   }
 }

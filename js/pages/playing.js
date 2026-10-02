@@ -26,8 +26,8 @@ const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 /* lazer mp 实测：0 = 打图中 */
 const PLAYING_IPC_STATE = 0;
 
-const EXIT_DELAY        = 8000;    /* 打图结束 → 聊天框/地图卡动画 */
-const PAGE_RETURN_DELAY = 13000;   /* 打图结束 → 判断切页（兜底） */
+const EXIT_DELAY        = 10000;    /* 打图结束 → 聊天框/地图卡动画 */
+const PAGE_RETURN_DELAY = 17000;   /* 打图结束 → 判断切页（兜底） */
 const A_TO_B_FADE       = 500;
 const B_TO_A_FADE       = 500;
 
@@ -234,9 +234,6 @@ export function initPlaying({
   let transitionToken = 0;
   let hasInitStage = false;
 
-  /* 歌曲预览播放状态（用于 spector 退出 result 后提前切回 mappool） */
-  let _lastPreviewPlaying = null; 
-
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const cancelExitTimer = () => {
     if (exitTimer) { clearTimeout(exitTimer); exitTimer = null; }
@@ -256,9 +253,16 @@ export function initPlaying({
     if (state === 'A') {
       stageEl.classList.remove('state-b');
       statsEl?.classList.remove('is-solid');
+      /* 打图状态：chat 隐藏 */
+      chatBox?.block();
     } else {
       stageEl.classList.add('state-b');
       statsEl?.classList.add('is-solid');
+      /* 非打图状态：确保 chat 显示（含从别的页面切回来的场景） */
+      if (chatBox) {
+        chatBox.unblock();
+        chatBox.show();
+      }
     }
     currentStage = state;
   }
@@ -483,34 +487,6 @@ export function initPlaying({
   }
 
   /* =========================================
-     歌曲预览重新播放 → 提前切回 mappool
-     ========================================= */
-
-  function handlePreviewPlaying(isPreview) {
-    const prev = _lastPreviewPlaying;
-    _lastPreviewPlaying = isPreview;
-
-    /* 只在 false → true 上升沿触发 */
-    if (!isPreview || prev) return;
-
-    /* 只在 still 在 playing 页 */
-    const activePage = document.querySelector('.page.active');
-    if (activePage?.dataset.page !== 'playing') return;
-
-    /* 只在打过图之后的非打图状态 */
-    if (!hasInitStage) return;
-    if (currentIpcState === PLAYING_IPC_STATE) return;
-
-    /* 决胜局不响应预览切页，交给 winnerWatcher */
-    const match = loadCurrentMatch();
-    if (isMatchFinished(match)) return;
-
-    /* 取消已排好的 PAGE_RETURN_DELAY 兜底，立即切回 mappool */
-    cancelPageSwitchTimer();
-    playAutoTransition(() => window.app?.router?.show('mappool'));
-  }
-
-  /* =========================================
      打图状态
      ========================================= */
 
@@ -619,8 +595,7 @@ export function initPlaying({
   }
 
   if (osuSocket) {
-    osuSocket.on('playing',        handlePlaying);
-    osuSocket.on('gameplay',       handleGameplay);
-    osuSocket.on('previewPlaying', handlePreviewPlaying);
+    osuSocket.on('playing',  handlePlaying);
+    osuSocket.on('gameplay', handleGameplay);
   }
 }

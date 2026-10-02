@@ -11,6 +11,9 @@
  * 手动操作会通过 syncFromUI 覆盖 AutoBp 内部状态，纠正误判。
  *
  * TB 图：protect / ban 一律忽略；pick 时统一紫框，不分队伍。
+ *
+ * 手动修改 BP 状态后派发 'bp-actions-changed' 事件，
+ * 让 playing 页的 MapCard 在同一个 tab 内也能立即刷新边框。
  */
 
 import { AutoBp } from '../services/autoBp.js';
@@ -341,15 +344,15 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     if (!osuSocket) return;
 
     osuSocket.on('playing', (isPlaying, roundPlayers) => {
-      /* 记录本局参与的玩家（原有） */
+      /* 记录本局参与的玩家 */
       if (isPlaying && Array.isArray(roundPlayers) && roundPlayers.length) {
         _lastRoundPlayers = roundPlayers;
       }
 
-      /* 打图结束自动消耗（原有） */
+      /* 打图结束自动消耗 */
       if (_lastPlayingState === true && isPlaying === false) handleRoundEnd();
 
-      /* 新增：刚进图（false → true）且当前在 mappool 页 → 切到 playing */
+      /* 刚进图（false → true）且当前在 mappool 页 → 切到 playing */
       if (isPlaying && _lastPlayingState === false) {
         const activePage = document.querySelector('.page.active');
         if (activePage?.dataset.page === 'mappool') {
@@ -501,6 +504,11 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     return /^TB/i.test(mods);
   }
 
+  /* 广播给同 tab 的其它组件（MapCard 等） */
+  function notifyBpChanged() {
+    window.dispatchEvent(new CustomEvent('bp-actions-changed'));
+  }
+
   function applyCardAction(card, action, team, { toggle }) {
     if (!card) return;
     const content  = card.querySelector('.mapContent');
@@ -594,6 +602,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       mapStates.set(mapId, { action, team });
       saveMapState(mapTitle, { action, team });
 
+      schedulePlayingSwitch();
       if (toggle) syncAutoBpToAuto('pick', team, mapId);
     }
   }
@@ -715,6 +724,8 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const shared = JSON.parse(localStorage.getItem(STORAGE_KEY_SHARED) || '{}');
     shared[mapTitle] = { ...state, timestamp: Date.now(), source: 'CYT_WOC_POOL' };
     localStorage.setItem(STORAGE_KEY_SHARED, JSON.stringify(shared));
+
+    notifyBpChanged();
   }
   function removeMapState(mapTitle) {
     if (!mapTitle) return;
@@ -724,6 +735,8 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const shared = JSON.parse(localStorage.getItem(STORAGE_KEY_SHARED) || '{}');
     delete shared[mapTitle];
     localStorage.setItem(STORAGE_KEY_SHARED, JSON.stringify(shared));
+
+    notifyBpChanged();
   }
   function saveProtectState(mapTitle, state) {
     if (!mapTitle) return;
@@ -823,6 +836,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   function resetAll() {
+    cancelPlayingSwitch();
     wrapper.querySelectorAll('.mapContainer').forEach(card => {
       card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
       card.querySelector('.mapContent').classList.remove('banned', 'is-protected');
@@ -833,6 +847,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     localStorage.removeItem(STORAGE_KEY_SHARED);
     localStorage.removeItem(STORAGE_KEY_PROTECT_LOCAL);
     localStorage.removeItem(STORAGE_KEY_PROTECT_SHARED);
+
+    notifyBpChanged();
+
     autoBp?.reset();
 
     if (autoBp) {
@@ -846,12 +863,16 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   function reloadFromJson() {
+    cancelPlayingSwitch();
     localStorage.removeItem(STORAGE_KEY_LOCAL);
     localStorage.removeItem(STORAGE_KEY_SHARED);
     localStorage.removeItem(STORAGE_KEY_PROTECT_LOCAL);
     localStorage.removeItem(STORAGE_KEY_PROTECT_SHARED);
     mapStates.clear();
     protectStates.clear();
+
+    notifyBpChanged();
+
     restoreMapStates();
     autoBp?.reset();
   }
