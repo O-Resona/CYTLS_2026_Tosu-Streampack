@@ -19,6 +19,7 @@ export function createRouter({ pages, deps }) {
 
   const loaded = new Set();
   const inited = new Set();
+  const PAGE_STORAGE_KEY = 'cyt2026.currentPage';
 
   let currentPage = null;
   let isTransitioning = false;
@@ -196,6 +197,9 @@ function applyHud(pageName) {
 
       currentPage = name;
 
+      /* 记录当前页面，刷新后恢复 */
+      try { localStorage.setItem(PAGE_STORAGE_KEY, name); } catch {}
+
       section.dispatchEvent(new CustomEvent('page:activated'));
 
       // 5. 等旧页面淡出收尾
@@ -211,9 +215,19 @@ function applyHud(pageName) {
     btn.addEventListener('click', () => show(btn.dataset.target));
   });
 
-  /* ---------- 默认显示第一个 ---------- */
+  /* ---------- 初始显示：优先上次访问的页面 ---------- */
 
-  const initial = buttons[0]?.dataset.target;
+  const initial = (() => {
+    try {
+      const saved = localStorage.getItem(PAGE_STORAGE_KEY);
+      if (saved) {
+        const exists = [...buttons].some(b => b.dataset.target === saved);
+        if (exists) return saved;
+      }
+    } catch {}
+    return buttons[0]?.dataset.target;
+  })();
+
   if (initial) show(initial);
 
   return { show, refreshBackground };
