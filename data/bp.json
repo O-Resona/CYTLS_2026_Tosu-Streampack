@@ -193,6 +193,99 @@
           "bluePlayer": "nuthing"
         }
       ]
+    },
+    {
+      "id": 7,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "HR2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Red",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Blue",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Name94"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Name94"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "Name94"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Qualifiers"
+        }
+      ]
     }
   ]
 }
