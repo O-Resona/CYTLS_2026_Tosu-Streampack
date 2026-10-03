@@ -93,14 +93,19 @@ export class MapCard {
     const root = this.root;
     if (!root) return;
 
-    root.classList.remove('redBorder', 'blueBorder');
+    root.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
     if (!mapTitle) return;
 
     try {
       const actions = JSON.parse(localStorage.getItem(BP_ACTIONS_KEY) || '{}');
       const state = actions[mapTitle];
       if (!state || state.action !== 'pick') return;
-      root.classList.add(state.team === 'red' ? 'redBorder' : 'blueBorder');
+
+      if (state.team === 'tb') {
+        root.classList.add('purpleBorder');
+      } else {
+        root.classList.add(state.team === 'red' ? 'redBorder' : 'blueBorder');
+      }
     } catch {}
   }
 

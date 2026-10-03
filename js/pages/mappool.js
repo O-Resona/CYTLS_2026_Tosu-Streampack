@@ -189,7 +189,23 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
   function getUsed(matchId, name) {
     if (matchId == null || !name) return 0;
-    return Number(loadPlayerRounds()[String(matchId)]?.[name]) || 0;
+
+    /* 1. 优先用 localStorage（手动调整 / 本局打图累计） */
+    const localUsed = loadPlayerRounds()[String(matchId)]?.[name];
+    if (localUsed != null) return Number(localUsed) || 0;
+
+    /* 2. localStorage 没有记录 → 已结束的比赛回退到 bp.json */
+    if (tournamentData.isMatchFinished(matchId)) {
+      const counts = tournamentData.getPlayerRoundsFromBp(matchId);
+      if (counts) {
+        const norm = s => String(s ?? '').trim().toLowerCase();
+        const n = norm(name);
+        const key = Object.keys(counts).find(k => norm(k) === n);
+        if (key) return counts[key];
+      }
+    }
+
+    return 0;
   }
   function setUsed(matchId, name, count) {
     if (matchId == null || !name) return;

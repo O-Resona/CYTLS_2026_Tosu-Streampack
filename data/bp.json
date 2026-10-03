@@ -4,70 +4,100 @@
       "id": 5,
       "actions": [
         {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
           "team": "Blue",
           "action": "Protect",
           "map": "LM1",
-          "winner": null
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
         },
         {
           "team": "Red",
           "action": "Ban",
           "map": "DT2",
-          "winner": null
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
         },
         {
           "team": "Blue",
           "action": "Ban",
           "map": "DT1",
-          "winner": null
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
         },
         {
           "team": "Blue",
           "action": "Pick",
           "map": "LM4",
-          "winner": "Blue"
+          "winner": "Blue",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "mcy4"
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "HR1",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "mcy4"
         },
         {
           "team": "Blue",
           "action": "Pick",
           "map": "LM1",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Barometz",
+          "bluePlayer": "aaront"
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "HD2",
-          "winner": "Blue"
+          "winner": "Blue",
+          "redPlayer": "Barometz",
+          "bluePlayer": "mcy4"
         },
         {
           "team": "Blue",
           "action": "Pick",
           "map": "NM2",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "mcy4"
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "LM3",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Barometz",
+          "bluePlayer": "aaront"
         },
         {
           "team": "Blue",
           "action": "Pick",
           "map": "NM3",
-          "winner": "Blue"
+          "winner": "Blue",
+          "redPlayer": "Barometz",
+          "bluePlayer": "aaront"
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "HR2",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "aaront"
         }
       ]
     },
@@ -78,67 +108,89 @@
           "team": "Red",
           "action": "Protect",
           "map": "NM3",
-          "winner": null
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
         },
         {
           "team": "Blue",
           "action": "Protect",
           "map": "LM3",
-          "winner": null
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
         },
         {
           "team": "Red",
           "action": "Ban",
           "map": "LM4",
-          "winner": null
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
         },
         {
           "team": "Blue",
           "action": "Ban",
           "map": "DT2",
-          "winner": null
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "NM2",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "nuthing"
         },
         {
           "team": "Blue",
           "action": "Pick",
           "map": "LM1",
-          "winner": "Blue"
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Hibiki"
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "HD2",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Hibiki"
         },
         {
           "team": "Blue",
           "action": "Pick",
           "map": "DT1",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "nuthing"
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "HD1",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "nuthing"
         },
         {
           "team": "Blue",
           "action": "Pick",
           "map": "LM3",
-          "winner": "Blue"
+          "winner": "Blue",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Hibiki"
         },
         {
           "team": "Red",
           "action": "Pick",
           "map": "NM3",
-          "winner": "Red"
+          "winner": "Red",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "nuthing"
         }
       ]
     }

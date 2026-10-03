@@ -242,6 +242,57 @@ export class TournamentData {
     return this._bpEmpty();
   }
 
+  /* =========================================
+     玩家长条：从 bp.json 统计上场次数
+     ========================================= */
+
+  /* 公开版：按 matchId 判是否已结束 */
+  isMatchFinished(matchId) {
+    const match = this.getMatch(matchId);
+    return this._isMatchFinished(match);
+  }
+
+  /**
+   * 从 bp.json 统计某场比赛里每位玩家的上场次数
+   *   · 只统计 action === 'Pick'
+   *   · 跳过 TB（map 以 TB 开头）
+   *   · 每条记录里的 redPlayer / bluePlayer 各 +1
+   *   · 上限 = ceil(bestOf/2) - 1
+   *
+   * @param {number} matchId
+   * @returns {Object<string, number> | null}
+   */
+  getPlayerRoundsFromBp(matchId) {
+    if (matchId == null) return null;
+
+    const match = this.getMatch(matchId);
+    if (!match) return null;
+
+    const bpMatch = this.bpData?.matches?.find(m => m.id === matchId);
+    if (!bpMatch?.actions?.length) return null;
+
+    const round = this.getRound(match.roundId);
+    const bestOf = Number(round?.bestOf) || 9;
+    const maxStars = Math.ceil(bestOf / 2) - 1;
+
+    const counts = {};
+    for (const a of bpMatch.actions) {
+      const act = String(a.action || '').toLowerCase();
+      if (act !== 'pick') continue;
+
+      const map = String(a.map || '');
+      if (/^tb/i.test(map)) continue;   /* TB 不消耗 */
+
+      if (a.redPlayer)  counts[a.redPlayer]  = (counts[a.redPlayer]  || 0) + 1;
+      if (a.bluePlayer) counts[a.bluePlayer] = (counts[a.bluePlayer] || 0) + 1;
+    }
+
+    for (const k of Object.keys(counts)) {
+      counts[k] = Math.min(counts[k], maxStars);
+    }
+    return counts;
+  }
+
   getMatchesByRound(roundId) {
     return this.getMatches().filter(m => m.roundId === roundId);
   }

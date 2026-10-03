@@ -139,6 +139,7 @@
 [data-page="schedule"] .sch-match.is-selected {
   border-color: #ffffff;
   box-shadow: 0 0 0 4px #ffffff;
+  border-radius: 2px;
 }
 
 [data-page="schedule"] .sch-match.is-empty {

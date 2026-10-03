@@ -136,7 +136,8 @@
 }
 
 .map-card.redBorder::after,
-.map-card.blueBorder::after {
+.map-card.blueBorder::after,
+.map-card.purpleBorder::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -145,8 +146,9 @@
   border-radius: inherit;
 }
 
-.map-card.redBorder::after  { border: 5pt solid #AE1318; }
-.map-card.blueBorder::after { border: 5pt solid #1661AB; }
+.map-card.redBorder::after    { border: 5pt solid #AE1318; }
+.map-card.blueBorder::after   { border: 5pt solid #1661AB; }
+.map-card.purpleBorder::after { border: 5pt solid #5a1aad; }
 
 .map-card__title {
   width: 100%;
