@@ -64,7 +64,11 @@ export class AutoBp {
   setFirstPicker(side) {
     if (side !== 'red' && side !== 'blue') return;
     this.firstPicker = side;
-    if (this.phase !== 'pick') this.pickTurn = side;
+
+    /* 无论当前阶段，用户主动切换先选方 → pickTurn 同步更新
+       （pick 已经打过的图不受影响，只影响之后的 pick） */
+    this.pickTurn = side;
+
     this._emitChange();
   }
 

@@ -187,14 +187,21 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   function savePlayerRounds(d) {
     try { localStorage.setItem(PLAYER_ROUNDS_KEY, JSON.stringify(d)); } catch {}
   }
+
+  /*
+   * getUsed：
+   *   1. 优先用 localStorage（手动调整 / 本局打图累计）
+   *   2. localStorage 无记录 → 若该比赛已结束，回退到 bp.json 的 Pick 统计
+   *      （只算 Pick，跳过 TB）
+   */
   function getUsed(matchId, name) {
     if (matchId == null || !name) return 0;
 
-    /* 1. 优先用 localStorage（手动调整 / 本局打图累计） */
+    /* 1. 优先 localStorage */
     const localUsed = loadPlayerRounds()[String(matchId)]?.[name];
     if (localUsed != null) return Number(localUsed) || 0;
 
-    /* 2. localStorage 没有记录 → 已结束的比赛回退到 bp.json */
+    /* 2. 已结束的比赛 → bp.json 统计 */
     if (tournamentData.isMatchFinished(matchId)) {
       const counts = tournamentData.getPlayerRoundsFromBp(matchId);
       if (counts) {
@@ -207,6 +214,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
 
     return 0;
   }
+
   function setUsed(matchId, name, count) {
     if (matchId == null || !name) return;
     const all = loadPlayerRounds();
@@ -215,6 +223,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     all[id][name] = Math.max(0, count);
     savePlayerRounds(all);
   }
+
   function getMaxStarsForMatch(match) {
     if (!match) return 4;
     const round = tournamentData.getRound(match.roundId);
@@ -320,7 +329,8 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   /* =========================================
-     本局结束自动消耗
+     打图状态：仅保留「进图 → 切页」逻辑
+     扣条逻辑已在 playing.js 里处理
      ========================================= */
 
   let _lastPlayingState = null;
@@ -841,6 +851,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
         lastAction: { action: 'clear' },
       });
     }
+
+    resetAutoBpModeSync();
+    setMode('redProtect');
   }
 
   function reloadFromJson() {
@@ -856,6 +869,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
 
     restoreMapStates();
     autoBp?.reset();
+
+    resetAutoBpModeSync();
+    setMode('redProtect');
   }
 
   /* =========================================
@@ -863,6 +879,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
      ========================================= */
 
   let autoBp = null;
+  let _lastAutoBpModeSig = '';
 
   function handleAutoAction(action, side, mods) {
     const card = findCardByMods(mods);
@@ -888,9 +905,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       osuSocket,
       tokenStore,
       onAction:      handleAutoAction,
-      onStateChange: (state) => {
-        /* UI 反馈预留 */
-      },
+      onStateChange: () => syncModeFromAutoBp(),
     });
     autoBp.start();
 
@@ -904,11 +919,65 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     }
 
     radioFirstRed ?.addEventListener('change', () => {
-      if (radioFirstRed.checked)  { autoBp.setFirstPicker('red');  setFirstPickerToStorage('red');  }
+      if (radioFirstRed.checked) {
+        autoBp.setFirstPicker('red');
+        setFirstPickerToStorage('red');
+        syncModeFromAutoBp();
+      }
     });
     radioFirstBlue?.addEventListener('change', () => {
-      if (radioFirstBlue.checked) { autoBp.setFirstPicker('blue'); setFirstPickerToStorage('blue'); }
+      if (radioFirstBlue.checked) {
+        autoBp.setFirstPicker('blue');
+        setFirstPickerToStorage('blue');
+        syncModeFromAutoBp();
+      }
     });
+
+    syncModeFromAutoBp();
+  }
+
+  /* 根据 autoBp 状态同步左侧黄框（带签名判重，只在状态真正变化时才改） */
+  function syncModeFromAutoBp() {
+    if (!autoBp) return;
+    const s = autoBp.getState();
+    if (!s.started) return;
+
+    let mode = null;
+
+    if (s.phase === 'pick') {
+      mode = s.pickTurn === 'red' ? 'redPick' : 'bluePick';
+    } else {
+      const order = s.firstPicker === 'red' ? ['red', 'blue'] : ['blue', 'red'];
+
+      for (const side of order) {
+        if (!s.teams[side].protect) {
+          mode = side === 'red' ? 'redProtect' : 'blueProtect';
+          break;
+        }
+      }
+
+      if (!mode) {
+        const r = s.teams.red.bans.length;
+        const b = s.teams.blue.bans.length;
+        let side;
+        if (r < b) side = 'red';
+        else if (b < r) side = 'blue';
+        else side = order[0];
+        mode = side === 'red' ? 'redBan' : 'blueBan';
+      }
+    }
+
+    const sig = `${mode}|${s.phase}|${s.pickTurn}`;
+    if (sig === _lastAutoBpModeSig) return;
+    _lastAutoBpModeSig = sig;
+
+    if (mode) setMode(mode);
+  }
+
+  /* 重置签名并立刻重新同步 */
+  function resetAutoBpModeSync() {
+    _lastAutoBpModeSig = '';
+    syncModeFromAutoBp();
   }
 
   const FIRST_PICKER_KEY = 'cyt2026.firstPicker';
@@ -951,6 +1020,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     });
     loadMapsForPool(p);
     renderLayout();
+    resetAutoBpModeSync();
   }
 
   /* =========================================
@@ -981,6 +1051,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     syncPoolWithCurrentMatch();
     restoreMapStates();
     renderPlayers();
+    resetAutoBpModeSync();
   });
   pageEl.addEventListener('page:deactivated', () => {
     panel.hidden = true;
@@ -991,6 +1062,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       syncPoolWithCurrentMatch();
       restoreMapStates();
       renderPlayers();
+      resetAutoBpModeSync();
     }
   });
 
