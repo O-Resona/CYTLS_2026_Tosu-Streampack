@@ -11,6 +11,10 @@
  * 自动加星逻辑仍在本文件：
  *   打图结束比较双方比分，赢家调用 teamHud.incrementStar()
  *
+ * 玩家长条消耗也移到本文件：
+ *   打图结束时把本局上场玩家写入 localStorage['cyt2026.playerRounds']，
+ *   并派发 window 'player-rounds-changed'，mappool 页据此刷新长条。
+ *
  * 打图结束后的切页：
  *   - 决胜（任一队 >= ceil(bestOf/2)）→ 交给 winnerWatcher
  *   - 非决胜 → 只在 spector 退出 result（previewPlaying=true）时切回 mappool
@@ -20,7 +24,8 @@ import { MapCard }    from '../components/mapCard.js';
 import { StatsPanel } from '../components/statsPanel.js';
 import { playAutoTransition } from '../services/autoTransition.js';
 
-const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
+const CURRENT_MATCH_KEY  = 'cyt2026.currentMatchId';
+const PLAYER_ROUNDS_KEY  = 'cyt2026.playerRounds';
 
 /* lazer mp 实测：0 = 打图中 */
 const PLAYING_IPC_STATE = 0;
@@ -69,17 +74,32 @@ export function initPlaying({
     right: { current: 0, target: 0, raf: null },
   };
 
+  /* 分数元素宽度缓存：按 textContent.length 缓存，避免每帧 offsetWidth 强制回流 */
+  const scoreWidthCache = {
+    left:  { len: -1, width: 0 },
+    right: { len: -1, width: 0 },
+  };
+
+  function getScoreWidth(side) {
+    const node = scoreEl(side);
+    if (!node) return 0;
+    const len = node.textContent.length;
+    const cache = scoreWidthCache[side];
+    if (cache.len === len) return cache.width;
+    cache.len = len;
+    cache.width = node.offsetWidth || 0;
+    return cache.width;
+  }
+
   function scoreEl(side) {
     return side === 'left' ? el.score1 : el.score2;
   }
 
-  /* 千分位格式化：1234567 → "1,234,567" */
   function formatScore(n) {
     const v = Math.round(Number(n) || 0);
     return v.toLocaleString('en-US');
   }
 
-  /* 分差数字：用平滑中的分数计算，跟随缓动 */
   function updateDiffText() {
     const l = Math.round(scoreAnim.left.current);
     const r = Math.round(scoreAnim.right.current);
@@ -234,6 +254,9 @@ export function initPlaying({
   /* 本轮打图是否已结束（等待 spector 退出 result） */
   let _roundEnded = false;
 
+  /* 本局参与的玩家列表（来自 osu 的 ipcClients） */
+  let _lastRoundPlayers = [];
+
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const cancelExitTimer = () => {
     if (exitTimer) { clearTimeout(exitTimer); exitTimer = null; }
@@ -250,12 +273,10 @@ export function initPlaying({
     if (state === 'A') {
       stageEl.classList.remove('state-b');
       statsEl?.classList.remove('is-solid');
-      /* 打图状态：chat 隐藏 */
       chatBox?.block();
     } else {
       stageEl.classList.add('state-b');
       statsEl?.classList.add('is-solid');
-      /* 非打图状态：确保 chat 显示（含从别的页面切回来的场景） */
       if (chatBox) {
         chatBox.unblock();
         chatBox.show();
@@ -269,15 +290,12 @@ export function initPlaying({
     const token = ++transitionToken;
     cancelExitTimer();
 
-    /* 阶段 1：分数条开始淡出 */
     stageEl.classList.add('is-scores-hiding');
 
-    /* 阶段 2：150ms 后 mapcard 也开始淡出 */
     await sleep(150);
     if (token !== transitionToken) return;
     stageEl.classList.add('is-transitioning-to-b');
 
-    /* 阶段 3：mapcard 淡出完成 → 换位置 → 淡入 + chat 同时淡入 */
     await sleep(A_TO_B_FADE);
     if (token !== transitionToken) return;
 
@@ -319,36 +337,27 @@ export function initPlaying({
   function computeBarWidth(diff) {
     if (diff <= 0) return 0;
 
-    /* 0 ~ 10w：最敏感，线性 → 0 ~ 400px */
     if (diff <= 100000) {
       return (diff / 100000) * 400;
     }
-
-    /* 10w ~ 30w：增长变慢 → 400 ~ 620px */
     if (diff <= 300000) {
       const t = (diff - 100000) / 200000;
       const eased = 1 - Math.pow(1 - t, 2);
       return 400 + eased * 220;
     }
-
-    /* 30w ~ 40w：极慢 → 620 ~ 700px */
     if (diff <= 400000) {
       const t = (diff - 300000) / 100000;
       return 620 + t * 80;
     }
-
-    /* 40w+：封顶 */
     return 700;
   }
 
   function renderScores() {
-    /* 数字：平滑变动 */
     scoreAnim.left.target  = scores.left;
     scoreAnim.right.target = scores.right;
     animateScoreTo('left');
     animateScoreTo('right');
 
-    /* 用真实分数判定领先 */
     const diff = Math.abs(scores.left - scores.right);
     const leadingLeft  = diff > 0 && scores.left  > scores.right;
     const leadingRight = diff > 0 && scores.right > scores.left;
@@ -358,10 +367,6 @@ export function initPlaying({
 
     el.scoresEl.classList.toggle('is-left-leading',  leadingLeft);
     el.scoresEl.classList.toggle('is-right-leading', leadingRight);
-
-    /* diff 文本交给 updateDiffText 每帧刷（不在这里写） */
-
-    /* ---------- 分数条 ---------- */
 
     if (diff === 0) {
       el.bar.style.width = '0px';
@@ -384,12 +389,12 @@ export function initPlaying({
     }
 
     if (leadingLeft) {
-      const w1 = el.score1.offsetWidth || 0;
+      const w1 = getScoreWidth('left');
       const shift = Math.max(0, barWidth - w1 / 2 - 10);
       setBoxTransform(el.box1, `translateX(${-20 - shift}px)`);
       setBoxTransform(el.box2, 'translateX(20px)');
     } else {
-      const w2 = el.score2.offsetWidth || 0;
+      const w2 = getScoreWidth('right');
       const shift = Math.max(0, barWidth - w2 / 2 - 10);
       setBoxTransform(el.box2, `translateX(${20 + shift}px)`);
       setBoxTransform(el.box1, 'translateX(-20px)');
@@ -423,6 +428,61 @@ export function initPlaying({
   }
 
   /* =========================================
+     本局结束 → 玩家长条消耗
+     ========================================= */
+
+  function applyPlayerRoundConsumption() {
+    if (!Array.isArray(_lastRoundPlayers) || !_lastRoundPlayers.length) {
+      _lastRoundPlayers = [];
+      return;
+    }
+
+    const id = getCurrentMatchId();
+    if (id == null) { _lastRoundPlayers = []; return; }
+
+    const match = tournamentData.getMatch(id);
+    if (!match) { _lastRoundPlayers = []; return; }
+
+    const t1 = match.team1Acronym ? tournamentData.getTeam(match.team1Acronym) : null;
+    const t2 = match.team2Acronym ? tournamentData.getTeam(match.team2Acronym) : null;
+
+    const round = tournamentData.getRound(match.roundId);
+    const bestOf = Number(round?.bestOf) || 9;
+    const maxStars = Math.ceil(bestOf / 2) - 1;
+
+    const norm = s => String(s ?? '').trim().toLowerCase();
+    const findPlayer = (team, name) => {
+      const n = norm(name);
+      return (team?.players || []).find(p => norm(p.username) === n) || null;
+    };
+
+    let all = {};
+    try { all = JSON.parse(localStorage.getItem(PLAYER_ROUNDS_KEY) || '{}'); } catch {}
+
+    const sid = String(id);
+    if (!all[sid]) all[sid] = {};
+
+    let changed = false;
+    for (const p of _lastRoundPlayers) {
+      const name = p?.name;
+      if (!name) continue;
+      const matched = findPlayer(t1, name) || findPlayer(t2, name);
+      if (!matched) continue;
+      const canonical = matched.username;
+      const used = Number(all[sid][canonical]) || 0;
+      if (used >= maxStars) continue;
+      all[sid][canonical] = used + 1;
+      changed = true;
+    }
+
+    _lastRoundPlayers = [];
+
+    if (!changed) return;
+    try { localStorage.setItem(PLAYER_ROUNDS_KEY, JSON.stringify(all)); } catch {}
+    window.dispatchEvent(new CustomEvent('player-rounds-changed'));
+  }
+
+  /* =========================================
      实时比分
      ========================================= */
 
@@ -451,7 +511,6 @@ export function initPlaying({
     return tournamentData.getMatch(id);
   }
 
-  /* 判断当前比赛是否处于决胜状态 */
   function isMatchFinished(match) {
     if (!match) return false;
     const round = tournamentData.getRound(match.roundId);
@@ -476,10 +535,8 @@ export function initPlaying({
       return;
     }
 
-    /* 决胜局 → 交给 winnerWatcher */
     if (isMatchFinished(match)) return;
 
-    /* 非决胜局 → 回 mappool */
     playAutoTransition(() => window.app?.router?.show('mappool'));
   }
 
@@ -487,7 +544,12 @@ export function initPlaying({
      打图状态
      ========================================= */
 
-  function handlePlaying(isPlaying) {
+  function handlePlaying(isPlaying, roundPlayers) {
+    /* 缓存本局参与的玩家 */
+    if (isPlaying && Array.isArray(roundPlayers) && roundPlayers.length) {
+      _lastRoundPlayers = roundPlayers;
+    }
+
     const newState = isPlaying ? PLAYING_IPC_STATE : 11;
 
     if (!hasInitStage) {
@@ -503,17 +565,16 @@ export function initPlaying({
     currentIpcState = newState;
 
     if (isPlaying) {
-      // 进入打图
       chatBox?.block();
       previousScores.left  = scores.left;
       previousScores.right = scores.right;
       isNewRound = false;
-      _roundEnded = false;              // 新一轮开始，清标记
+      _roundEnded = false;
       transitionToA();
     } else {
-      // 打图结束：延迟 → 依次 分数条隐藏 → mapcard 移动 → chat 出现
       handleRoundEnd();
-      _roundEnded = true;               // 标记本轮已结束，等待 spector 退出 result
+      applyPlayerRoundConsumption();   /* ← 本局结束：写 localStorage + 派发事件 */
+      _roundEnded = true;
       cancelExitTimer();
       exitTimer = setTimeout(() => {
         exitTimer = null;
@@ -527,9 +588,9 @@ export function initPlaying({
      ========================================= */
 
   function handlePreviewPlaying(mapCleared) {
-    if (!mapCleared) return;            // 只在"离开会话"时响应
-    if (!_roundEnded) return;           // 本轮还没打完，忽略
-    _roundEnded = false;                // 一次性，防重复触发
+    if (!mapCleared) return;
+    if (!_roundEnded) return;
+    _roundEnded = false;
     decideReturnPage();
   }
 

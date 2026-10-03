@@ -44,11 +44,11 @@ export class OsuSocket {
     return () => this._handlers.get(event).delete(fn);
   }
 
-  _emit(event, payload) {
+  _emit(event, ...args) {
     const set = this._handlers.get(event);
     if (!set) return;
     for (const fn of set) {
-      try { fn(payload); }
+      try { fn(...args); }
       catch (e) { console.error(`[OsuSocket] handler "${event}" failed:`, e); }
     }
   }
@@ -175,16 +175,24 @@ export class OsuSocket {
       const name =
         c?.user?.name ??
         c?.user?.username ??
+        c?.spectating?.name ??
+        c?.gameplay?.name ??
         c?.name ??
         c?.username ??
         c?.player?.name ??
         '';
-      if (!name) continue;
+      if (!name) {
+        console.warn('[OsuSocket] 有 score 但没名字:', JSON.stringify(c));
+        continue;
+      }
 
       let team = c?.team;
       if (team === 0) team = 'left';
       if (team === 1) team = 'right';
-      if (team !== 'left' && team !== 'right') continue;
+      if (team !== 'left' && team !== 'right') {
+        console.warn('[OsuSocket] 未知 team 字段:', JSON.stringify(team), '| 原始 client:', JSON.stringify(c));
+        continue;
+      }
 
       out.push({ name, team });
     }

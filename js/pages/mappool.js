@@ -104,6 +104,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
 
   /* ---------- pick → playing 延迟切换 ---------- */
 
+  const PICK_TO_PLAYING_DELAY = 5000;
   let _pickSwitchTimer = null;
 
   function schedulePlayingSwitch() {
@@ -307,51 +308,11 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
      ========================================= */
 
   let _lastPlayingState = null;
-  let _lastRoundPlayers = [];
-
-  function handleRoundEnd() {
-    const id = getCurrentMatchId();
-    if (id == null) return;
-    const match = tournamentData.getMatch(id);
-    if (!match) return;
-    const t1 = match.team1Acronym ? tournamentData.getTeam(match.team1Acronym) : null;
-    const t2 = match.team2Acronym ? tournamentData.getTeam(match.team2Acronym) : null;
-    const maxStars = getMaxStarsForMatch(match);
-
-    const norm = s => String(s ?? '').trim().toLowerCase();
-    const findPlayer = (team, name) => {
-      const n = norm(name);
-      return (team?.players || []).find(p => norm(p.username) === n) || null;
-    };
-
-    for (const p of _lastRoundPlayers) {
-      const name = p?.name;
-      if (!name) continue;
-
-      const matched = findPlayer(t1, name) || findPlayer(t2, name);
-      if (!matched) continue;
-
-      const canonical = matched.username;
-      const used = getUsed(id, canonical);
-      if (used >= maxStars) continue;
-      setUsed(id, canonical, used + 1);
-    }
-    _lastRoundPlayers = [];
-    renderPlayers();
-  }
 
   function bindOsuEvents() {
     if (!osuSocket) return;
 
-    osuSocket.on('playing', (isPlaying, roundPlayers) => {
-      /* 记录本局参与的玩家 */
-      if (isPlaying && Array.isArray(roundPlayers) && roundPlayers.length) {
-        _lastRoundPlayers = roundPlayers;
-      }
-
-      /* 打图结束自动消耗 */
-      if (_lastPlayingState === true && isPlaying === false) handleRoundEnd();
-
+    osuSocket.on('playing', (isPlaying) => {
       /* 刚进图（false → true）且当前在 mappool 页 → 切到 playing */
       if (isPlaying && _lastPlayingState === false) {
         const activePage = document.querySelector('.page.active');
@@ -361,16 +322,20 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
           });
         }
       }
-
       _lastPlayingState = isPlaying;
     });
 
     window.addEventListener('storage', (e) => {
       if (e.key === 'cyt2026.currentMatchId') {
         _lastPlayingState = false;
-        _lastRoundPlayers = [];
+      }
+      if (e.key === 'cyt2026.playerRounds') {
+        renderPlayers();
       }
     });
+
+    /* 同 tab 内打图结束 → 刷新长条 */
+    window.addEventListener('player-rounds-changed', renderPlayers);
   }
 
   function alignPlayerNames() {
