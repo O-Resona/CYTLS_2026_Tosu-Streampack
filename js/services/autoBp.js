@@ -12,6 +12,8 @@
  * 手动操作通过 syncFromUI() 覆盖内部状态，纠正误判：
  *   - autoBp 不再维护 cursor，进度完全由 protect / bans / picks 的实际内容决定
  *   - 手动改 UI 后调 syncFromUI，autoBp 采纳 UI 为准
+ *   - 若尚未 started（未识别到 roll），但 UI 已有手动 BP 状态，
+ *     syncFromUI 会自动冷启动状态机，让后续换图 → pick 依然可用
  */
 
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
@@ -271,6 +273,10 @@ export class AutoBp {
    * 手动操作后调用，用 UI 的完整状态覆盖内部 set。
    * 手动修正会被 autoBp 采纳，后续自动判定基于最新 UI。
    *
+   * 冷启动：若尚未 started（未识别到 roll），但快照里已有
+   * 手动 protect / ban / pick，则自动补上初始化，让后续
+   * 「换图 → 自动 pick」正常工作。
+   *
    * @param {{
    *   protects?: { red: string[], blue: string[] },
    *   bans?:     { red: string[], blue: string[] },
@@ -279,10 +285,23 @@ export class AutoBp {
    * }} snapshot
    */
   syncFromUI(snapshot = {}) {
-    if (!this.started) return;
-
     const { protects, bans, picks, lastAction } = snapshot;
 
+    /* ---------- 冷启动：还没 started，但 UI 已有状态 ---------- */
+    if (!this.started) {
+      const hasUIState =
+        (protects?.red?.length  || protects?.blue?.length) ||
+        (bans?.red?.length      || bans?.blue?.length)     ||
+        (picks?.red?.length     || picks?.blue?.length);
+
+      if (!hasUIState) return;              /* 空快照 → 不动 */
+      if (!this._initSequences()) return;   /* 没选中比赛 / 没图池 → 放弃 */
+
+      this.started = true;
+      this.phase   = 'protect-ban';
+    }
+
+    /* ---------- 用 UI 快照覆盖内部 set ---------- */
     for (const side of ['red', 'blue']) {
       const t = this.teams[side];
       if (protects) t.protect = protects[side]?.[0] || null;
@@ -298,7 +317,7 @@ export class AutoBp {
       }
     } else {
       if (this.phase === 'pick') {
-        this.phase = 'protect-ban';    // 手动退回
+        this.phase = 'protect-ban';    /* 手动退回 */
       }
     }
 

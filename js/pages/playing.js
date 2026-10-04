@@ -9,7 +9,7 @@
  * 本文件不再维护队伍/聊天相关的 DOM。
  *
  * 自动加星逻辑仍在本文件：
- *   打图结束比较双方比分，赢家调用 teamHud.incrementStar()
+ *   打图结束时直接比较双方本局最终分数，高者加星
  *
  * 玩家长条消耗也移到本文件：
  *   打图结束时把本局上场玩家写入 localStorage['cyt2026.playerRounds']，
@@ -18,6 +18,11 @@
  * 打图结束后的切页：
  *   - 决胜（任一队 >= ceil(bestOf/2)）→ 交给 winnerWatcher
  *   - 非决胜 → 只在 spector 退出 result（previewPlaying=true）时切回 mappool
+ *
+ * 切页保护：
+ *   page:deactivated 会 transitionToken++，让任何挂起的
+ *   transitionToA / transitionToB 在下一次 await 后立即 return，
+ *   避免切走后仍在后台显示 chatBox 或改动布局状态。
  */
 
 import { MapCard }    from '../components/mapCard.js';
@@ -305,8 +310,11 @@ export function initPlaying({
 
     statsEl?.classList.add('is-solid');
 
-    chatBox?.unblock();
-    chatBox?.show();
+    /* 只有还停在 playing 页才显示 chatBox，防止切页后污染其它页面 */
+    if (document.querySelector('.page.active')?.dataset.page === 'playing') {
+      chatBox?.unblock();
+      chatBox?.show();
+    }
 
     await sleep(A_TO_B_FADE);
     if (token !== transitionToken) return;
@@ -414,14 +422,11 @@ export function initPlaying({
   function handleRoundEnd() {
     if (isNewRound) { isNewRound = false; return; }
 
-    const leftDiff  = scores.left  - previousScores.left;
-    const rightDiff = scores.right - previousScores.right;
+    const left  = Number(scores.left)  || 0;
+    const right = Number(scores.right) || 0;
 
-    if (leftDiff > rightDiff) {
-      teamHud?.incrementStar('left');
-    } else if (rightDiff > leftDiff) {
-      teamHud?.incrementStar('right');
-    }
+    if (left > right)      teamHud?.incrementStar('left');
+    else if (right > left) teamHud?.incrementStar('right');
 
     previousScores.left  = scores.left;
     previousScores.right = scores.right;
@@ -645,6 +650,7 @@ export function initPlaying({
 
   pageEl.addEventListener('page:deactivated', () => {
     cancelExitTimer();
+    transitionToken++;            /* 打断任何挂起的 transitionToA / transitionToB */
     if (greenPanel) greenPanel.hidden = true;
   });
 
