@@ -3,11 +3,10 @@
  *
  * 直接读当前比赛（cyt2026.currentMatchId）的比分判定胜者：
  *   - 任一方比分 >= ceil(bestOf/2) 且领先 → 该方为胜者
- *   - 否则页面不显示额外内容（仅背景）
+ *   - 或任一方 FF（分数 === -1）→ 对手为胜者
+ *   - 双方都 FF → 无胜者，仅显示背景
  *
- * 展示格式与 Match Info 一致。
  * 顶部标题（Carry Yourself Tournament / 轮次名）始终显示，与胜者无关。
- *
  * 红队获胜时，通知 router 把背景视频切到 bg_red.mp4。
  */
 
@@ -111,22 +110,33 @@ export function initWinner({ tournamentData } = {}) {
   function resolveWinner(match) {
     if (!match || !tournamentData) return null;
 
-    const round = tournamentData.getRound(match.roundId);
-    const bestOf = Number(round?.bestOf) || 9;
-    const maxStars = Math.ceil(bestOf / 2);
-
-    const s1 = Number(match.team1Score) || 0;
-    const s2 = Number(match.team2Score) || 0;
+    const s1 = Number(match.team1Score);
+    const s2 = Number(match.team2Score);
+    const ff1 = s1 === -1;
+    const ff2 = s2 === -1;
 
     let acronym = '';
     let side = '';
-    if (s1 >= maxStars && s1 > s2) {
-      acronym = match.team1Acronym;
-      side = 'red';
-    } else if (s2 >= maxStars && s2 > s1) {
-      acronym = match.team2Acronym;
-      side = 'blue';
+
+    /* FF 优先 */
+    if (ff1 && !ff2) {
+      acronym = match.team2Acronym; side = 'blue';
+    } else if (ff2 && !ff1) {
+      acronym = match.team1Acronym; side = 'red';
+    } else if (!ff1 && !ff2) {
+      const round = tournamentData.getRound(match.roundId);
+      const bestOf = Number(round?.bestOf) || 9;
+      const maxStars = Math.ceil(bestOf / 2);
+      const n1 = s1 || 0;
+      const n2 = s2 || 0;
+
+      if (n1 >= maxStars && n1 > n2) {
+        acronym = match.team1Acronym; side = 'red';
+      } else if (n2 >= maxStars && n2 > n1) {
+        acronym = match.team2Acronym; side = 'blue';
+      }
     }
+
     if (!acronym) return null;
 
     const team = tournamentData.getTeam(acronym);
@@ -142,7 +152,6 @@ export function initWinner({ tournamentData } = {}) {
   function render() {
     const match = getCurrentMatch();
 
-    /* 标题轮次名：始终显示，与是否有 winner 无关 */
     if (refs.roundName) {
       const round = match ? tournamentData.getRound(match.roundId) : null;
       refs.roundName.textContent = round?.name || '';
@@ -154,13 +163,11 @@ export function initWinner({ tournamentData } = {}) {
     const { team, side } = result;
     const isRed = side === 'red';
 
-    /* 头像队伍色描边 */
     if (refs.avatar) {
       refs.avatar.classList.toggle('is-red',  isRed);
       refs.avatar.classList.toggle('is-blue', !isRed);
     }
 
-    /* 光环：只显示胜者那一边的 */
     setHalo('red',  isRed);
     setHalo('blue', !isRed);
 
@@ -181,7 +188,6 @@ export function initWinner({ tournamentData } = {}) {
 
     if (layoutEl) layoutEl.hidden = false;
 
-    /* 红队赢 → 背景切红 */
     refreshBg();
   }
 
@@ -201,7 +207,6 @@ export function initWinner({ tournamentData } = {}) {
     setHalo('red',  false);
     setHalo('blue', false);
 
-    /* 无胜者 → 背景回蓝 */
     refreshBg();
   }
 

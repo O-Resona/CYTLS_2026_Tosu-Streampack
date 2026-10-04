@@ -10,6 +10,8 @@
  *
  * 本地覆盖层（localStorage）：
  *   合并规则 —— tournament.json 里字段有值则用 json，为空则用本地 override。
+ *
+ * FF：teamXScore === -1 表示该队弃权，视为比赛结束。
  */
 
 const SEED_URL      = 'data/tournament.json';
@@ -172,16 +174,40 @@ export class TournamentData {
   }
 
   /* =========================================
+     FF 与比赛结束判定
+     ========================================= */
+
+  /* 某方是否 FF（分数 === -1） */
+  isForfeit(match, side) {
+    if (!match) return false;
+    const score = side === 'team2' ? match.team2Score : match.team1Score;
+    return Number(score) === -1;
+  }
+
+  /* 比赛是否已结束（任一方达到决胜分，或任一方 FF） */
+  _isMatchFinished(match) {
+    if (!match) return false;
+
+    const s1 = Number(match.team1Score);
+    const s2 = Number(match.team2Score);
+
+    /* FF：任一方 -1 → 已结束 */
+    if (s1 === -1 || s2 === -1) return true;
+
+    const round = this.getRound(match.roundId);
+    const bestOf = Number(round?.bestOf) || 9;
+    const maxStars = Math.ceil(bestOf / 2);
+    return (s1 >= maxStars) || (s2 >= maxStars);
+  }
+
+  /* =========================================
      BP 数据
-     · 已结束的比赛：永远以 bp.json 为准
-     · 未结束的比赛：优先 match 自身字段，回退 bp.json
      ========================================= */
 
   _bpEmpty() {
     return { bans: [], picks: [], protects: [] };
   }
 
-  /* 从 match 自身的 bans / picks / protects 读取 */
   _bpFromMatch(match) {
     return {
       bans:     Array.isArray(match?.bans)     ? match.bans     : [],
@@ -190,16 +216,15 @@ export class TournamentData {
     };
   }
 
-  /* 从 data/bp.json 的 actions 读取并转换 */
   _bpFromBpJson(matchId) {
     const bpMatch = this.bpData?.matches?.find(m => m.id === matchId);
     if (!bpMatch?.actions?.length) return null;
 
     const out = this._bpEmpty();
     for (const a of bpMatch.actions) {
-      const team = String(a.team || '').toLowerCase();     /* "Red" → "red" */
+      const team = String(a.team || '').toLowerCase();
       const mods = a.map;
-      const act  = String(a.action || '').toLowerCase();   /* "Ban" → "ban" */
+      const act  = String(a.action || '').toLowerCase();
       if (!team || !mods) continue;
 
       if (act === 'ban')          out.bans.push({ mods, team });
@@ -211,17 +236,6 @@ export class TournamentData {
 
   _bpHasData(bp) {
     return !!bp && (bp.bans.length || bp.picks.length || bp.protects.length);
-  }
-
-  /* 比赛是否已结束（任一方达到决胜分） */
-  _isMatchFinished(match) {
-    if (!match) return false;
-    const round = this.getRound(match.roundId);
-    const bestOf = Number(round?.bestOf) || 9;
-    const maxStars = Math.ceil(bestOf / 2);
-    const s1 = Number(match.team1Score) || 0;
-    const s2 = Number(match.team2Score) || 0;
-    return (s1 >= maxStars) || (s2 >= maxStars);
   }
 
   getMatchBP(matchId) {
@@ -246,22 +260,11 @@ export class TournamentData {
      玩家长条：从 bp.json 统计上场次数
      ========================================= */
 
-  /* 公开版：按 matchId 判是否已结束 */
   isMatchFinished(matchId) {
     const match = this.getMatch(matchId);
     return this._isMatchFinished(match);
   }
 
-  /**
-   * 从 bp.json 统计某场比赛里每位玩家的上场次数
-   *   · 只统计 action === 'Pick'
-   *   · 跳过 TB（map 以 TB 开头）
-   *   · 每条记录里的 redPlayer / bluePlayer 各 +1
-   *   · 上限 = ceil(bestOf/2) - 1
-   *
-   * @param {number} matchId
-   * @returns {Object<string, number> | null}
-   */
   getPlayerRoundsFromBp(matchId) {
     if (matchId == null) return null;
 
@@ -281,7 +284,7 @@ export class TournamentData {
       if (act !== 'pick') continue;
 
       const map = String(a.map || '');
-      if (/^tb/i.test(map)) continue;   /* TB 不消耗 */
+      if (/^tb/i.test(map)) continue;
 
       if (a.redPlayer)  counts[a.redPlayer]  = (counts[a.redPlayer]  || 0) + 1;
       if (a.bluePlayer) counts[a.bluePlayer] = (counts[a.bluePlayer] || 0) + 1;

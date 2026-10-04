@@ -3,19 +3,8 @@
  *
  * 只展示当前轮次（第一个还有未结束比赛的轮次）。
  *
- * 布局：
- *   - 轮次标题（白底黑字）
- *   - 下方：两列
- *       · 左：RECENT MATCHES（已结束，时间升序）
- *       · 右：UPCOMING MATCHS（未结束，剔除选中，时间降序）
- *   - 距底部：COMING UP NEXT（选中的比赛）+ 相对时间字样
- *
- * 单场比赛：深灰底框，结构为：
- *   时间 | 红队名 | 红队比分 | VS | 蓝队比分 | 蓝队名
- *
- * 获胜方高亮：队名白底黑字，比分块红/蓝底白字（仅当比赛已结束）。
- *
- * 初始化自动选中：最早的一场未开始比赛。
+ * FF：teamXScore === -1 显示为 "FF"，该队判负，对手判胜。
+ *     双方都 FF → 都不高亮。
  */
 
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
@@ -48,16 +37,22 @@ export function initSchedule({ tournamentData }) {
     } catch (e) { console.warn('[Schedule] write failed:', e); }
   }
 
-  /* ---------- 比赛状态判断 ---------- */
+  /* ---------- 比赛状态判断（含 FF） ---------- */
 
   function isFinished(match, round) {
     const s1 = match.team1Score;
     const s2 = match.team2Score;
     if (s1 == null || s2 == null) return false;
 
+    const n1 = Number(s1);
+    const n2 = Number(s2);
+
+    /* FF：任一方 -1 → 已结束 */
+    if (n1 === -1 || n2 === -1) return true;
+
     const bestOf = Number(round?.bestOf) || 9;
     const maxStars = Math.ceil(bestOf / 2);
-    return (Number(s1) >= maxStars) || (Number(s2) >= maxStars);
+    return (n1 >= maxStars) || (n2 >= maxStars);
   }
 
   /* ---------- 找出当前轮次 ---------- */
@@ -81,24 +76,21 @@ export function initSchedule({ tournamentData }) {
     return withM[withM.length - 1] || null;
   }
 
-  /* ---------- 自动选中 ----------
-     1. 未开始的比赛中，选时间最近的一场（最早）
-     2. 若全部已结束，选已结束中时间最近的一场（最晚）
-  */
+  /* ---------- 自动选中 ---------- */
+
   function autoSelect(roundMatches, round) {
     if (currentMatchId != null) {
       const cur = roundMatches.find(m => m.id === currentMatchId);
       if (cur) return;
     }
 
-    /* 未开始：无比分 + 两队已确定 */
     const unstarted = roundMatches
       .filter(m => m.team1Score == null && m.team2Score == null)
       .filter(m => m.team1Acronym && m.team2Acronym)
       .sort((a, b) => {
         const ta = a.date ? new Date(a.date).getTime() : Infinity;
         const tb = b.date ? new Date(b.date).getTime() : Infinity;
-        return ta - tb;   /* 升序：越早越靠前 */
+        return ta - tb;
       });
 
     if (unstarted.length) {
@@ -106,13 +98,12 @@ export function initSchedule({ tournamentData }) {
       return;
     }
 
-    /* 兜底：全部已结束 → 选最晚的一场 */
     const finished = roundMatches
       .filter(m => isFinished(m, round))
       .sort((a, b) => {
         const ta = a.date ? new Date(a.date).getTime() : 0;
         const tb = b.date ? new Date(b.date).getTime() : 0;
-        return tb - ta;   /* 降序：越晚越靠前 */
+        return tb - ta;
       });
 
     if (finished.length) setCurrentMatchId(finished[0].id);
@@ -128,14 +119,12 @@ export function initSchedule({ tournamentData }) {
     return `${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 
-  /* 相对时间：只显示最大单位
-     返回 { text, started } 或 null */
   function formatRelativeTime(iso) {
     if (!iso) return null;
     const t = new Date(iso).getTime();
     if (!Number.isFinite(t)) return null;
 
-    const diffMs = Date.now() - t;   // >0 = 已开始；<0 = 未开始
+    const diffMs = Date.now() - t;
     const absSec = Math.floor(Math.abs(diffMs) / 1000);
 
     const day  = Math.floor(absSec / 86400);
@@ -173,18 +162,15 @@ export function initSchedule({ tournamentData }) {
     const roundMatches = matches.filter(m => m.roundId === currentRound.id);
     autoSelect(roundMatches, currentRound);
 
-    /* 已结束 / 未结束 */
     const finished   = roundMatches.filter(m => isFinished(m, currentRound));
     const unfinished = roundMatches.filter(m => !isFinished(m, currentRound));
 
-    /* RECENT：时间升序 */
     const recent = [...finished].sort((a, b) => {
       const ta = a.date ? new Date(a.date).getTime() : 0;
       const tb = b.date ? new Date(b.date).getTime() : 0;
       return ta - tb;
     });
 
-    /* UPCOMING：时间降序，剔除选中 */
     const upcoming = unfinished
       .filter(m => m.id !== currentMatchId)
       .sort((a, b) => {
@@ -213,7 +199,6 @@ export function initSchedule({ tournamentData }) {
     const colsEl = document.createElement('div');
     colsEl.className = 'sch-cols';
 
-    /* RECENT */
     const recentColEl = document.createElement('div');
     recentColEl.className = 'sch-col sch-col--recent';
 
@@ -229,7 +214,6 @@ export function initSchedule({ tournamentData }) {
 
     colsEl.appendChild(recentColEl);
 
-    /* UPCOMING */
     const upcomingColEl = document.createElement('div');
     upcomingColEl.className = 'sch-col sch-col--upcoming';
 
@@ -298,31 +282,43 @@ export function initSchedule({ tournamentData }) {
 
     if (!m.team1Acronym && !m.team2Acronym) row.classList.add('is-empty');
 
-    /* ---------- 比分显示 ----------
-       · 选中 → 始终显示（未开始即 0-0，随比赛实时更新）
-       · 已结束（非选中）→ 显示最终比分
-       · 其它 → 不显示
-    */
     const hasScore1 = m.team1Score != null;
     const hasScore2 = m.team2Score != null;
 
+    const n1 = Number(m.team1Score);
+    const n2 = Number(m.team2Score);
+    const ff1 = hasScore1 && n1 === -1;
+    const ff2 = hasScore2 && n2 === -1;
+
+    /* ---------- 比分显示 ---------- */
     let score1 = '';
     let score2 = '';
 
     if (isSelected) {
-      score1 = String(Number(m.team1Score) || 0);
-      score2 = String(Number(m.team2Score) || 0);
+      score1 = ff1 ? 'FF' : String(Number(m.team1Score) || 0);
+      score2 = ff2 ? 'FF' : String(Number(m.team2Score) || 0);
     } else if (finished) {
-      score1 = hasScore1 ? String(m.team1Score) : '';
-      score2 = hasScore2 ? String(m.team2Score) : '';
+      score1 = ff1 ? 'FF' : (hasScore1 ? String(m.team1Score) : '');
+      score2 = ff2 ? 'FF' : (hasScore2 ? String(m.team2Score) : '');
     }
 
-    /* ---------- 获胜方：仅已结束 ---------- */
-    const hasBoth = hasScore1 && hasScore2;
-    const s1 = Number(m.team1Score);
-    const s2 = Number(m.team2Score);
-    const redWin  = finished && hasBoth && Number.isFinite(s1) && Number.isFinite(s2) && s1 > s2;
-    const blueWin = finished && hasBoth && Number.isFinite(s1) && Number.isFinite(s2) && s2 > s1;
+    /* ---------- 胜负高亮（含 FF） ---------- */
+    let redWin  = false;
+    let blueWin = false;
+
+    if (finished) {
+      if (ff1 && ff2) {
+        /* 双方 FF → 都不高亮 */
+      } else if (ff1) {
+        blueWin = true;
+      } else if (ff2) {
+        redWin = true;
+      } else if (hasScore1 && hasScore2
+              && Number.isFinite(n1) && Number.isFinite(n2)) {
+        redWin  = n1 > n2;
+        blueWin = n2 > n1;
+      }
+    }
 
     row.innerHTML = `
       <div class="sch-match__time"></div>

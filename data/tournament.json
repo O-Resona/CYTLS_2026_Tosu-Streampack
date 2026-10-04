@@ -860,8 +860,8 @@
       "roundId": "swiss-round-1",
       "team1Acronym": "貓鴨",
       "team2Acronym": "左右手",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": -1,
       "date": "2026-10-04T16:00:00+08:00"
     },
     {
@@ -869,17 +869,17 @@
       "roundId": "swiss-round-1",
       "team1Acronym": "泥土玩家",
       "team2Acronym": "壓力克絲",
-      "team1Score": null,
-      "team2Score": null,
-      "date": "2026-10-04T18:00:00+08:00"
+      "team1Score": 5,
+      "team2Score": 2,
+      "date": "2026-10-04T17:30:00+08:00"
     },
     {
       "id": 3,
       "roundId": "swiss-round-1",
       "team1Acronym": "TJQQ",
       "team2Acronym": "doro",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 0,
       "date": "2026-10-03T22:30:00+08:00"
     },
     {

@@ -5,24 +5,10 @@
  *   A（打图中）：左下地图卡 | 右下四维
  *   B（未开始/结束）：左下聊天框 | 右下四维，地图卡叠在四维上方
  *
- * 队伍 HUD（头像/名称/星星）与聊天框由全局组件负责，
- * 本文件不再维护队伍/聊天相关的 DOM。
- *
- * 自动加星逻辑仍在本文件：
- *   打图结束时直接比较双方本局最终分数，高者加星
- *
- * 玩家长条消耗也移到本文件：
- *   打图结束时把本局上场玩家写入 localStorage['cyt2026.playerRounds']，
- *   并派发 window 'player-rounds-changed'，mappool 页据此刷新长条。
- *
- * 打图结束后的切页：
- *   - 决胜（任一队 >= ceil(bestOf/2)）→ 交给 winnerWatcher
- *   - 非决胜 → 只在 spector 退出 result（previewPlaying=true）时切回 mappool
- *
- * 切页保护：
- *   page:deactivated 会 transitionToken++，让任何挂起的
- *   transitionToA / transitionToB 在下一次 await 后立即 return，
- *   避免切走后仍在后台显示 chatBox 或改动布局状态。
+ * 自动加星：打图结束时直接比较双方本局最终分数，高者加星。
+ * 玩家长条消耗：打图结束时把上场玩家写入 localStorage，并派发事件。
+ * 切页保护：page:deactivated 会 transitionToken++，中断挂起的 transition。
+ * FF：isMatchFinished 识别 teamXScore === -1。
  */
 
 import { MapCard }    from '../components/mapCard.js';
@@ -32,10 +18,9 @@ import { playAutoTransition } from '../services/autoTransition.js';
 const CURRENT_MATCH_KEY  = 'cyt2026.currentMatchId';
 const PLAYER_ROUNDS_KEY  = 'cyt2026.playerRounds';
 
-/* lazer mp 实测：0 = 打图中 */
 const PLAYING_IPC_STATE = 0;
 
-const EXIT_DELAY        = 10000;    /* 打图结束 → 聊天框/地图卡动画 */
+const EXIT_DELAY        = 10000;
 const A_TO_B_FADE       = 500;
 const B_TO_A_FADE       = 500;
 
@@ -55,7 +40,7 @@ export function initPlaying({
   if (!stageEl) return;
 
   /* =========================================
-     DOM（地图卡 / 分数 / 四维）
+     DOM
      ========================================= */
 
   const el = {
@@ -70,7 +55,7 @@ export function initPlaying({
   };
 
   /* =========================================
-     分数数字的平滑缓冲
+     分数数字平滑
      ========================================= */
 
   const SCORE_SMOOTH = 0.15;
@@ -79,7 +64,6 @@ export function initPlaying({
     right: { current: 0, target: 0, raf: null },
   };
 
-  /* 分数元素宽度缓存：按 textContent.length 缓存，避免每帧 offsetWidth 强制回流 */
   const scoreWidthCache = {
     left:  { len: -1, width: 0 },
     right: { len: -1, width: 0 },
@@ -159,7 +143,7 @@ export function initPlaying({
   }
 
   /* =========================================
-     绿幕宽度（px 制，960 ~ 1920）
+     绿幕宽度
      ========================================= */
 
   const greenEl      = pageEl.querySelector('.pl-green-screen');
@@ -256,10 +240,7 @@ export function initPlaying({
   let transitionToken = 0;
   let hasInitStage = false;
 
-  /* 本轮打图是否已结束（等待 spector 退出 result） */
   let _roundEnded = false;
-
-  /* 本局参与的玩家列表（来自 osu 的 ipcClients） */
   let _lastRoundPlayers = [];
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -310,7 +291,7 @@ export function initPlaying({
 
     statsEl?.classList.add('is-solid');
 
-    /* 只有还停在 playing 页才显示 chatBox，防止切页后污染其它页面 */
+    /* 只有还停在 playing 页才显示 chatBox */
     if (document.querySelector('.page.active')?.dataset.page === 'playing') {
       chatBox?.unblock();
       chatBox?.show();
@@ -339,7 +320,7 @@ export function initPlaying({
   }
 
   /* =========================================
-     分数条宽度：分段增长
+     分数条宽度
      ========================================= */
 
   function computeBarWidth(diff) {
@@ -516,13 +497,19 @@ export function initPlaying({
     return tournamentData.getMatch(id);
   }
 
+  /* 比赛是否已结束（含 FF） */
   function isMatchFinished(match) {
     if (!match) return false;
+
+    const s1 = Number(match.team1Score);
+    const s2 = Number(match.team2Score);
+
+    /* FF：任一方 -1 → 已结束 */
+    if (s1 === -1 || s2 === -1) return true;
+
     const round = tournamentData.getRound(match.roundId);
     const bestOf = Number(round?.bestOf) || 9;
     const maxStars = Math.ceil(bestOf / 2);
-    const s1 = Number(match.team1Score) || 0;
-    const s2 = Number(match.team2Score) || 0;
     return (s1 >= maxStars) || (s2 >= maxStars);
   }
 
@@ -550,7 +537,6 @@ export function initPlaying({
      ========================================= */
 
   function handlePlaying(isPlaying, roundPlayers) {
-    /* 缓存本局参与的玩家 */
     if (isPlaying && Array.isArray(roundPlayers) && roundPlayers.length) {
       _lastRoundPlayers = roundPlayers;
     }
@@ -578,7 +564,7 @@ export function initPlaying({
       transitionToA();
     } else {
       handleRoundEnd();
-      applyPlayerRoundConsumption();   /* ← 本局结束：写 localStorage + 派发事件 */
+      applyPlayerRoundConsumption();
       _roundEnded = true;
       cancelExitTimer();
       exitTimer = setTimeout(() => {
@@ -620,8 +606,11 @@ export function initPlaying({
       return;
     }
 
-    scores.left  = Number(currentMatch.team1Score) || 0;
-    scores.right = Number(currentMatch.team2Score) || 0;
+    /* FF（-1）视作 0 显示 */
+    const raw1 = Number(currentMatch.team1Score);
+    const raw2 = Number(currentMatch.team2Score);
+    scores.left  = raw1 === -1 ? 0 : (raw1 || 0);
+    scores.right = raw2 === -1 ? 0 : (raw2 || 0);
 
     jumpScore('left',  scores.left);
     jumpScore('right', scores.right);
@@ -650,7 +639,7 @@ export function initPlaying({
 
   pageEl.addEventListener('page:deactivated', () => {
     cancelExitTimer();
-    transitionToken++;            /* 打断任何挂起的 transitionToA / transitionToB */
+    transitionToken++;
     if (greenPanel) greenPanel.hidden = true;
   });
 
