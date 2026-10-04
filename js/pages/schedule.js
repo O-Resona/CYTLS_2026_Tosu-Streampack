@@ -165,11 +165,13 @@ export function initSchedule({ tournamentData }) {
     const finished   = roundMatches.filter(m => isFinished(m, currentRound));
     const unfinished = roundMatches.filter(m => !isFinished(m, currentRound));
 
-    const recent = [...finished].sort((a, b) => {
-      const ta = a.date ? new Date(a.date).getTime() : 0;
-      const tb = b.date ? new Date(b.date).getTime() : 0;
-      return ta - tb;
-    });
+    const recent = finished
+      .filter(m => m.id !== currentMatchId)
+      .sort((a, b) => {
+        const ta = a.date ? new Date(a.date).getTime() : 0;
+        const tb = b.date ? new Date(b.date).getTime() : 0;
+        return ta - tb;
+      });
 
     const upcoming = unfinished
       .filter(m => m.id !== currentMatchId)

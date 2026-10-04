@@ -6,7 +6,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  padding: 226px 100px 140px 150px;
+  padding: 180px 100px 140px 150px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;

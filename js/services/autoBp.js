@@ -14,6 +14,12 @@
  *   - 手动改 UI 后调 syncFromUI，autoBp 采纳 UI 为准
  *   - 若尚未 started（未识别到 roll），但 UI 已有手动 BP 状态，
  *     syncFromUI 会自动冷启动状态机，让后续换图 → pick 依然可用
+ *
+ * protect / ban / pick 语义（关键）：
+ *   · protect 只保护该图不被 ban，被 protect 的图仍可被 pick
+ *   · ban 的图彻底出局，不能再 pick
+ *   · 已 pick 的图不能再次 pick
+ *   因此 pick 阶段的占用判断 _modsBlockedForPick() 只查 ban + pick，不查 protect。
  */
 
 const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
@@ -177,7 +183,7 @@ export class AutoBp {
 
     const mods = this._extractMods(text);
     if (!mods) return;                 // 识别失败 → 忽略，不动状态
-    if (this._modsUsed(mods)) return;
+    if (this._modsUsed(mods)) return;  // protect / ban 阶段：任何已用都不能再用
 
     const team = this.teams[side];
     if (action === 'protect') team.protect = mods;
@@ -224,11 +230,24 @@ export class AutoBp {
     return null;
   }
 
+  /* =========================================
+     占用判断
+     ========================================= */
+
+  /* protect / ban 阶段：protect / ban / pick 全部算「已用」，不能再被选 */
   _modsUsed(mods) {
     const r = this.teams.red;
     const b = this.teams.blue;
     return r.protect === mods || r.bans.includes(mods) || r.picks.includes(mods)
         || b.protect === mods || b.bans.includes(mods) || b.picks.includes(mods);
+  }
+
+  /* pick 阶段：只有 ban / pick 会阻止 pick；protect 不阻止（被保护的图仍可被 pick） */
+  _modsBlockedForPick(mods) {
+    const r = this.teams.red;
+    const b = this.teams.blue;
+    return r.bans.includes(mods) || r.picks.includes(mods)
+        || b.bans.includes(mods) || b.picks.includes(mods);
   }
 
   /* =========================================
@@ -252,7 +271,7 @@ export class AutoBp {
     if (!bm?.mods) return;
 
     const mods = bm.mods;
-    if (this._modsUsed(mods)) return;
+    if (this._modsBlockedForPick(mods)) return;   /* 被 ban 或已 pick → 跳过 */
 
     this._lastPickMapId = idStr;
 

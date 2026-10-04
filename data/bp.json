@@ -392,6 +392,67 @@
           "bluePlayer": "Qualifiers"
         }
       ]
+    },
+    {
+      "id": 8,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Blue",
+          "redPlayer": "Crystal",
+          "bluePlayer": "MyAngelSora"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Red",
+          "redPlayer": "Crystal",
+          "bluePlayer": "z980838928"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "pr1mary",
+          "bluePlayer": "MyAngelSora"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Red",
+          "redPlayer": "Crystal",
+          "bluePlayer": "MyAngelSora"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Blue",
+          "redPlayer": "pr1mary",
+          "bluePlayer": "z980838928"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "Crystal",
+          "bluePlayer": "MyAngelSora"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Red",
+          "redPlayer": "pr1mary",
+          "bluePlayer": "z980838928"
+        }
+      ]
     }
   ]
 }
