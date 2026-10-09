@@ -292,6 +292,44 @@
   width: 100%;
 }
 
+/* ---------- 当前 pick + 展示按钮 ---------- */
+
+.mappool-panel .round-selector {
+  position: relative;
+  padding-bottom: 30px;              /* 给按钮预留空间 */
+}
+
+.mappool-panel .mp-btn--show-data {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(77, 155, 255, 0.45);
+  background: rgba(77, 155, 255, 0.15);
+  color: #4d9bff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+  z-index: 6;
+  white-space: nowrap;
+}
+
+.mappool-panel .mp-btn--show-data:hover {
+  background: rgba(77, 155, 255, 0.28);
+  border-color: rgba(77, 155, 255, 0.7);
+}
+
+.mappool-panel .mp-btn--show-data.is-active {
+  background: rgba(246, 219, 0, 0.18);
+  border-color: rgba(246, 219, 0, 0.55);
+  color: #F6DB00;
+}
+
 .mappool-panel .selected-option {
   width: 100%;
   padding: 12px 14px;
@@ -700,4 +738,243 @@
 .first-picker-options input[type="radio"] {
   accent-color: #4d9bff;
   cursor: pointer;
+}
+
+/* =========================================
+   左侧 BP / 出分面板
+   ========================================= */
+
+[data-page="mappool"] .score-overlay {
+  position: absolute;
+  left: 0;
+  top: 227px;                              /* ← 230 → 227，整体上移 3px */
+  width: 780px;
+  max-height: 640px;
+  z-index: 20;
+
+  opacity: 0;
+  transform: translateX(-100%);
+  transition:
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity   0.4s ease;
+
+  pointer-events: none;
+  padding: 20px 24px 22px;
+  box-sizing: border-box;
+
+  background: rgba(30, 40, 58, 0.78);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+
+  border: 1px solid rgba(140, 185, 255, 0.25);
+  border-left: none;
+  border-radius: 0 14px 14px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+
+  font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  color: #f8f8f6;
+  overflow: hidden;
+}
+
+[data-page="mappool"] .score-overlay.is-visible {
+  opacity: 0.9;
+  transform: translateX(0);
+}
+
+/* ---------- 标题行：slot 居中 + 左侧两小行统计 ---------- */
+
+[data-page="mappool"] .score-overlay__title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  font-size: 24px;                         /* ← 28 → 24 */
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #f8f8f6;
+
+  margin-bottom: 10px;
+  padding: 6px 0 8px;
+  min-height: 56px;
+
+  border-bottom: 1px solid rgba(140, 185, 255, 0.25);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+[data-page="mappool"] .score-overlay__stats {
+  position: absolute;
+  left: 34px;
+  top: 4px;
+  transform: none;
+
+  font-size: 18px;
+  line-height: 1.3;
+  text-align: left;
+  text-transform: none;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #f8f8f6;
+
+  white-space: nowrap;
+}
+
+/* ---------- 正文：最多显示 10 行，溢出滚动 ---------- */
+
+[data-page="mappool"] .score-overlay__body {
+  font-size: 18px;
+  overflow: hidden;
+}
+
+/* ---------- 表格 ---------- */
+
+[data-page="mappool"] .so-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+[data-page="mappool"] .so-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 440px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  /* 需要滚动时允许手动滚轮（不影响面板其它区域穿透） */
+  pointer-events: none;
+}
+
+[data-page="mappool"] .so-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* 面板可见、且内容溢出 → 只有滚动容器接收鼠标事件 */
+[data-page="mappool"] .score-overlay.is-visible .so-scroll {
+  pointer-events: auto;
+}
+
+/* 内容不溢出时不接收事件（不影响底下地图卡点击） */
+[data-page="mappool"] .score-overlay.is-visible .so-scroll:not(.is-scrollable) {
+  pointer-events: none;
+}
+
+[data-page="mappool"] .so-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px 9px 32px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+[data-page="mappool"] .so-row--head {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #a5b3c7;
+  padding: 7px 12px 7px 32px;
+}
+
+/* ---------- 红 / 蓝行：更明显、不透明一些 ---------- */
+
+[data-page="mappool"] .so-row--red {
+  background: rgba(174, 19, 24, 0.45);
+  border-left: 4px solid #ff2a30;
+  box-shadow: inset 0 0 0 1px rgba(255, 42, 48, 0.55);
+}
+
+[data-page="mappool"] .so-row--blue {
+  background: rgba(22, 97, 171, 0.45);
+  border-left: 4px solid #2d8cff;
+  box-shadow: inset 0 0 0 1px rgba(45, 140, 255, 0.55);
+}
+
+[data-page="mappool"] .so-row--neutral {
+  /* 使用默认 .so-row 背景即可 */
+}
+
+/* ---------- 单元格 ---------- */
+
+[data-page="mappool"] .so-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-page="mappool"] .so-cell--team {
+  flex: 0 0 110px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+[data-page="mappool"] .so-cell--protect {
+  flex: 0 0 220px;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+[data-page="mappool"] .so-cell--ban {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+[data-page="mappool"] .so-row--red  .so-cell--team { color: #ff9a9d; }
+[data-page="mappool"] .so-row--blue .so-cell--team { color: #9ac8ff; }
+
+[data-page="mappool"] .so-cell--player {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-weight: 600;
+  color: #dbe6f5;
+}
+
+[data-page="mappool"] .so-cell--score {
+  flex: 0 0 140px;
+  text-align: left;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-page="mappool"] .so-cell--acc {
+  flex: 0 0 110px;
+  text-align: left;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: #dbe6f5;
+}
+
+[data-page="mappool"] .so-cell--cb {
+  flex: 0 0 110px;
+  text-align: left;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: #dbe6f5;
+}
+
+/* ---------- 该列最大值：加粗 + 轻发光 ---------- */
+
+[data-page="mappool"] .so-cell--score.is-max,
+[data-page="mappool"] .so-cell--acc.is-max,
+[data-page="mappool"] .so-cell--cb.is-max {
+  font-weight: 800;
+  color: #fff8d6;
+  text-shadow: 0 0 5px rgba(246, 219, 0, 0.55);
 }

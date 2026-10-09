@@ -6,10 +6,12 @@
       "seed": "1",
       "players": [
         {
-          "username": "misha awa"
+          "username": "misha awa",
+          "id": "14503423"
         },
         {
-          "username": "Ruyaya"
+          "username": "Ruyaya",
+          "id": "16288992"
         }
       ]
     },
@@ -19,10 +21,12 @@
       "seed": "2",
       "players": [
         {
-          "username": "GAO HAO"
+          "username": "GAO HAO",
+          "id": "8964050"
         },
         {
-          "username": "Flyer"
+          "username": "Flyer",
+          "id": "9767342"
         }
       ]
     },
@@ -32,10 +36,12 @@
       "seed": "3",
       "players": [
         {
-          "username": "4k110sh1"
+          "username": "4k110sh1",
+          "id": "11375105"
         },
         {
-          "username": "yutro"
+          "username": "yutro",
+          "id": "6338477"
         }
       ]
     },
@@ -45,10 +51,12 @@
       "seed": "4",
       "players": [
         {
-          "username": "Zkyler"
+          "username": "Zkyler",
+          "id": "15530617"
         },
         {
-          "username": "Finloge"
+          "username": "Finloge",
+          "id": "15085098"
         }
       ]
     },
@@ -58,10 +66,12 @@
       "seed": "5",
       "players": [
         {
-          "username": "Barometz"
+          "username": "Barometz",
+          "id": "9539163"
         },
         {
-          "username": "Moonlit111"
+          "username": "Moonlit111",
+          "id": "12215507"
         }
       ]
     },
@@ -71,10 +81,12 @@
       "seed": "6",
       "players": [
         {
-          "username": "[SHK]oliwakami"
+          "username": "[SHK]oliwakami",
+          "id": "3046750"
         },
         {
-          "username": "Ledeau_Fox"
+          "username": "Ledeau_Fox",
+          "id": "15816872"
         }
       ]
     },
@@ -84,10 +96,12 @@
       "seed": "7",
       "players": [
         {
-          "username": "Pompeijwag"
+          "username": "Pompeijwag",
+          "id": "9315589"
         },
         {
-          "username": "MogenNotFound"
+          "username": "MogenNotFound",
+          "id": "14494010"
         }
       ]
     },
@@ -97,10 +111,12 @@
       "seed": "8",
       "players": [
         {
-          "username": "Crystal"
+          "username": "Crystal",
+          "id": "1646397"
         },
         {
-          "username": "pr1mary"
+          "username": "pr1mary",
+          "id": "15100415"
         }
       ]
     },
@@ -110,10 +126,12 @@
       "seed": "9",
       "players": [
         {
-          "username": "z980838928"
+          "username": "z980838928",
+          "id": "1355695"
         },
         {
-          "username": "MyAngelSora"
+          "username": "MyAngelSora",
+          "id": "2987120"
         }
       ]
     },
@@ -123,10 +141,12 @@
       "seed": "10",
       "players": [
         {
-          "username": "Qualifiers"
+          "username": "Qualifiers",
+          "id": "8186536"
         },
         {
-          "username": "Name94"
+          "username": "Name94",
+          "id": "13284882"
         }
       ]
     },
@@ -136,10 +156,12 @@
       "seed": "11",
       "players": [
         {
-          "username": "nuthing"
+          "username": "nuthing",
+          "id": "6386735"
         },
         {
-          "username": "Hibiki"
+          "username": "Hibiki",
+          "id": "5413624"
         }
       ]
     },
@@ -149,10 +171,12 @@
       "seed": "12",
       "players": [
         {
-          "username": "aaront"
+          "username": "aaront",
+          "id": "4641477"
         },
         {
-          "username": "mcy4"
+          "username": "mcy4",
+          "id": "2165650"
         }
       ]
     },
@@ -162,10 +186,12 @@
       "seed": "13",
       "players": [
         {
-          "username": "Bochi the osu"
+          "username": "Bochi the osu",
+          "id": "30284920"
         },
         {
-          "username": "fuyukiS"
+          "username": "fuyukiS",
+          "id": "32657919"
         }
       ]
     },
@@ -175,10 +201,12 @@
       "seed": "14",
       "players": [
         {
-          "username": "BurgerKing"
+          "username": "BurgerKing",
+          "id": "13013147"
         },
         {
-          "username": "Diaostrophism"
+          "username": "Diaostrophism",
+          "id": "2317789"
         }
       ]
     },
@@ -188,10 +216,12 @@
       "seed": "15",
       "players": [
         {
-          "username": "FakeAlexChio"
+          "username": "FakeAlexChio",
+          "id": "16656942"
         },
         {
-          "username": "Tokirii"
+          "username": "Tokirii",
+          "id": "11563694"
         }
       ]
     },
@@ -201,10 +231,12 @@
       "seed": "16",
       "players": [
         {
-          "username": "ming0328ming"
+          "username": "ming0328ming",
+          "id": "2984074"
         },
         {
-          "username": "rlsc1109"
+          "username": "rlsc1109",
+          "id": "20285591"
         }
       ]
     }

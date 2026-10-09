@@ -1,7 +1,7 @@
 /**
  * Mappool 子页面
  *
- * 图池展示 + BP 交互 + 自动 BP（AutoBp）
+ * 图池展示 + BP 交互 + 自动 BP（AutoBp）+ 左侧数据面板
  *
  * 图池会跟随当前选中比赛所属轮次自动切换。
  * protect 与 ban/pick 互相独立；自动与手动操作共存，手动可覆盖。
@@ -15,10 +15,18 @@
  *
  * 切页：仅在 osu 发出「进入打图」事件时自动切到 playing。
  *       pick 地图本身不触发切页。
+ *
+ * 左侧数据面板：
+ *   · BP 开始（roll 或首次 BP 动作）→ 显示两队之前场次的 protect / ban（20s 收）
+ *   · pick 阶段换图后 4s → 显示该图历史成绩（按 score 降序，红蓝标当前比赛双方）
+ *   · 手动「展示数据」按钮 / 下拉选择图 → 立即展示
+ *   · 切页强制隐藏
  */
 
 import { AutoBp } from '../services/autoBp.js';
 import { playAutoTransition } from '../services/autoTransition.js';
+import { ScoresData } from '../services/scoresData.js';
+import { ScoreOverlay } from '../components/scoreOverlay.js';
 
 const MOD_ICONS = {
   LM: 'src/mods/LM.png',
@@ -85,8 +93,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   const panel = document.getElementById('mappoolPanel');
   if (!panel) return;
 
-  const selectedPoolEl  = panel.querySelector('#mappoolSelectedRound');
-  const poolOptionsEl   = panel.querySelector('#mappoolRoundOptions');
+  const selPickEl    = panel.querySelector('#mappoolSelectedPick');
+  const pickOptsEl   = panel.querySelector('#mappoolPickOptions');
+  const btnShowData  = panel.querySelector('#mappoolShowDataBtn');
   const btnRedProtect   = panel.querySelector('#mappoolRedProtectBtn');
   const btnBlueProtect  = panel.querySelector('#mappoolBlueProtectBtn');
   const btnRedBan       = panel.querySelector('#mappoolRedBanBtn');
@@ -102,9 +111,17 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   let currentPool = pools[0] || null;
   let currentMode = 'redProtect';
   let maps        = [];
+  let _currentPickMapId = null;
 
-  const mapStates     = new Map();   // mapId -> { action:'ban'|'pick', team:'red'|'blue'|'tb' }
-  const protectStates = new Map();   // mapId -> { team }
+  const mapStates     = new Map();
+  const protectStates = new Map();
+
+  /* ---------- 左侧数据面板 / 成绩数据 ---------- */
+  const overlayEl    = pageEl.querySelector('#scoreOverlay');
+  const scoreOverlay = overlayEl
+    ? new ScoreOverlay(overlayEl, { onChange: () => updateShowDataBtn() })
+    : null;
+  const scoresData   = new ScoresData({ tournamentData });
 
   if (!pools.length) {
     wrapper.innerHTML = '<div class="mappool-empty">没有可用的图池数据</div>';
@@ -164,20 +181,12 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     try { localStorage.setItem(PLAYER_ROUNDS_KEY, JSON.stringify(d)); } catch {}
   }
 
-  /*
-   * getUsed：
-   *   1. 优先用 localStorage（手动调整 / 本局打图累计）
-   *   2. localStorage 无记录 → 若该比赛已结束，回退到 bp.json 的 Pick 统计
-   *      （只算 Pick，跳过 TB）
-   */
   function getUsed(matchId, name) {
     if (matchId == null || !name) return 0;
 
-    /* 1. 优先 localStorage */
     const localUsed = loadPlayerRounds()[String(matchId)]?.[name];
     if (localUsed != null) return Number(localUsed) || 0;
 
-    /* 2. 已结束的比赛 → bp.json 统计 */
     if (tournamentData.isMatchFinished(matchId)) {
       const counts = tournamentData.getPlayerRoundsFromBp(matchId);
       if (counts) {
@@ -187,7 +196,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
         if (key) return counts[key];
       }
     }
-
     return 0;
   }
 
@@ -306,7 +314,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
 
   /* =========================================
      打图状态：仅保留「进图 → 切页」逻辑
-     扣条逻辑已在 playing.js 里处理
      ========================================= */
 
   let _lastPlayingState = null;
@@ -315,7 +322,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     if (!osuSocket) return;
 
     osuSocket.on('playing', (isPlaying) => {
-      /* 刚进图（false → true）且当前在 mappool 页 → 切到 playing */
       if (isPlaying && _lastPlayingState === false) {
         const activePage = document.querySelector('.page.active');
         if (activePage?.dataset.page === 'mappool') {
@@ -336,7 +342,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       }
     });
 
-    /* 同 tab 内打图结束 → 刷新长条 */
     window.addEventListener('player-rounds-changed', renderPlayers);
   }
 
@@ -471,7 +476,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     return /^TB/i.test(mods);
   }
 
-  /* 广播给同 tab 的其它组件（MapCard 等） */
   function notifyBpChanged() {
     window.dispatchEvent(new CustomEvent('bp-actions-changed'));
   }
@@ -483,11 +487,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const mapTitle = card.dataset.mapTitle;
     const isTB     = isTBMap(card);
 
-    /* TB 图：protect / ban 一律忽略 */
     if (isTB && (action === 'protect' || action === 'ban')) return;
 
     /* ---------- protect ---------- */
-
     if (action === 'protect') {
       const existing = protectStates.get(mapId);
       if (toggle && existing && existing.team === team) {
@@ -506,7 +508,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     }
 
     /* ---------- ban ---------- */
-
     if (action === 'ban') {
       const existing = mapStates.get(mapId);
       if (toggle && existing && existing.team === team && existing.action === action) {
@@ -531,11 +532,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     }
 
     /* ---------- pick ---------- */
-
     if (action === 'pick') {
       const existing = mapStates.get(mapId);
 
-      /* TB：不分队伍，统一紫框 */
       if (isTB) {
         if (toggle && existing && existing.action === 'pick') {
           card.classList.remove('purpleBorder');
@@ -552,7 +551,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
         return;
       }
 
-      /* 普通图 pick */
       if (toggle && existing && existing.team === team && existing.action === action) {
         card.classList.remove('redBorder', 'blueBorder', 'purpleBorder');
         mapStates.delete(mapId);
@@ -633,7 +631,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
      UI → AutoBp 同步
      ========================================= */
 
-  /* 从 UI 读取完整 BP 状态快照（mods 为 key） */
   function buildUISnapshotForAutoBp() {
     const protects = { red: [], blue: [] };
     const bans     = { red: [], blue: [] };
@@ -660,7 +657,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     return { protects, bans, picks };
   }
 
-  /* 把 UI 最新状态同步给 autoBp */
   function syncAutoBpToAuto(action, side, mapId) {
     if (!autoBp) return;
 
@@ -848,6 +844,296 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   /* =========================================
+     左侧信息面板：BP / 出分
+     ========================================= */
+
+  let _bpOverlayShown = false;
+  let _lastBpMatchId  = null;
+  let _lastScoreMapId = null;
+  let _scoreTimer     = null;
+
+  function formatNum(n) {
+    return (Number(n) || 0).toLocaleString('en-US');
+  }
+
+  function fmtPct(v) {
+    return Number.isFinite(v) ? (v * 100).toFixed(2) + '%' : '--';
+  }
+
+  /* ---------- BP 开场：两队之前场次的 protect / ban ---------- */
+
+  function onBpStateChange() {
+    if (!scoreOverlay || !autoBp) return;
+
+    const matchId = getCurrentMatchId();
+
+    if (matchId !== _lastBpMatchId) {
+      _lastBpMatchId  = matchId;
+      _bpOverlayShown = false;
+    }
+
+    const s = autoBp.getState();
+    if (!s.started) return;
+    if (_bpOverlayShown) return;
+    _bpOverlayShown = true;
+
+    showBpOverlay();
+  }
+
+  function showBpOverlay() {
+    if (document.querySelector('.page.active')?.dataset.page !== 'mappool') return;
+
+    const matchId = getCurrentMatchId();
+    if (matchId == null) return;
+    const match = tournamentData.getMatch(matchId);
+    if (!match) return;
+
+    const t1 = match.team1Acronym ? tournamentData.getTeam(match.team1Acronym) : null;
+    const t2 = match.team2Acronym ? tournamentData.getTeam(match.team2Acronym) : null;
+
+    const h1 = match.team1Acronym
+      ? tournamentData.getTeamBpHistory(match.team1Acronym, { excludeMatchId: matchId })
+      : { protects: [], bans: [] };
+    const h2 = match.team2Acronym
+      ? tournamentData.getTeamBpHistory(match.team2Acronym, { excludeMatchId: matchId })
+      : { protects: [], bans: [] };
+
+    const fmt = arr => (arr && arr.length) ? arr.join('  /  ') : '—';
+
+    const bodyHtml = `
+      <div class="so-table">
+        <div class="so-row so-row--head">
+          <span class="so-cell so-cell--team">TEAM</span>
+          <span class="so-cell so-cell--protect">PROTECT</span>
+          <span class="so-cell so-cell--ban">BAN</span>
+        </div>
+        <div class="so-row so-row--red">
+          <span class="so-cell so-cell--team">${escapeHtml(t1?.acronym || 'RED')}</span>
+          <span class="so-cell so-cell--protect">${escapeHtml(fmt(h1.protects))}</span>
+          <span class="so-cell so-cell--ban">${escapeHtml(fmt(h1.bans))}</span>
+        </div>
+        <div class="so-row so-row--blue">
+          <span class="so-cell so-cell--team">${escapeHtml(t2?.acronym || 'BLUE')}</span>
+          <span class="so-cell so-cell--protect">${escapeHtml(fmt(h2.protects))}</span>
+          <span class="so-cell so-cell--ban">${escapeHtml(fmt(h2.bans))}</span>
+        </div>
+      </div>
+    `;
+
+    scoreOverlay.show({
+      title: 'Previous BP',
+      bodyHtml,
+      duration: 20000,
+    });
+  }
+
+  /* ---------- 出分：当前图历史成绩 ---------- */
+
+  function onMapIdChange(mapId) {
+    if (mapId != null && mapId !== '') {
+      setPickMap(String(mapId));
+    }
+
+    if (!autoBp) return;
+    if (autoBp.getState().phase !== 'pick') return;
+    if (mapId == null || mapId === '') return;
+
+    const idStr = String(mapId);
+    if (idStr === _lastScoreMapId) return;
+    _lastScoreMapId = idStr;
+
+    if (_scoreTimer) clearTimeout(_scoreTimer);
+    _scoreTimer = setTimeout(() => {
+      _scoreTimer = null;
+      showScoreOverlay(idStr);
+    }, 4000);
+  }
+
+  async function showScoreOverlay(mapId) {
+    if (!scoreOverlay || !scoresData) return;
+    if (document.querySelector('.page.active')?.dataset.page !== 'mappool') return;
+
+    const poolId = currentPool?.id;
+    if (!poolId) return;
+
+    await scoresData.loadPool(poolId);
+
+    if (document.querySelector('.page.active')?.dataset.page !== 'mappool') return;
+
+    const rooms = scoresData.getRoomsForBeatmap(poolId, mapId);
+    if (!rooms.length) return;
+
+    const matchId = getCurrentMatchId();
+    const match   = matchId != null ? tournamentData.getMatch(matchId) : null;
+
+    const bm   = maps.find(m => String(m.id) === String(mapId));
+    const slot = bm?.rawMods || bm?.mod || '';
+
+    /* 该图池 BP 统计（跨轮次累计，取已完赛非 FF 的场次） */
+    let stats = null;
+    if (poolId && slot) {
+      const raw = tournamentData.getPoolBpStats(poolId, slot);
+      if (raw.total > 0) {
+        stats = {
+          protect: raw.protect / raw.total,
+          ban:     raw.ban     / raw.total,
+          pick:    raw.pick    / raw.total,
+        };
+      } else {
+        stats = { protect: null, ban: null, pick: null };
+      }
+    }
+
+    const title = buildScoreTitleHtml(slot, stats);
+    const bodyHtml = buildScoreTableHtml(rooms, match);
+
+    scoreOverlay.show({ title, bodyHtml, duration: 20000 });
+  }
+
+  function buildScoreTitleHtml(slot, stats) {
+    const slotHtml = escapeHtml(slot || 'MAP SCORES');
+
+    if (!stats) return slotHtml;
+
+    const p = fmtPct(stats.protect);
+    const b = fmtPct(stats.ban);
+    const k = fmtPct(stats.pick);
+
+    return `
+      <div class="score-overlay__stats">
+        <div>protect: ${p}&nbsp;&nbsp;&nbsp;ban: ${b}</div>
+        <div>pick: ${k}</div>
+      </div>
+      <span class="score-overlay__slot">${slotHtml}</span>
+    `;
+  }
+
+  function buildScoreTableHtml(rooms, match) {
+    const t1Acr = match?.team1Acronym || null;
+    const t2Acr = match?.team2Acronym || null;
+
+    const rows = [];
+
+    for (const room of rooms) {
+      for (const r of room.rows) {
+        const found = tournamentData.findPlayerById(r.userId);
+        const team  = found?.team || null;
+        const uname = found?.player?.username || `User ${r.userId}`;
+
+        let side = 'neutral';
+        if (team && t1Acr && team.acronym === t1Acr) side = 'red';
+        else if (team && t2Acr && team.acronym === t2Acr) side = 'blue';
+
+        rows.push({
+          teamName: team?.acronym || '—',
+          username: uname,
+          scoreRaw: Number(r.score) || 0,
+          score:    formatNum(r.score),
+          accRaw:   parseFloat(r.accuracy) || 0,
+          acc:      r.accuracy || '—',
+          cbRaw:    Number(r.maxCombo) || 0,
+          cb:       r.maxCombo != null ? formatNum(r.maxCombo) : '—',
+          side,
+        });
+      }
+    }
+
+    if (!rows.length) return '';
+
+    /* 按 score 降序 */
+    rows.sort((a, b) => b.scoreRaw - a.scoreRaw);
+
+    const maxScore = Math.max(...rows.map(r => r.scoreRaw));
+    const maxAcc   = Math.max(...rows.map(r => r.accRaw));
+    const maxCb    = Math.max(...rows.map(r => r.cbRaw));
+
+    const bodyHtml = rows.map(r => {
+      const scoreCls = r.scoreRaw === maxScore ? ' is-max' : '';
+      const accCls   = Math.abs(r.accRaw - maxAcc) < 1e-6 ? ' is-max' : '';
+      const cbCls    = r.cbRaw === maxCb ? ' is-max' : '';
+
+      return `
+        <div class="so-row so-row--${r.side}">
+          <span class="so-cell so-cell--team">${escapeHtml(r.teamName)}</span>
+          <span class="so-cell so-cell--player">${escapeHtml(r.username)}</span>
+          <span class="so-cell so-cell--score${scoreCls}">${escapeHtml(r.score)}</span>
+          <span class="so-cell so-cell--acc${accCls}">${escapeHtml(r.acc)}</span>
+          <span class="so-cell so-cell--cb${cbCls}">${escapeHtml(r.cb)}</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="so-table">
+        <div class="so-row so-row--head">
+          <span class="so-cell so-cell--team">TEAM</span>
+          <span class="so-cell so-cell--player">PLAYER</span>
+          <span class="so-cell so-cell--score">SCORE</span>
+          <span class="so-cell so-cell--acc">ACC</span>
+          <span class="so-cell so-cell--cb">COMBO</span>
+        </div>
+        <div class="so-scroll">
+          ${bodyHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  /* =========================================
+     当前 pick 框 / 选项 / 展示按钮
+     ========================================= */
+
+  function renderPickOptions() {
+    if (!pickOptsEl) return;
+    pickOptsEl.innerHTML = '';
+
+    maps.forEach(map => {
+      const opt = document.createElement('div');
+      opt.className = 'custom-option';
+      opt.dataset.mapId = String(map.id);
+      opt.textContent = map.rawMods || map.mod || '';
+      opt.classList.toggle('selected', String(map.id) === _currentPickMapId);
+
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        pickOptsEl.classList.remove('active');
+
+        setPickMap(String(map.id));
+
+        if (_scoreTimer) { clearTimeout(_scoreTimer); _scoreTimer = null; }
+        showScoreOverlay(String(map.id));
+      });
+
+      pickOptsEl.appendChild(opt);
+    });
+  }
+
+  function setPickMap(mapId) {
+    _currentPickMapId = (mapId != null && mapId !== '') ? String(mapId) : null;
+
+    const map = _currentPickMapId
+      ? maps.find(m => String(m.id) === _currentPickMapId)
+      : null;
+
+    if (selPickEl) {
+      selPickEl.textContent = map ? (map.rawMods || map.mod || '—') : '—';
+    }
+
+    if (pickOptsEl) {
+      pickOptsEl.querySelectorAll('.custom-option').forEach(o => {
+        o.classList.toggle('selected', o.dataset.mapId === _currentPickMapId);
+      });
+    }
+  }
+
+  function updateShowDataBtn() {
+    if (!btnShowData || !overlayEl) return;
+    const visible = overlayEl.classList.contains('is-visible');
+    btnShowData.textContent = visible ? '隐藏' : '展示数据';
+    btnShowData.classList.toggle('is-active', visible);
+  }
+
+  /* =========================================
      AutoBp 集成
      ========================================= */
 
@@ -858,7 +1144,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const card = findCardByMods(mods);
     if (!card) return;
 
-    /* 自动操作 → 同步左侧控制面板高亮 */
     const modeName = side === 'red'
       ? (action === 'protect' ? 'redProtect'
        : action === 'ban'     ? 'redBan'
@@ -878,7 +1163,10 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       osuSocket,
       tokenStore,
       onAction:      handleAutoAction,
-      onStateChange: () => syncModeFromAutoBp(),
+      onStateChange: () => {
+        syncModeFromAutoBp();
+        onBpStateChange();
+      },
     });
     autoBp.start();
 
@@ -909,7 +1197,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     syncModeFromAutoBp();
   }
 
-  /* 根据 autoBp 状态同步左侧黄框（带签名判重，只在状态真正变化时才改） */
   function syncModeFromAutoBp() {
     if (!autoBp) return;
     const s = autoBp.getState();
@@ -947,7 +1234,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     if (mode) setMode(mode);
   }
 
-  /* 重置签名并立刻重新同步 */
   function resetAutoBpModeSync() {
     _lastAutoBpModeSig = '';
     syncModeFromAutoBp();
@@ -963,36 +1249,21 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
 
   /* =========================================
-     图池选择器
+     图池切换
      ========================================= */
-
-  function renderPoolOptions() {
-    poolOptionsEl.innerHTML = '';
-    pools.forEach(p => {
-      const opt = document.createElement('div');
-      opt.className = 'custom-option';
-      opt.dataset.value = p.id;
-      opt.textContent = getMappoolLabel(p);
-      opt.classList.toggle('selected', p.id === currentPool?.id);
-      opt.addEventListener('click', (e) => {
-        e.stopPropagation();
-        switchPool(p.id);
-      });
-      poolOptionsEl.appendChild(opt);
-    });
-  }
 
   function switchPool(poolId) {
     const p = pools.find(x => x.id === poolId);
     if (!p) return;
+
     currentPool = p;
-    selectedPoolEl.textContent = getMappoolLabel(p);
-    poolOptionsEl.classList.remove('active');
-    poolOptionsEl.querySelectorAll('.custom-option').forEach(o => {
-      o.classList.toggle('selected', o.dataset.value === poolId);
-    });
     loadMapsForPool(p);
     renderLayout();
+    renderPickOptions();
+
+    const id = tokenStore?.get('mapid');
+    setPickMap(id ? String(id) : null);
+
     resetAutoBpModeSync();
   }
 
@@ -1009,11 +1280,21 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   btnReset      .addEventListener('click', resetAll);
   btnReload    ?.addEventListener('click', reloadFromJson);
 
-  selectedPoolEl.addEventListener('click', (e) => {
+  selPickEl?.addEventListener('click', (e) => {
     e.stopPropagation();
-    poolOptionsEl.classList.toggle('active');
+    pickOptsEl?.classList.toggle('active');
   });
-  document.addEventListener('click', () => poolOptionsEl.classList.remove('active'));
+  document.addEventListener('click', () => pickOptsEl?.classList.remove('active'));
+
+  btnShowData?.addEventListener('click', () => {
+    if (overlayEl?.classList.contains('is-visible')) {
+      scoreOverlay.hide();
+      if (_scoreTimer) { clearTimeout(_scoreTimer); _scoreTimer = null; }
+    } else if (_currentPickMapId) {
+      if (_scoreTimer) { clearTimeout(_scoreTimer); _scoreTimer = null; }
+      showScoreOverlay(_currentPickMapId);
+    }
+  });
 
   /* =========================================
      面板显隐
@@ -1025,9 +1306,20 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     restoreMapStates();
     renderPlayers();
     resetAutoBpModeSync();
+    updateShowDataBtn();
+
+    if (autoBp?.getState().started && !_bpOverlayShown) {
+      _lastBpMatchId = getCurrentMatchId();
+      _bpOverlayShown = true;
+      showBpOverlay();
+    }
   });
+
   pageEl.addEventListener('page:deactivated', () => {
     panel.hidden = true;
+    scoreOverlay?.hide();
+    if (_scoreTimer) { clearTimeout(_scoreTimer); _scoreTimer = null; }
+    updateShowDataBtn();
   });
 
   window.addEventListener('storage', (e) => {
@@ -1044,15 +1336,21 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
      ========================================= */
 
   loadMapsForPool(currentPool);
-  selectedPoolEl.textContent = getMappoolLabel(currentPool);
-  renderPoolOptions();
   renderLayout();
+  renderPickOptions();
+
+  const _initMapId = tokenStore?.get('mapid');
+  if (_initMapId) setPickMap(String(_initMapId));
+
   setMode('redProtect');
   bindBarEvents();
   bindOsuEvents();
   syncPoolWithCurrentMatch();
   renderPlayers();
   initAutoBp();
+  updateShowDataBtn();
+
+  tokenStore?.watchKey('mapid', (id) => onMapIdChange(id));
 
   if (pageEl.classList.contains('active')) panel.hidden = false;
 }

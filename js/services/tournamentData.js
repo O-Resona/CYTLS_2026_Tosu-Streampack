@@ -296,6 +296,122 @@ export class TournamentData {
     return counts;
   }
 
+  /* =========================================
+     某图池 BP 统计：某图被 protect / ban / pick 的次数
+     （统计范围：所有使用该图池的轮次里，已完赛且非 FF 的场次）
+     ========================================= */
+
+  getPoolBpStats(mappoolId, mapMods) {
+    const empty = { protect: 0, ban: 0, pick: 0, total: 0 };
+    if (!mappoolId || !mapMods) return empty;
+
+    /* 找出所有使用该图池的轮次 id（字符串） */
+    const roundIds = new Set(
+      this.getRounds()
+        .filter(r => String(r.mappool) === String(mappoolId))
+        .map(r => String(r.id))
+    );
+    if (!roundIds.size) return empty;
+
+    /* 已完赛且非 FF 的场次 id（字符串） */
+    const finishedIds = new Set();
+    for (const m of this.getMatches()) {
+      if (!roundIds.has(String(m.roundId))) continue;
+
+      const round    = this.getRound(m.roundId);
+      const bestOf   = Number(round?.bestOf) || 9;
+      const maxStars = Math.ceil(bestOf / 2);
+
+      const s1 = Number(m.team1Score);
+      const s2 = Number(m.team2Score);
+      if (!Number.isFinite(s1) || !Number.isFinite(s2)) continue;
+      if (s1 === -1 || s2 === -1) continue;                 /* 排除 FF */
+      if (s1 >= maxStars || s2 >= maxStars) {
+        finishedIds.add(String(m.id));
+      }
+    }
+
+    const total = finishedIds.size;
+    if (!total) return empty;
+
+    const target = String(mapMods).trim().toLowerCase();
+
+    let protect = 0, ban = 0, pick = 0;
+    for (const bpM of (this.bpData?.matches || [])) {
+      if (!finishedIds.has(String(bpM.id))) continue;
+
+      for (const a of bpM.actions || []) {
+        const map = String(a.map || '').trim().toLowerCase();
+        if (map !== target) continue;
+
+        const act = String(a.action || '').trim().toLowerCase();
+        if (act === 'protect')      protect++;
+        else if (act === 'ban')     ban++;
+        else if (act === 'pick')    pick++;
+      }
+    }
+
+    return { protect, ban, pick, total };
+  }
+
+  /* =========================================
+     某队在 bp.json 中所有场次的 protect / ban 历史
+     （不含当前场次）
+     ========================================= */
+
+  getTeamBpHistory(acronym, { excludeMatchId = null } = {}) {
+    const out = { protects: [], bans: [] };
+    if (!acronym) return out;
+    if (!this.bpData?.matches?.length) return out;
+
+    for (const bpMatch of this.bpData.matches) {
+      if (excludeMatchId != null && bpMatch.id === excludeMatchId) continue;
+
+      const tMatch = this.getMatch(bpMatch.id);
+      if (!tMatch) continue;
+
+      /* 判断该队在这场 bp.json 记录里是红还是蓝 */
+      let side = null;
+      if (tMatch.team1Acronym === acronym) side = 'red';
+      else if (tMatch.team2Acronym === acronym) side = 'blue';
+      else continue;
+
+      for (const a of bpMatch.actions || []) {
+        const team = String(a.team || '').toLowerCase();
+        if (team !== side) continue;
+
+        const act  = String(a.action || '').toLowerCase();
+        const mods = a.map;
+        if (!mods) continue;
+
+        if (act === 'protect') out.protects.push(mods);
+        else if (act === 'ban') out.bans.push(mods);
+      }
+    }
+
+    out.protects = Array.from(new Set(out.protects));
+    out.bans     = Array.from(new Set(out.bans));
+    return out;
+  }
+
+  /* =========================================
+     通过 osu user id 反查选手
+     ========================================= */
+
+  findPlayerById(userId) {
+    if (userId == null) return null;
+    const idStr = String(userId);
+
+    for (const team of this.getTeams()) {
+      for (const p of team.players || []) {
+        if (p.id != null && String(p.id) === idStr) {
+          return { team, player: p };
+        }
+      }
+    }
+    return null;
+  }
+
   getMatchesByRound(roundId) {
     return this.getMatches().filter(m => m.roundId === roundId);
   }
