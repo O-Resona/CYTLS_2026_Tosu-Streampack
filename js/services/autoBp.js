@@ -271,6 +271,7 @@ export class AutoBp {
     if (!bm?.mods) return;
 
     const mods = bm.mods;
+    if (/^tb/i.test(mods)) return;
     if (this._modsBlockedForPick(mods)) return;   /* 被 ban 或已 pick → 跳过 */
 
     this._lastPickMapId = idStr;

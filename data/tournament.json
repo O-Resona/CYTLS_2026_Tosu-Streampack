@@ -964,8 +964,8 @@
       "roundId": "swiss-round-2",
       "team1Acronym": "貓鴨",
       "team2Acronym": "什麼",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 0,
       "date": "2026-10-10T21:00:00+08:00"
     },
     {
@@ -1009,8 +1009,8 @@
       "roundId": "swiss-round-2",
       "team1Acronym": "zjb",
       "team2Acronym": "壓力克絲",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 2,
       "date": "2026-10-10T21:00:00+08:00"
     },
     {

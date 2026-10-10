@@ -6,15 +6,17 @@
  * 内容超出可视高度时：
  *   · 滑入 5s 后开始以固定慢速向下滚动
  *   · 滚动到底后无缝接续（末尾 → 空行 → 头部），接续瞬间暂停 5s
- *   · 用户手动滚轮时暂停自动滚动（本次不再恢复）
+ *   · 用户手动滚轮时暂停自动滚动，3s 后自动恢复
+ *   · 手动滚到顶部/底部时，把滚轮量转发给 mappool 页本身
  *
  * 布局准备用双层 rAF + 80ms 延迟，避免切页 / 滑入动画期间
  * scrollHeight 尚未算好导致"不滚"。
  */
 
-const SCROLL_DELAY_MS = 5000;   // 首次启动自动滚动的延迟
-const SCROLL_SPEED    = 10;     // px / s
-const LOOP_PAUSE_MS   = 5000;   // 循环接续时的暂停
+const SCROLL_DELAY_MS  = 5000;   // 首次启动自动滚动的延迟
+const SCROLL_SPEED     = 10;     // px / s
+const LOOP_PAUSE_MS    = 5000;   // 循环接续时的暂停
+const RESUME_DELAY_MS  = 3000;   // 手动滚动后多久恢复自动滚动
 
 export class ScoreOverlay {
   constructor(root, { onChange } = {}) {
@@ -27,12 +29,33 @@ export class ScoreOverlay {
     this._hideTimer    = null;
     this._scrollTimer  = null;
     this._scrollRaf    = null;
+    this._resumeTimer  = null;
     this._manualPaused = false;
     this._wheelBound   = false;
 
-    this._onWheel = () => {
+    this._onWheel = (e) => {
+      /* 手动滚动 → 暂时停掉自动滚动，3s 后恢复 */
       this._manualPaused = true;
       this._stopScroll();
+
+      if (this._resumeTimer) clearTimeout(this._resumeTimer);
+      this._resumeTimer = setTimeout(() => {
+        this._resumeTimer = null;
+        this._manualPaused = false;
+        this._startAutoScroll();
+      }, RESUME_DELAY_MS);
+
+      /* 面板到达顶部/底部 → 把剩余滚轮量转发给 mappool 页本身 */
+      const el = this.scrollEl;
+      if (!el) return;
+
+      const atTop    = el.scrollTop <= 0;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+
+      if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
+        const page = document.querySelector('[data-page="mappool"] .mappool-wrapper');
+        if (page) page.scrollTop += e.deltaY;
+      }
     };
   }
 
@@ -51,6 +74,7 @@ export class ScoreOverlay {
     }
 
     this._stopScroll();
+    if (this._resumeTimer) { clearTimeout(this._resumeTimer); this._resumeTimer = null; }
     this._manualPaused = false;
 
     if (this.scrollEl) {
@@ -162,6 +186,8 @@ export class ScoreOverlay {
     if (!this.root) return;
     this.root.classList.remove('is-visible');
     this._stopScroll();
+
+    if (this._resumeTimer) { clearTimeout(this._resumeTimer); this._resumeTimer = null; }
 
     if (this.scrollEl && this._wheelBound) {
       this.scrollEl.removeEventListener('wheel', this._onWheel);

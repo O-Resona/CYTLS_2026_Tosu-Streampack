@@ -222,10 +222,19 @@ export class TournamentData {
 
     const out = this._bpEmpty();
     for (const a of bpMatch.actions) {
-      const team = String(a.team || '').toLowerCase();
       const mods = a.map;
-      const act  = String(a.action || '').toLowerCase();
-      if (!team || !mods) continue;
+      if (!mods) continue;
+
+      const act = String(a.action || '').toLowerCase();
+
+      /* TB 特例：team = null / action = "TB" → 记为 pick，team = 'tb' */
+      if (act === 'tb') {
+        out.picks.push({ mods, team: 'tb' });
+        continue;
+      }
+
+      const team = String(a.team || '').toLowerCase();
+      if (!team) continue;
 
       if (act === 'ban')          out.bans.push({ mods, team });
       else if (act === 'pick')    out.picks.push({ mods, team });
@@ -345,7 +354,8 @@ export class TournamentData {
         if (map !== target) continue;
 
         const act = String(a.action || '').trim().toLowerCase();
-        if (act === 'protect')      protect++;
+        if (act === 'tb')           pick++;   /* ← TB 计为一次 pick */
+        else if (act === 'protect') protect++;
         else if (act === 'ban')     ban++;
         else if (act === 'pick')    pick++;
       }

@@ -619,6 +619,7 @@ function buildScoresColumn() {
     row.className = 'br-scores-row';
 
     if (i === 0) row.classList.add('br-scores-row--mark-green');
+    if (i === 4) row.classList.add('br-scores-row--cut');
     if (i === 8) row.classList.add('br-scores-row--mark-red');
     if (i >= 8)  row.classList.add('br-scores-row--lower');
 

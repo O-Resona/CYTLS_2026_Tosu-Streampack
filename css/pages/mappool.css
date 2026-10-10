@@ -528,7 +528,7 @@
   border-radius: 12px;
   object-fit: cover;
   border: 3px solid rgba(255, 255, 255, 0.15);
-  background: #1a2130;
+  background: transparent;
   flex-shrink: 0;
   opacity: 0;
   transition: opacity 0.2s ease;

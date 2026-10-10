@@ -443,7 +443,7 @@ body {
   height: 80px;
   border-radius: 10px;
   object-fit: cover;
-  background: #1a2130;
+  background: transparent;
   flex-shrink: 0;
   opacity: 0;
   transition: opacity 0.2s ease;
