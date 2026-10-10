@@ -5,6 +5,38 @@
       "actions": [
         {
           "team": "Red",
+          "action": "Protect",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HR1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
           "action": "Pick",
           "map": "NM2",
           "winner": "Red",
@@ -66,6 +98,38 @@
       "actions": [
         {
           "team": "Red",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
           "action": "Pick",
           "map": "LM4",
           "winner": "Red",
@@ -109,6 +173,38 @@
     {
       "id": 4,
       "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "HR2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
         {
           "team": "Blue",
           "action": "Pick",
@@ -467,6 +563,38 @@
       "actions": [
         {
           "team": "Blue",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "NM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
           "action": "Pick",
           "map": "LM3",
           "winner": "Blue",
@@ -524,8 +652,133 @@
       ]
     },
     {
+      "id": 13,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "DT1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "ming0328ming"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "rlsc1109"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "rlsc1109"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "ming0328ming"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "ming0328ming"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "ming0328ming"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "rlsc1109"
+        }
+      ]
+    },
+    {
       "id": 16,
       "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
         {
           "team": "Red",
           "action": "Pick",
