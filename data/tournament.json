@@ -1000,8 +1000,8 @@
       "roundId": "swiss-round-2",
       "team1Acronym": "NOUM",
       "team2Acronym": "左右手",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 2,
       "date": "2026-10-09T23:00:00+08:00"
     },
     {
