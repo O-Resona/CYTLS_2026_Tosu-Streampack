@@ -1000,6 +1000,107 @@
       ]
     },
     {
+      "id": 15,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Red",
+          "redPlayer": "Hibiki",
+          "bluePlayer": "BurgerKing"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Blue",
+          "redPlayer": "Hibiki",
+          "bluePlayer": "Diaostrophism"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Red",
+          "redPlayer": "nuthing",
+          "bluePlayer": "Diaostrophism"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Blue",
+          "redPlayer": "Hibiki",
+          "bluePlayer": "Diaostrophism"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Red",
+          "redPlayer": "nuthing",
+          "bluePlayer": "BurgerKing"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Red",
+          "redPlayer": "Hibiki",
+          "bluePlayer": "BurgerKing"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "nuthing",
+          "bluePlayer": "Diaostrophism"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Red",
+          "redPlayer": "nuthing",
+          "bluePlayer": "BurgerKing"
+        }
+      ]
+    },
+    {
       "id": 16,
       "actions": [
         {

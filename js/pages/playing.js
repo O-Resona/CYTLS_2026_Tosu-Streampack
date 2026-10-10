@@ -566,6 +566,17 @@ export function initPlaying({
       handleRoundEnd();
       applyPlayerRoundConsumption();
       _roundEnded = true;
+
+      /* 打图结束 → 立刻解除 chatBox 屏蔽。
+         这样用户在 10s 延迟内切到 mappool，router.applyHud 里的 chatBox.show()
+         就能正常显示（否则 _blocked 为 true 会直接 return）。 */
+      chatBox?.unblock();
+
+      /* 若打图结束时已经在 mappool 页（打图中提前切过来），立即显示 chat */
+      if (document.querySelector('.page.active')?.dataset.page === 'mappool') {
+        chatBox?.show();
+      }
+
       cancelExitTimer();
       exitTimer = setTimeout(() => {
         exitTimer = null;

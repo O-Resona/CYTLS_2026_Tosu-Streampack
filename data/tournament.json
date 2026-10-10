@@ -1018,8 +1018,8 @@
       "roundId": "swiss-round-2",
       "team1Acronym": "0傾",
       "team2Acronym": "doro",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 3,
       "date": "2026-10-10T23:00:00+08:00"
     },
     {
