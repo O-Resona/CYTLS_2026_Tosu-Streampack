@@ -982,8 +982,8 @@
       "roundId": "swiss-round-2",
       "team1Acronym": "TJQQ",
       "team2Acronym": "WLT",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 1,
+      "team2Score": 5,
       "date": "2026-10-10T20:00:00+08:00"
     },
     {

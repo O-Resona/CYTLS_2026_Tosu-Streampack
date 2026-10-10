@@ -652,6 +652,91 @@
       ]
     },
     {
+      "id": 11,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HR2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "DT1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Blue",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "[SHK]oliwakami"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Blue",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "[SHK]oliwakami"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Blue",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "[SHK]oliwakami"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "Ledeau_Fox"
+        }
+      ]
+    },
+    {
       "id": 13,
       "actions": [
         {

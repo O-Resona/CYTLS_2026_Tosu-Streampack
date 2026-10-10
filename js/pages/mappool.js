@@ -17,8 +17,10 @@
  *       pick 地图本身不触发切页。
  *
  * 左侧数据面板：
- *   · BP 开始（roll 或首次 BP 动作）→ 显示两队之前场次的 protect / ban（20s 收）
- *   · pick 阶段换图后 4s → 显示该图历史成绩（按 score 降序，红蓝标当前比赛双方）
+ *   · BP 开始（roll 或首次 BP 动作）→ 显示两队之前场次的 protect / ban
+ *     （不再自动隐藏，等任一方出现 protect / ban 时隐藏）
+ *   · pick 阶段换图后 4s → 显示该图历史成绩
+ *     （不再自动隐藏，除非换图 / 切页 / 手动隐藏）
  *   · 手动「展示数据」按钮 / 下拉选择图 → 立即展示
  *   · 切页强制隐藏
  */
@@ -851,6 +853,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   let _lastBpMatchId  = null;
   let _lastScoreMapId = null;
   let _scoreTimer     = null;
+  let _overlayMode    = null;   // 'bp' | 'score' | null
 
   function formatNum(n) {
     return (Number(n) || 0).toLocaleString('en-US');
@@ -860,7 +863,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     return Number.isFinite(v) ? (v * 100).toFixed(2) + '%' : '--';
   }
 
-  /* ---------- BP 开场：两队之前场次的 protect / ban ---------- */
+  /* ---------- BP 榜：两队之前场次的 protect / ban ---------- */
 
   function onBpStateChange() {
     if (!scoreOverlay || !autoBp) return;
@@ -870,13 +873,26 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     if (matchId !== _lastBpMatchId) {
       _lastBpMatchId  = matchId;
       _bpOverlayShown = false;
+      _overlayMode    = null;
     }
 
     const s = autoBp.getState();
     if (!s.started) return;
-    if (_bpOverlayShown) return;
-    _bpOverlayShown = true;
 
+    /* 已显示过 → 只要出现 protect / ban 就隐藏 BP 榜 */
+    if (_bpOverlayShown) {
+      if (_overlayMode === 'bp') {
+        const hasBp = !!(s.teams.red.protect || s.teams.blue.protect
+                      || s.teams.red.bans.length || s.teams.blue.bans.length);
+        if (hasBp) {
+          scoreOverlay.hide();
+          _overlayMode = null;
+        }
+      }
+      return;
+    }
+
+    _bpOverlayShown = true;
     showBpOverlay();
   }
 
@@ -923,11 +939,12 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     scoreOverlay.show({
       title: 'Previous BP',
       bodyHtml,
-      duration: 20000,
+      duration: 0,          /* 不自动隐藏，等 protect / ban 出现时隐藏 */
     });
+    _overlayMode = 'bp';
   }
 
-  /* ---------- 出分：当前图历史成绩 ---------- */
+  /* ---------- 成绩榜：当前图历史成绩 ---------- */
 
   function onMapIdChange(mapId) {
     if (mapId != null && mapId !== '') {
@@ -984,10 +1001,11 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
       }
     }
 
-    const title = buildScoreTitleHtml(slot, stats);
+    const title    = buildScoreTitleHtml(slot, stats);
     const bodyHtml = buildScoreTableHtml(rooms, match);
 
-    scoreOverlay.show({ title, bodyHtml, duration: 20000 });
+    scoreOverlay.show({ title, bodyHtml, duration: 0 });   /* 不自动隐藏 */
+    _overlayMode = 'score';
   }
 
   function buildScoreTitleHtml(slot, stats) {
@@ -1073,7 +1091,9 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
           <span class="so-cell so-cell--cb">COMBO</span>
         </div>
         <div class="so-scroll">
-          ${bodyHtml}
+          <div class="so-segment">
+            ${bodyHtml}
+          </div>
         </div>
       </div>
     `;
@@ -1129,8 +1149,10 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   function updateShowDataBtn() {
     if (!btnShowData || !overlayEl) return;
     const visible = overlayEl.classList.contains('is-visible');
-    btnShowData.textContent = visible ? '隐藏' : '展示数据';
-    btnShowData.classList.toggle('is-active', visible);
+    const isScore = _overlayMode === 'score';
+    /* 只有成绩榜可见时按钮才显示为"隐藏"；BP 榜可见时按钮仍显示为"展示数据" */
+    btnShowData.textContent = (visible && isScore) ? '隐藏' : '展示数据';
+    btnShowData.classList.toggle('is-active', visible && isScore);
   }
 
   /* =========================================
@@ -1287,10 +1309,16 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   document.addEventListener('click', () => pickOptsEl?.classList.remove('active'));
 
   btnShowData?.addEventListener('click', () => {
-    if (overlayEl?.classList.contains('is-visible')) {
+    const visible = overlayEl?.classList.contains('is-visible');
+    const isScore = _overlayMode === 'score';
+
+    if (visible && isScore) {
+      /* 当前是成绩榜且可见 → 隐藏 */
       scoreOverlay.hide();
+      _overlayMode = null;
       if (_scoreTimer) { clearTimeout(_scoreTimer); _scoreTimer = null; }
     } else if (_currentPickMapId) {
+      /* 否则一律展示成绩榜（若当前是 BP 榜则被覆盖） */
       if (_scoreTimer) { clearTimeout(_scoreTimer); _scoreTimer = null; }
       showScoreOverlay(_currentPickMapId);
     }
@@ -1308,6 +1336,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     resetAutoBpModeSync();
     updateShowDataBtn();
 
+    /* 补显 BP 榜：切回 mappool 且 AutoBp 已 started、尚未显示过 */
     if (autoBp?.getState().started && !_bpOverlayShown) {
       _lastBpMatchId = getCurrentMatchId();
       _bpOverlayShown = true;
@@ -1318,6 +1347,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   pageEl.addEventListener('page:deactivated', () => {
     panel.hidden = true;
     scoreOverlay?.hide();
+    _overlayMode = null;
     if (_scoreTimer) { clearTimeout(_scoreTimer); _scoreTimer = null; }
     updateShowDataBtn();
   });
@@ -1350,6 +1380,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   initAutoBp();
   updateShowDataBtn();
 
+  /* 监听地图切换（用于 pick 阶段 4s 后弹出出分） */
   tokenStore?.watchKey('mapid', (id) => onMapIdChange(id));
 
   if (pageEl.classList.contains('active')) panel.hidden = false;

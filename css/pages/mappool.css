@@ -837,6 +837,7 @@
   gap: 4px;
 }
 
+/* 数据行滚动容器：正好容纳 10 行；表头不计入 */
 [data-page="mappool"] .so-scroll {
   display: flex;
   flex-direction: column;
@@ -847,13 +848,26 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 
-  /* 需要滚动时允许手动滚轮（不影响面板其它区域穿透） */
   pointer-events: none;
 }
 
 [data-page="mappool"] .so-scroll::-webkit-scrollbar {
   width: 0;
   height: 0;
+}
+
+/* 一份数据（循环单位） */
+[data-page="mappool"] .so-segment {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+/* 两份之间的空行（约一行高度） */
+[data-page="mappool"] .so-row-gap {
+  height: 40px;
+  flex: 0 0 auto;
 }
 
 /* 面板可见、且内容溢出 → 只有滚动容器接收鼠标事件 */
