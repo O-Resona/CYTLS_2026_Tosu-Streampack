@@ -837,23 +837,22 @@
   gap: 4px;
 }
 
-/* 数据行滚动容器：正好容纳 10 行；表头不计入 */
+/* 数据行裁剪容器：正好容纳 10 行；表头不计入 */
 [data-page="mappool"] .so-scroll {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  position: relative;
   max-height: 440px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
+  overflow: hidden;
   pointer-events: none;
 }
 
-[data-page="mappool"] .so-scroll::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+/* 内部轨道：用 transform 平移实现平滑滚动（sub-pixel） */
+[data-page="mappool"] .so-track {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  will-change: transform;
+  backface-visibility: hidden;            /* ← 新增：强制合成层 */
+  transform: translate3d(0, 0, 0);        /* ← 新增：初始即建层 */
 }
 
 /* 一份数据（循环单位） */
@@ -878,6 +877,13 @@
 /* 内容不溢出时不接收事件（不影响底下地图卡点击） */
 [data-page="mappool"] .score-overlay.is-visible .so-scroll:not(.is-scrollable) {
   pointer-events: none;
+}
+
+/* 滚动期间关闭 backdrop-filter，避免每帧重算模糊导致的掉帧 */
+[data-page="mappool"] .score-overlay.is-scrolling {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(30, 40, 58, 0.92);     /* 略提高不透明度，弥补去掉模糊 */
 }
 
 [data-page="mappool"] .so-row {

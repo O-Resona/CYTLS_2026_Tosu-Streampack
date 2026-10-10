@@ -4,17 +4,18 @@
  * 面板从左侧滑入，duration 毫秒后自动收回（duration = 0 表示永不自动隐藏）。
  *
  * 内容超出可视高度时：
- *   · 滑入 5s 后开始以固定慢速向下滚动
+ *   · 滑入 5s 后开始以固定慢速向下滚动（transform 平移，sub-pixel 平滑）
  *   · 滚动到底后无缝接续（末尾 → 空行 → 头部），接续瞬间暂停 5s
  *   · 用户手动滚轮时暂停自动滚动，3s 后自动恢复
  *   · 手动滚到顶部/底部时，把滚轮量转发给 mappool 页本身
  *
- * 布局准备用双层 rAF + 80ms 延迟，避免切页 / 滑入动画期间
- * scrollHeight 尚未算好导致"不滚"。
+ * 性能：
+ *   · 滚动期间给面板加 .is-scrolling → 临时关闭 backdrop-filter，避免每帧重算模糊
+ *   · .so-track 用 transform 平移，sub-pixel 平滑
  */
 
 const SCROLL_DELAY_MS  = 5000;   // 首次启动自动滚动的延迟
-const SCROLL_SPEED     = 10;     // px / s
+const SCROLL_SPEED     = 20;     // px / s
 const LOOP_PAUSE_MS    = 5000;   // 循环接续时的暂停
 const RESUME_DELAY_MS  = 3000;   // 手动滚动后多久恢复自动滚动
 
@@ -25,6 +26,8 @@ export class ScoreOverlay {
     this.titleEl  = root?.querySelector('.score-overlay__title');
     this.bodyEl   = root?.querySelector('.score-overlay__body');
     this.scrollEl = null;
+    this.trackEl  = null;
+    this._panelEl = root || null;
 
     this._hideTimer    = null;
     this._scrollTimer  = null;
@@ -33,8 +36,10 @@ export class ScoreOverlay {
     this._manualPaused = false;
     this._wheelBound   = false;
 
+    this._pos  = 0;   // 当前平移位置（向下为正，px，浮点）
+    this._segH = 0;   // 循环单位高度（一份 segment + 空行）
+
     this._onWheel = (e) => {
-      /* 手动滚动 → 暂时停掉自动滚动，3s 后恢复 */
       this._manualPaused = true;
       this._stopScroll();
 
@@ -45,17 +50,23 @@ export class ScoreOverlay {
         this._startAutoScroll();
       }, RESUME_DELAY_MS);
 
-      /* 面板到达顶部/底部 → 把剩余滚轮量转发给 mappool 页本身 */
-      const el = this.scrollEl;
-      if (!el) return;
+      const el    = this.scrollEl;
+      const track = this.trackEl;
+      if (!el || !track) return;
 
-      const atTop    = el.scrollTop <= 0;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      const maxScroll = Math.max(0, this._segH - el.clientHeight);
+      const before    = this._pos;
+      const next      = Math.max(0, Math.min(maxScroll, this._pos + e.deltaY));
 
-      if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
+      /* 已到边界 → 把滚轮量转发给 mappool 页 */
+      if (next === before) {
         const page = document.querySelector('[data-page="mappool"] .mappool-wrapper');
         if (page) page.scrollTop += e.deltaY;
+        return;
       }
+
+      this._pos = next;
+      track.style.transform = `translate3d(0, ${-next}px, 0)`;
     };
   }
 
@@ -66,6 +77,7 @@ export class ScoreOverlay {
     if (this.bodyEl)  this.bodyEl.innerHTML = bodyHtml || '';
 
     this.scrollEl = this.bodyEl?.querySelector('.so-scroll') || this.bodyEl;
+    this.trackEl  = this.scrollEl?.querySelector('.so-track') || null;
 
     /* 清理上一次的手动监听 */
     if (this.scrollEl && this._wheelBound) {
@@ -76,9 +88,13 @@ export class ScoreOverlay {
     this._stopScroll();
     if (this._resumeTimer) { clearTimeout(this._resumeTimer); this._resumeTimer = null; }
     this._manualPaused = false;
+    this._pos  = 0;
+    this._segH = 0;
 
+    if (this.trackEl) {
+      this.trackEl.style.transform = 'translate3d(0, 0, 0)';
+    }
     if (this.scrollEl) {
-      this.scrollEl.scrollTop = 0;
       this.scrollEl.classList.remove('is-scrollable');
     }
 
@@ -93,8 +109,6 @@ export class ScoreOverlay {
       this._hideTimer = null;
     }
 
-    /* 等布局稳定后：判断是否溢出 → 复制一份 → 绑定 wheel → 启动滚动
-       用双层 rAF + 短延迟，避免切页 / 滑入动画期间 scrollHeight 尚未算好 */
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setTimeout(() => this._prepareScroll(), 80);
@@ -105,19 +119,34 @@ export class ScoreOverlay {
   }
 
   _prepareScroll() {
-    const el = this.scrollEl;
-    if (!el) return;
+    const el    = this.scrollEl;
+    const track = this.trackEl;
+    if (!el || !track) return;
     if (!el.isConnected) return;
 
-    const seg = el.querySelector('.so-segment');
-    const overflow = el.scrollHeight - el.clientHeight > 1;
+    const seg = track.querySelector('.so-segment');
+
+    /* 用 segment 高度判断是否溢出（.so-scroll 是 overflow: hidden） */
+    const overflow = seg ? (seg.offsetHeight > el.clientHeight + 1) : false;
 
     /* 溢出 → 复制一份 segment（幂等：已复制则跳过） */
-    if (overflow && seg && !el.querySelector('.so-row-gap')) {
+    if (overflow && seg && !track.querySelector('.so-row-gap')) {
       const gap = document.createElement('div');
       gap.className = 'so-row-gap';
-      el.appendChild(gap);
-      el.appendChild(seg.cloneNode(true));
+      track.appendChild(gap);
+      track.appendChild(seg.cloneNode(true));
+    }
+
+    /* 计算循环单位高度 */
+    const segs = track.querySelectorAll('.so-segment');
+    if (segs.length >= 2) {
+      let segH = segs[1].offsetTop - segs[0].offsetTop;
+      if (!(segH > 0)) {
+        const gapEl = track.querySelector('.so-row-gap');
+        const gapH  = gapEl ? gapEl.offsetHeight : 40;
+        segH = segs[0].offsetHeight + gapH + 8;
+      }
+      this._segH = segH;
     }
 
     el.classList.toggle('is-scrollable', overflow);
@@ -135,18 +164,19 @@ export class ScoreOverlay {
   }
 
   _startAutoScroll() {
-    const el = this.scrollEl;
-    if (!el || this._manualPaused) return;
+    const el    = this.scrollEl;
+    const track = this.trackEl;
+    if (!el || !track || this._manualPaused) return;
 
-    const segs = el.querySelectorAll('.so-segment');
+    const segs = track.querySelectorAll('.so-segment');
     if (segs.length < 2) return;
 
-    /* 循环单位 = 第二个 segment 的 offsetTop - 第一个的 offsetTop
-       （含两份之间的空行） */
-    const segH = segs[1].offsetTop - segs[0].offsetTop;
-    if (segH <= 0) return;
+    const segH = this._segH;
+    if (!(segH > 0)) return;
 
-    let lastTs = null;
+    /* 从当前位置开始 */
+    let pos        = this._pos;
+    let lastTs     = null;
     let pauseUntil = 0;
 
     const step = (ts) => {
@@ -154,7 +184,6 @@ export class ScoreOverlay {
 
       if (lastTs == null) lastTs = ts;
 
-      /* 循环接续处暂停 */
       if (ts < pauseUntil) {
         lastTs = ts;
         this._scrollRaf = requestAnimationFrame(step);
@@ -164,13 +193,16 @@ export class ScoreOverlay {
       const dt = (ts - lastTs) / 1000;
       lastTs = ts;
 
-      el.scrollTop += SCROLL_SPEED * dt;
+      pos += SCROLL_SPEED * dt;
 
-      /* 越过一个循环单位 → 往回跳（无缝接续），并暂停 */
-      if (el.scrollTop >= segH) {
-        el.scrollTop -= segH;
+      /* 越过一个循环单位 → 无缝接续 + 暂停 */
+      if (pos >= segH) {
+        pos -= segH;
         pauseUntil = ts + LOOP_PAUSE_MS;
       }
+
+      this._pos = pos;
+      track.style.transform = `translate3d(0, ${-pos}px, 0)`;
 
       this._scrollRaf = requestAnimationFrame(step);
     };

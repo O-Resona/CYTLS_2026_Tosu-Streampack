@@ -1091,8 +1091,10 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
           <span class="so-cell so-cell--cb">COMBO</span>
         </div>
         <div class="so-scroll">
-          <div class="so-segment">
-            ${bodyHtml}
+          <div class="so-track">
+            <div class="so-segment">
+              ${bodyHtml}
+            </div>
           </div>
         </div>
       </div>
