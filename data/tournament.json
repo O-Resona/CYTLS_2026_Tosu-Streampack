@@ -975,7 +975,7 @@
       "team2Acronym": "小初",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-12T22:00:00+08:00"
+      "date": "2026-10-12T20:00:00+08:00"
     },
     {
       "id": 11,
@@ -991,8 +991,8 @@
       "roundId": "swiss-round-2",
       "team1Acronym": "zklg",
       "team2Acronym": "3125",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 3,
+      "team2Score": 5,
       "date": "2026-10-11T20:00:00+08:00"
     },
     {
