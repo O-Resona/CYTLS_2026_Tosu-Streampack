@@ -729,6 +729,99 @@
       ]
     },
     {
+      "id": 10,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "HR2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "HR1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Red",
+          "redPlayer": "Flyer",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "Flyer",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "Flyer",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Blue",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Red",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Blue",
+          "redPlayer": "Flyer",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Red",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "pr1mary"
+        }
+      ]
+    },
+    {
       "id": 11,
       "actions": [
         {

@@ -51,7 +51,7 @@
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-  margin: 0 7px;
+  margin: 0 10px;
 }
 
 /* 旧的描边规则清空（描边挪到 .mapContent 上） */
@@ -747,7 +747,7 @@
 [data-page="mappool"] .score-overlay {
   position: absolute;
   left: 0;
-  top: 227px;                              /* ← 230 → 227，整体上移 3px */
+  top: 222px;
   width: 780px;
   max-height: 640px;
   z-index: 20;
@@ -768,7 +768,7 @@
 
   border: 1px solid rgba(140, 185, 255, 0.25);
   border-left: none;
-  border-radius: 0 14px 14px 0;
+  border-radius: 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
 
   font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
@@ -889,7 +889,7 @@
 }
 
 [data-page="mappool"] .so-row--head {
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -899,6 +899,21 @@
   text-transform: uppercase;
   color: #a5b3c7;
   padding: 7px 12px 7px 32px;
+}
+
+/* ---------- 阶段名表头行（PROTECT/BAN 下一行） ---------- */
+
+[data-page="mappool"] .so-row--stagehead {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: #a5b3c7;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 4px 12px 6px 32px;
 }
 
 /* ---------- 红 / 蓝行：更明显、不透明一些 ---------- */
@@ -917,6 +932,27 @@
 
 [data-page="mappool"] .so-row--neutral {
   /* 使用默认 .so-row 背景即可 */
+}
+
+/* ---------- BP 榜：阶段行 ---------- */
+
+[data-page="mappool"] .so-row--stage {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid rgba(140, 185, 255, 0.35);
+  margin-top: 2px;
+}
+
+[data-page="mappool"] .so-row--stage .so-cell--protect {
+  color: #a5b3c7;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+[data-page="mappool"] .so-row--stage .so-cell--ban {
+  color: #dbe6f5;
+  font-weight: 500;
 }
 
 /* ---------- 单元格 ---------- */
@@ -990,4 +1026,41 @@
   font-weight: 800;
   color: #fff8d6;
   text-shadow: 0 0 5px rgba(246, 219, 0, 0.55);
+}
+
+/* =========================================
+   BP 榜：多阶段列
+   ========================================= */
+
+[data-page="mappool"] .so-table--bp {
+  gap: 3px;
+}
+
+/* ---------- 分组单元格（PROTECT / BAN 各自一列，内含多个阶段） ---------- */
+
+[data-page="mappool"] .so-cell--bp-group {
+  display: flex;
+  gap: 12px;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 每个阶段一列，等分宽度 */
+[data-page="mappool"] .so-stage-col {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 数据行内文字颜色（继承队色调整后的色） */
+[data-page="mappool"] .so-row--red .so-cell--bp-group  { color: #ffb8bb; }
+[data-page="mappool"] .so-row--blue .so-cell--bp-group { color: #aed6ff; }
+
+/* 无数据占位符更淡 */
+[data-page="mappool"] .so-stage-col:empty::before {
+  content: "—";
+  opacity: 0.4;
 }

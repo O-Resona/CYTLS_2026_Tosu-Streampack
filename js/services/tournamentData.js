@@ -405,6 +405,49 @@ export class TournamentData {
   }
 
   /* =========================================
+     某队在指定图池下的 protect / ban 历史
+     （按 round.mappool 过滤，不含当前场次）
+     ========================================= */
+
+  getTeamBpHistoryByPool(acronym, mappoolId, { excludeMatchId = null } = {}) {
+    const out = { protects: [], bans: [] };
+    if (!acronym || !mappoolId) return out;
+    if (!this.bpData?.matches?.length) return out;
+
+    for (const bpMatch of this.bpData.matches) {
+      if (excludeMatchId != null && bpMatch.id === excludeMatchId) continue;
+
+      const tMatch = this.getMatch(bpMatch.id);
+      if (!tMatch) continue;
+
+      const round = this.getRound(tMatch.roundId);
+      if (!round) continue;
+      if (String(round.mappool) !== String(mappoolId)) continue;
+
+      let side = null;
+      if (tMatch.team1Acronym === acronym) side = 'red';
+      else if (tMatch.team2Acronym === acronym) side = 'blue';
+      else continue;
+
+      for (const a of bpMatch.actions || []) {
+        const team = String(a.team || '').toLowerCase();
+        if (team !== side) continue;
+
+        const act  = String(a.action || '').toLowerCase();
+        const mods = a.map;
+        if (!mods) continue;
+
+        if (act === 'protect') out.protects.push(mods);
+        else if (act === 'ban') out.bans.push(mods);
+      }
+    }
+
+    out.protects = Array.from(new Set(out.protects));
+    out.bans     = Array.from(new Set(out.bans));
+    return out;
+  }
+
+  /* =========================================
      通过 osu user id 反查选手
      ========================================= */
 

@@ -194,15 +194,27 @@ export class MapCard {
     const box = this.specialEl;
     if (!box) return;
 
-    /* items 结构：{ type: 'img', name } 或 { type: 'label', text } */
-    const items = [];
+    const token = ++this._specialToken;
 
+    /* 所有现存层先淡出（含上一次调用的残留） */
+    const oldLayers = Array.from(box.querySelectorAll('.map-card__specials-layer'));
+    oldLayers.forEach(layer => {
+      layer.classList.remove('is-in');
+      setTimeout(() => {
+        if (layer.parentNode) layer.remove();
+        /* 最后一个 layer 移除后，没有任何 layer 就隐藏容器 */
+        if (!box.querySelector('.map-card__specials-layer')) {
+          box.classList.remove('is-on');
+        }
+      }, 400);
+    });
+
+    /* ---------- 收集 items ---------- */
+    const items = [];
     const rawMod = String(bm?.mods || '').replace(/\d+$/, '').toUpperCase();
 
-    /* DT 特例：右侧带倍率标签 */
     if (rawMod === 'DT') {
       items.push({ type: 'img', name: MOD_ICON_MAP.DT });
-
       if (bm?.dtRate != null) {
         const n = Number(bm.dtRate);
         if (Number.isFinite(n)) {
@@ -210,69 +222,72 @@ export class MapCard {
           items.push({ type: 'label', text: `${rateStr}x` });
         }
       }
-    }
-    /* HR / HD → 单图标 */
-    else if (MOD_ICON_MAP[rawMod]) {
+    } else if (MOD_ICON_MAP[rawMod]) {
       items.push({ type: 'img', name: MOD_ICON_MAP[rawMod] });
     }
 
-    /* LM → 读 specialmods（支持多个） */
     if (rawMod === 'LM') {
       const raw = bm?.specialmods;
       const sp = Array.isArray(raw) ? raw : (raw ? [raw] : []);
       sp.forEach(name => items.push({ type: 'img', name }));
     }
 
-    const token = ++this._specialToken;
+    /* ---------- 无 item → 上面已处理淡出，结束 ---------- */
+    if (!items.length) return;
 
-    /* 没有 → 清空隐藏 */
-    if (!items.length) {
-      box.innerHTML = '';
-      box.style.display = 'none';
-      return;
-    }
+    /* ---------- 有 item → 显示容器，新建层 ---------- */
+    box.classList.add('is-on');
 
-    /* 先隐藏，避免切换时闪旧内容 */
-    box.style.display = 'none';
-    box.innerHTML = '';
-
-    let loadedCount = 0;
-    const total = items.length;
+    const layer = document.createElement('div');
+    layer.className = 'map-card__specials-layer';
+    box.appendChild(layer);
 
     const finish = () => {
-      if (token !== this._specialToken) return;
-      loadedCount++;
-      if (loadedCount === total) {
-        box.style.display = box.children.length ? 'flex' : 'none';
+      if (token !== this._specialToken) {
+        /* 已被后续调用取代 → 自我清理 */
+        if (layer.parentNode) layer.remove();
+        return;
       }
+      void layer.offsetWidth;      /* 强制 reflow，保证 transition 触发 */
+      layer.classList.add('is-in');
     };
 
-    items.forEach((item) => {
+    let pending  = 0;
+    let finished = 0;
+
+    items.forEach(item => {
       if (item.type === 'label') {
         const el = document.createElement('span');
         el.className = 'map-card__special-label';
         el.textContent = item.text;
         el.style.zIndex = '1';
-        box.appendChild(el);
-        finish();
+        layer.appendChild(el);
         return;
       }
 
-      const img = new Image();
+      pending++;
+      const img = document.createElement('img');
       img.className = 'map-card__special';
       img.alt = item.name;
       img.style.zIndex = '2';
 
-      img.onload  = finish;
+      img.onload = () => {
+        if (token !== this._specialToken) return;
+        finished++;
+        if (finished === pending) finish();
+      };
       img.onerror = () => {
         if (token !== this._specialToken) return;
         console.warn('[MapCard] special mod 图片加载失败:', `src/mods_tag/${item.name}.png`);
-        finish();
+        finished++;
+        if (finished === pending) finish();
       };
 
+      layer.appendChild(img);
       img.src = `src/mods_tag/${item.name}.png`;
-      box.appendChild(img);
     });
+
+    if (pending === 0) finish();
   }
 
   /* 可选：外部主动刷新边框 */

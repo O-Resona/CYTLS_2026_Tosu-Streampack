@@ -207,13 +207,30 @@
   top: 50%;
   transform: translateY(-50%);
   display: none;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+/* 有内容时切到 grid：多层叠放做交叉淡化 */
+.map-card__specials.is-on {
+  display: grid;
+}
+
+.map-card__specials-layer {
+  grid-area: 1 / 1;
+  justify-self: end;
+  display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 1px;
   width: max-content;
-  pointer-events: none;
-  user-select: none;
-  z-index: 1;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.map-card__specials-layer.is-in {
+  opacity: 1;
 }
 
 .map-card__special {

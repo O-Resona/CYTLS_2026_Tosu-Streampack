@@ -490,6 +490,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const isTB     = isTBMap(card);
 
     if (isTB && (action === 'protect' || action === 'ban')) return;
+    if (mapId) setPickMap(mapId);
 
     /* ---------- protect ---------- */
     if (action === 'protect') {
@@ -907,39 +908,104 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     const t1 = match.team1Acronym ? tournamentData.getTeam(match.team1Acronym) : null;
     const t2 = match.team2Acronym ? tournamentData.getTeam(match.team2Acronym) : null;
 
-    const h1 = match.team1Acronym
-      ? tournamentData.getTeamBpHistory(match.team1Acronym, { excludeMatchId: matchId })
-      : { protects: [], bans: [] };
-    const h2 = match.team2Acronym
-      ? tournamentData.getTeamBpHistory(match.team2Acronym, { excludeMatchId: matchId })
-      : { protects: [], bans: [] };
+    /* ---------- 阶段定义 ---------- */
+    const STAGES = [
+      { id: 'swiss-1', label: 'Swiss Phase 1' },
+      { id: 'swiss-2', label: 'Swiss Phase 2' },
+      { id: 'bracket', label: 'Bracket Stage' },
+    ];
 
-    const fmt = arr => (arr && arr.length) ? arr.join('  /  ') : '—';
+    /* ---------- 取某队在某阶段的 pro / ban ---------- */
+    const getTeamStageData = (acronym, stageId) => {
+      if (!acronym) return { protects: [], bans: [] };
+      return tournamentData.getTeamBpHistoryByPool(acronym, stageId, {
+        excludeMatchId: matchId,
+      });
+    };
+
+    /* ---------- 该阶段是否两队都无数据 ---------- */
+    const stageHasData = (stageId) => {
+      const a = getTeamStageData(match.team1Acronym, stageId);
+      const b = getTeamStageData(match.team2Acronym, stageId);
+      return a.protects.length || a.bans.length
+          || b.protects.length || b.bans.length;
+    };
+
+    /* ---------- 只保留有数据的阶段 ---------- */
+    const activeStages = STAGES.filter(s => stageHasData(s.id));
+    if (!activeStages.length) {
+      /* 无任何历史数据 → 显示空表提示 */
+      scoreOverlay.show({
+        title: 'Previous BP',
+        bodyHtml: `
+          <div class="so-table so-table--bp">
+            <div class="so-row so-row--head">
+              <span class="so-cell so-cell--team">TEAM</span>
+              <span class="so-cell so-cell--bp-group">PROTECT</span>
+              <span class="so-cell so-cell--bp-group">BAN</span>
+            </div>
+            <div class="so-row">
+              <span class="so-cell so-cell--team">—</span>
+              <span class="so-cell so-cell--bp-group"><span class="so-stage-col">—</span></span>
+              <span class="so-cell so-cell--bp-group"><span class="so-stage-col">—</span></span>
+            </div>
+          </div>
+        `,
+        duration: 0,
+      });
+      _overlayMode = 'bp';
+      return;
+    }
+
+    const fmtList = arr => (arr && arr.length) ? arr.join('/') : '—';
+
+    /* ---------- 两行表头（阶段名重复 PROTECT / BAN 下各一份） ---------- */
+    const stageHeadHtml = activeStages
+      .map(s => `<span class="so-stage-col">${escapeHtml(s.label)}</span>`)
+      .join('');
+
+    /* ---------- 每队一行 ---------- */
+    const buildRow = (team, cls) => {
+      const protCols = activeStages.map(s => {
+        const d = getTeamStageData(team?.acronym, s.id);
+        return `<span class="so-stage-col">${escapeHtml(fmtList(d.protects))}</span>`;
+      }).join('');
+
+      const banCols = activeStages.map(s => {
+        const d = getTeamStageData(team?.acronym, s.id);
+        return `<span class="so-stage-col">${escapeHtml(fmtList(d.bans))}</span>`;
+      }).join('');
+
+      return `
+        <div class="so-row so-row--${cls}">
+          <span class="so-cell so-cell--team">${escapeHtml(team?.acronym || '—')}</span>
+          <span class="so-cell so-cell--bp-group">${protCols}</span>
+          <span class="so-cell so-cell--bp-group">${banCols}</span>
+        </div>
+      `;
+    };
 
     const bodyHtml = `
-      <div class="so-table">
+      <div class="so-table so-table--bp">
         <div class="so-row so-row--head">
           <span class="so-cell so-cell--team">TEAM</span>
-          <span class="so-cell so-cell--protect">PROTECT</span>
-          <span class="so-cell so-cell--ban">BAN</span>
+          <span class="so-cell so-cell--bp-group">PROTECT</span>
+          <span class="so-cell so-cell--bp-group">BAN</span>
         </div>
-        <div class="so-row so-row--red">
-          <span class="so-cell so-cell--team">${escapeHtml(t1?.acronym || 'RED')}</span>
-          <span class="so-cell so-cell--protect">${escapeHtml(fmt(h1.protects))}</span>
-          <span class="so-cell so-cell--ban">${escapeHtml(fmt(h1.bans))}</span>
+        <div class="so-row so-row--stagehead">
+          <span class="so-cell so-cell--team"></span>
+          <span class="so-cell so-cell--bp-group">${stageHeadHtml}</span>
+          <span class="so-cell so-cell--bp-group">${stageHeadHtml}</span>
         </div>
-        <div class="so-row so-row--blue">
-          <span class="so-cell so-cell--team">${escapeHtml(t2?.acronym || 'BLUE')}</span>
-          <span class="so-cell so-cell--protect">${escapeHtml(fmt(h2.protects))}</span>
-          <span class="so-cell so-cell--ban">${escapeHtml(fmt(h2.bans))}</span>
-        </div>
+        ${buildRow(t1, 'red')}
+        ${buildRow(t2, 'blue')}
       </div>
     `;
 
     scoreOverlay.show({
       title: 'Previous BP',
       bodyHtml,
-      duration: 0,          /* 不自动隐藏，等 protect / ban 出现时隐藏 */
+      duration: 0,
     });
     _overlayMode = 'bp';
   }
@@ -978,7 +1044,14 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
     if (document.querySelector('.page.active')?.dataset.page !== 'mappool') return;
 
     const rooms = scoresData.getRoomsForBeatmap(poolId, mapId);
-    if (!rooms.length) return;
+    if (!rooms.length) {
+      /* 该图暂无成绩 → 若当前是成绩榜，自动收掉 */
+      if (_overlayMode === 'score') {
+        scoreOverlay.hide();
+        _overlayMode = null;
+      }
+      return;
+    }
 
     const matchId = getCurrentMatchId();
     const match   = matchId != null ? tournamentData.getMatch(matchId) : null;

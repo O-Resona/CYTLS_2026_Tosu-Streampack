@@ -53,12 +53,19 @@ export function initShowcase({ mapInfo, tokenStore, tournamentState, tournamentD
 function findMappoolByTitle(tournamentData, title) {
   if (!title || !tournamentData) return null;
 
-  /* 尝试阶段名匹配：遍历 STAGE_TO_MAPPool */
+  /* 取「最长匹配」的 stage 名，避免 'Swiss Phase I' 抢走 'Swiss Phase II' */
+  let bestStage  = null;
+  let bestPoolId = null;
+
   for (const [stage, poolId] of Object.entries(STAGE_TO_MAPPool)) {
-    if (title.includes(stage)) {
-      return tournamentData.getMappool(poolId);
+    if (!title.includes(stage)) continue;
+    if (!bestStage || stage.length > bestStage.length) {
+      bestStage  = stage;
+      bestPoolId = poolId;
     }
   }
+
+  if (bestPoolId) return tournamentData.getMappool(bestPoolId);
 
   /* 兜底：如果标题就是某个 mappool id */
   const pools = tournamentData.getMappools();
