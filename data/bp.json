@@ -1527,6 +1527,131 @@
           "bluePlayer": "mcy4"
         }
       ]
+    },
+    {
+      "id": 24,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "DT1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HR2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Blue",
+          "redPlayer": "rlsc1109",
+          "bluePlayer": "Bochi the osu"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Red",
+          "redPlayer": "ming0328ming",
+          "bluePlayer": "Bochi the osu"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Red",
+          "redPlayer": "ming0328ming",
+          "bluePlayer": "fuyukiS"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "rlsc1109",
+          "bluePlayer": "fuyukiS"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Blue",
+          "redPlayer": "rlsc1109",
+          "bluePlayer": "Bochi the osu"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Red",
+          "redPlayer": "ming0328ming",
+          "bluePlayer": "Bochi the osu"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Blue",
+          "redPlayer": "rlsc1109",
+          "bluePlayer": "fuyukiS"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Red",
+          "redPlayer": "ming0328ming",
+          "bluePlayer": "Bochi the osu"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Blue",
+          "redPlayer": "rlsc1109",
+          "bluePlayer": "fuyukiS"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM5",
+          "winner": "Red",
+          "redPlayer": "ming0328ming",
+          "bluePlayer": "fuyukiS"
+        },
+        {
+          "team": null,
+          "action": "TB",
+          "map": "TB",
+          "winner": "Red",
+          "redPlayer": "ming0328ming",
+          "bluePlayer": "fuyukiS"
+        }
+      ]
     }
   ]
 }
