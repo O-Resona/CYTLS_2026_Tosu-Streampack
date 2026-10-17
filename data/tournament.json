@@ -1348,8 +1348,8 @@
       "roundId": "swiss-round-3",
       "team1Acronym": "TJQQ",
       "team2Acronym": "BB",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 6,
+      "team2Score": 5,
       "date": "2026-10-16T21:00:00+08:00"
     },
     {
@@ -1359,7 +1359,7 @@
       "team2Acronym": "0傾",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-18T21:00:00+08:00"
+      "date": "2026-10-18T22:00:00+08:00"
     },
     {
       "id": 23,

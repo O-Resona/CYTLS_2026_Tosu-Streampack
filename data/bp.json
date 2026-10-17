@@ -1402,6 +1402,131 @@
           "bluePlayer": "fuyukiS"
         }
       ]
+    },
+    {
+      "id": 21,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "DT3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "NM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "aaront"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "mcy4"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Blue",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "mcy4"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "yutro",
+          "bluePlayer": "aaront"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "aaront"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM5",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "mcy4"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "mcy4"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "aaront"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "mcy4"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "yutro",
+          "bluePlayer": "aaront"
+        },
+        {
+          "team": null,
+          "action": "TB",
+          "map": "TB",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "mcy4"
+        }
+      ]
     }
   ]
 }

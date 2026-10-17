@@ -24,7 +24,6 @@
   letter-spacing: 1px;
 }
 
-/* 默认：非 SF/F/GF —— 宽松间距 */
 [data-page="mappool"] .mapRow {
   display: flex;
   justify-content: center;
@@ -32,7 +31,6 @@
   margin-bottom: 15px;
 }
 
-/* bracket stage —— 紧凑间距 */
 [data-page="mappool"] .mappool-wrapper.is-compact .mapRow {
   margin-bottom: 19px;
 }
@@ -54,13 +52,10 @@
   margin: 0 10px;
 }
 
-/* 旧的描边规则清空（描边挪到 .mapContent 上） */
 [data-page="mappool"] .mapContainer.blueBorder,
 [data-page="mappool"] .mapContainer.redBorder {
   box-shadow: none;
 }
-
-/* ---------- 内容 ---------- */
 
 [data-page="mappool"] .mapContent {
   display: flex;
@@ -69,23 +64,19 @@
   height: 100%;
   position: relative;
 
-  /* 内描边：颜色由变量控制，默认透明 */
   --border-color: transparent;
   box-shadow: inset 0 0 0 5.5pt var(--border-color);
   transition: background-color .3s ease, box-shadow .3s ease;
 }
 
-/* 红队 → 红内描边 */
 [data-page="mappool"] .mapContainer.redBorder .mapContent {
   --border-color:#a80c0c;
 }
 
-/* 蓝队 → 蓝内描边 */
 [data-page="mappool"] .mapContainer.blueBorder .mapContent {
   --border-color: #147aff;
 }
 
-/* ban 状态下描边变暗 */
 [data-page="mappool"] .mapContainer.redBorder .mapContent.banned {
   --border-color: rgba(168, 12, 12, 0.6);
 }
@@ -94,7 +85,6 @@
   --border-color: rgba(20, 122, 255, 0.6);
 }
 
-/* ban 状态背景变深 + 内部内容变暗 */
 [data-page="mappool"] .mapContent.banned {
   background-color: rgba(0, 0, 0, .8);
 }
@@ -107,7 +97,6 @@
   opacity: .6;
 }
 
-/* TB（赛点图）：不属于任何一方，深紫内描边 */
 [data-page="mappool"] .mapContainer.purpleBorder .mapContent {
   --border-color: #5a1aad; 
 }
@@ -126,7 +115,7 @@
   animation: flashWhite 4s ease-in-out;
 }
 
-/* ---------- 元数据（左对齐） ---------- */
+/* ---------- 元数据 ---------- */
 
 [data-page="mappool"] .mapMetadata {
   display: flex;
@@ -210,7 +199,6 @@
   pointer-events: none;
   z-index: 5;
 
-  /* 初始：滑到卡片外 */
   transform: translate(calc(100% + 150px), -50%);
   opacity: 0;
   will-change: transform;
@@ -235,7 +223,6 @@
   font-weight: 700;
 }
 
-/* 当前谱面聚焦高亮 */
 [data-page="mappool"] .mapContainer.is-focused {
   animation: mapCardFocus 1.6s ease;
 }
@@ -249,7 +236,7 @@
 }
 
 /* =========================================
-   Mappool 控制面板（位于 sidebar 底部）
+   Mappool 控制面板
    ========================================= */
 
 .mappool-panel {
@@ -271,8 +258,6 @@
   gap: 4px;
 }
 
-/* ---------- 图池选择器 ---------- */
-
 .mappool-panel .round-selector {
   width: 100%;
   margin-bottom: 4px;
@@ -292,11 +277,9 @@
   width: 100%;
 }
 
-/* ---------- 当前 pick + 展示按钮 ---------- */
-
 .mappool-panel .round-selector {
   position: relative;
-  padding-bottom: 30px;              /* 给按钮预留空间 */
+  padding-bottom: 30px;
 }
 
 .mappool-panel .mp-btn--show-data {
@@ -394,8 +377,6 @@
 .mappool-panel .custom-option:last-child { border-bottom: none; }
 .mappool-panel .custom-option:hover      { background: #232b39; }
 .mappool-panel .custom-option.selected   { background: #4d9bff; color: #f8f8f6; }
-
-/* ---------- 按钮 ---------- */
 
 .mappool-panel .mp-btn {
   width: 100%;
@@ -499,7 +480,7 @@
 }
 
 /* =========================================
-   Mappool 顶部队伍 HUD（旧样式，保留以免影响）
+   Mappool 顶部队伍 HUD（旧样式）
    ========================================= */
 
 [data-page="mappool"] .mp-teams {
@@ -587,12 +568,10 @@
   font-family: 'GoogleSansFlex', "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 }
 
-/* 红队：HUD 里 avatar(80)+gap(10)+container(30)，信息起点 ≈ 120 */
 [data-page="mappool"] .mp-players--left {
   left: 120px;
 }
 
-/* 蓝队：镜像 */
 [data-page="mappool"] .mp-players--right {
   right: 120px;
 }
@@ -629,11 +608,10 @@
   display: block;
   width: 30px;
   height: 10px;
-  background: #AE1318;             /* 红队色 */
+  background: #AE1318;
   flex-shrink: 0;
 }
 
-/* 蓝队：镜像（名字在右、条在左）+ 蓝色条 */
 [data-page="mappool"] .mp-players--right .mp-player {
   flex-direction: row-reverse;
 }
@@ -683,14 +661,13 @@
   transform: translateY(-50%) rotate(-45deg);
 }
 
-/* 蓝队的叉 */
 [data-page="mappool"] .mp-players--right .mp-player__cross::before,
 [data-page="mappool"] .mp-players--right .mp-player__cross::after {
   background: #1661AB;
 }
 
 /* =========================================
-   组内横排（protect + ban 同行）
+   组内横排
    ========================================= */
 
 .mappool-panel__group--row {
@@ -781,7 +758,7 @@
   transform: translateX(0);
 }
 
-/* ---------- 标题行：slot 居中 + 左侧两小行统计 ---------- */
+/* ---------- 标题行 ---------- */
 
 [data-page="mappool"] .score-overlay__title {
   position: relative;
@@ -790,7 +767,7 @@
   justify-content: center;
   text-align: center;
 
-  font-size: 24px;                         /* ← 28 → 24 */
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: 1.8px;
   text-transform: uppercase;
@@ -822,7 +799,7 @@
   white-space: nowrap;
 }
 
-/* ---------- 正文：最多显示 10 行，溢出滚动 ---------- */
+/* ---------- 正文 ---------- */
 
 [data-page="mappool"] .score-overlay__body {
   font-size: 18px;
@@ -837,7 +814,6 @@
   gap: 4px;
 }
 
-/* 数据行裁剪容器：正好容纳 10 行；表头不计入 */
 [data-page="mappool"] .so-scroll {
   position: relative;
   max-height: 440px;
@@ -845,17 +821,15 @@
   pointer-events: none;
 }
 
-/* 内部轨道：用 transform 平移实现平滑滚动（sub-pixel） */
 [data-page="mappool"] .so-track {
   display: flex;
   flex-direction: column;
   gap: 4px;
   will-change: transform;
-  backface-visibility: hidden;            /* ← 新增：强制合成层 */
-  transform: translate3d(0, 0, 0);        /* ← 新增：初始即建层 */
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
-/* 一份数据（循环单位） */
 [data-page="mappool"] .so-segment {
   display: flex;
   flex-direction: column;
@@ -863,18 +837,15 @@
   flex: 0 0 auto;
 }
 
-/* 两份之间的空行（约一行高度） */
 [data-page="mappool"] .so-row-gap {
   height: 40px;
   flex: 0 0 auto;
 }
 
-/* 面板可见、且内容溢出 → 只有滚动容器接收鼠标事件 */
 [data-page="mappool"] .score-overlay.is-visible .so-scroll {
   pointer-events: auto;
 }
 
-/* 内容不溢出时不接收事件（不影响底下地图卡点击） */
 [data-page="mappool"] .score-overlay.is-visible .so-scroll:not(.is-scrollable) {
   pointer-events: none;
 }
@@ -901,8 +872,6 @@
   padding: 7px 12px 7px 32px;
 }
 
-/* ---------- 阶段名表头行（PROTECT/BAN 下一行） ---------- */
-
 [data-page="mappool"] .so-row--stagehead {
   background: transparent;
   border: none;
@@ -916,7 +885,7 @@
   padding: 4px 12px 6px 32px;
 }
 
-/* ---------- 红 / 蓝行：更明显、不透明一些 ---------- */
+/* ---------- 红 / 蓝行 ---------- */
 
 [data-page="mappool"] .so-row--red {
   background: rgba(174, 19, 24, 0.45);
@@ -931,28 +900,6 @@
 }
 
 [data-page="mappool"] .so-row--neutral {
-  /* 使用默认 .so-row 背景即可 */
-}
-
-/* ---------- BP 榜：阶段行 ---------- */
-
-[data-page="mappool"] .so-row--stage {
-  background: rgba(255, 255, 255, 0.02);
-  border-left: 3px solid rgba(140, 185, 255, 0.35);
-  margin-top: 2px;
-}
-
-[data-page="mappool"] .so-row--stage .so-cell--protect {
-  color: #a5b3c7;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-[data-page="mappool"] .so-row--stage .so-cell--ban {
-  color: #dbe6f5;
-  font-weight: 500;
 }
 
 /* ---------- 单元格 ---------- */
@@ -1018,8 +965,6 @@
   color: #dbe6f5;
 }
 
-/* ---------- 该列最大值：加粗 + 轻发光 ---------- */
-
 [data-page="mappool"] .so-cell--score.is-max,
 [data-page="mappool"] .so-cell--acc.is-max,
 [data-page="mappool"] .so-cell--cb.is-max {
@@ -1029,38 +974,168 @@
 }
 
 /* =========================================
-   BP 榜：多阶段列
+   BP 榜：矩阵排版（阶段 × 队）
+   竖线用表格容器的伪元素画，贯穿整表，不受任何横线/内边距影响
    ========================================= */
 
-[data-page="mappool"] .so-table--bp {
-  gap: 3px;
-}
-
-/* ---------- 分组单元格（PROTECT / BAN 各自一列，内含多个阶段） ---------- */
-
-[data-page="mappool"] .so-cell--bp-group {
+[data-page="mappool"] .so-table--bp-matrix {
   display: flex;
-  gap: 12px;
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
 }
 
-/* 每个阶段一列，等分宽度 */
-[data-page="mappool"] .so-stage-col {
-  flex: 1 1 0;
-  min-width: 0;
+/* 两条贯穿整个表格的竖线（红线对齐红值列左边缘，蓝线对齐蓝值列左边缘） */
+[data-page="mappool"] .so-table--bp-matrix::before,
+[data-page="mappool"] .so-table--bp-matrix::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-page="mappool"] .so-table--bp-matrix::before {
+  left: 278px;
+  background: #ff2a30;
+}
+
+[data-page="mappool"] .so-table--bp-matrix::after {
+  left: calc(50% + 133px);
+  background: #2d8cff;
+}
+
+/* ---------- 表头 ---------- */
+
+[data-page="mappool"] .so-row--bp-head {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  padding: 0 12px 0 32px;
+  border-bottom: 1px solid rgba(140, 185, 255, 0.25);
+}
+
+/* ---------- 数据行 ---------- */
+
+[data-page="mappool"] .so-row--bp-data {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  padding: 6px 12px 6px 32px;
+}
+
+[data-page="mappool"] .so-row--bp-first {
+  padding-top: 14px;
+}
+
+[data-page="mappool"] .so-row--bp-second {
+  padding-bottom: 10px;
+}
+
+/* ---------- 列宽 ---------- */
+
+[data-page="mappool"] .so-cell--bp-stage {
+  flex: 0 0 140px;
+  margin-right: 2px;
+  font-weight: 700;
+  color: #f8f8f6;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-/* 数据行内文字颜色（继承队色调整后的色） */
-[data-page="mappool"] .so-row--red .so-cell--bp-group  { color: #ffb8bb; }
-[data-page="mappool"] .so-row--blue .so-cell--bp-group { color: #aed6ff; }
+[data-page="mappool"] .so-cell--bp-type {
+  flex: 0 0 90px;
+  margin-right: 14px;
+  font-weight: 700;
+  color: #a5b3c7;
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
 
-/* 无数据占位符更淡 */
-[data-page="mappool"] .so-stage-col:empty::before {
-  content: "—";
-  opacity: 0.4;
+/* ---------- 表头红蓝框（无圆角，无边线，竖线由伪元素统一画） ---------- */
+
+[data-page="mappool"] .so-cell--bp-head-red,
+[data-page="mappool"] .so-cell--bp-head-blue {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 0;
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  position: relative;
+}
+
+[data-page="mappool"] .so-cell--bp-head-red::before,
+[data-page="mappool"] .so-cell--bp-head-blue::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+[data-page="mappool"] .so-cell--bp-head-red::before {
+  background: #ff2a30;
+}
+
+[data-page="mappool"] .so-cell--bp-head-blue::before {
+  background: #2d8cff;
+}
+
+[data-page="mappool"] .so-cell--bp-head-red {
+  background: rgba(174, 19, 24, 0.55);
+  color: #ffb8bb;
+  box-shadow: inset 0 0 0 1px rgba(255, 42, 48, 0.6);
+}
+
+[data-page="mappool"] .so-cell--bp-head-blue {
+  background: rgba(22, 97, 171, 0.55);
+  color: #aed6ff;
+  box-shadow: inset 0 0 0 1px rgba(45, 140, 255, 0.6);
+}
+
+/* ---------- 数据行红蓝值（竖线由伪元素统一画，这里只管文字与内边距） ---------- */
+
+[data-page="mappool"] .so-row--bp-data .so-cell--bp-val:nth-child(3),
+[data-page="mappool"] .so-row--bp-data .so-cell--bp-val:nth-child(4) {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-left: 15px;
+  padding-right: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+[data-page="mappool"] .so-row--bp-data .so-cell--bp-val:nth-child(3) {
+  color: #ffb8bb;
+}
+
+[data-page="mappool"] .so-row--bp-data .so-cell--bp-val:nth-child(4) {
+  color: #aed6ff;
 }

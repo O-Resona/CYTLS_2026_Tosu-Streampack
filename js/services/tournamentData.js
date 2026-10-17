@@ -399,9 +399,7 @@ export class TournamentData {
       }
     }
 
-    out.protects = Array.from(new Set(out.protects));
-    out.bans     = Array.from(new Set(out.bans));
-    return out;
+     return out;
   }
 
   /* =========================================
@@ -442,8 +440,6 @@ export class TournamentData {
       }
     }
 
-    out.protects = Array.from(new Set(out.protects));
-    out.bans     = Array.from(new Set(out.bans));
     return out;
   }
 

@@ -64,7 +64,6 @@ export class ScoresData {
       if (c.length < 6) continue;
 
       const passed = (c[5] || '').trim().toUpperCase() === 'TRUE';
-      if (!passed) continue;
 
       const row = {
         roomName:  (c[0]  || '').trim(),
@@ -77,6 +76,7 @@ export class ScoresData {
         mods:      (c[12] || '').trim(),
         rank:      (c[13] || '').trim(),
         scoredAt:  (c[14] || '').trim(),
+        passed,
       };
       if (!row.beatmapId) continue;
 
