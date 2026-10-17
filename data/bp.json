@@ -1404,6 +1404,115 @@
       ]
     },
     {
+      "id": 18,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM5",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "HR2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "misha awa"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Ruyaya"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Ruyaya"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "misha awa"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "misha awa"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Ruyaya"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "misha awa"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "misha awa"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Ruyaya"
+        }
+      ]
+    },
+    {
       "id": 21,
       "actions": [
         {

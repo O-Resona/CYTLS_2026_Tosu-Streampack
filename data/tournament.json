@@ -1321,8 +1321,8 @@
       "roundId": "swiss-round-3",
       "team1Acronym": "WLT",
       "team2Acronym": "貓鴨",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 3,
+      "team2Score": 6,
       "date": "2026-10-17T20:00:00+08:00"
     },
     {
@@ -1375,8 +1375,8 @@
       "roundId": "swiss-round-3",
       "team1Acronym": "左右手",
       "team2Acronym": "2yo",
-      "team1Score": 5,
-      "team2Score": 4,
+      "team1Score": 6,
+      "team2Score": 5,
       "date": "2026-10-17T17:00:00+08:00"
     },
     {
