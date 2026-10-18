@@ -16,7 +16,7 @@ const CURRENT_MATCH_KEY = 'cyt2026.currentMatchId';
 const OVERRIDE_KEY      = 'cyt2026.matchOverrides';
 
 const POLL_INTERVAL = 300;
-const FIRE_DELAY    = 16000;
+const FIRE_DELAY    = 25000;
 
 export class WinnerWatcher {
   constructor({ tournamentData, router }) {
