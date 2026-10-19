@@ -1513,6 +1513,107 @@
       ]
     },
     {
+      "id": 20,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "NM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Red",
+          "redPlayer": "Name94",
+          "bluePlayer": "z980838928"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "Qualifiers",
+          "bluePlayer": "z980838928"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "Name94",
+          "bluePlayer": "z980838928"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Red",
+          "redPlayer": "Qualifiers",
+          "bluePlayer": "z980838928"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Blue",
+          "redPlayer": "Qualifiers",
+          "bluePlayer": "MyAngelSora"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Red",
+          "redPlayer": "Name94",
+          "bluePlayer": "MyAngelSora"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "Name94",
+          "bluePlayer": "MyAngelSora"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "Qualifiers",
+          "bluePlayer": "z980838928"
+        }
+      ]
+    },
+    {
       "id": 21,
       "actions": [
         {
@@ -1634,6 +1735,131 @@
           "winner": "Red",
           "redPlayer": "4k110sh1",
           "bluePlayer": "mcy4"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "NM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Blue",
+          "redPlayer": "Zkyler",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "Finloge",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "Finloge",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "Zkyler",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Blue",
+          "redPlayer": "Finloge",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Red",
+          "redPlayer": "Zkyler",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Red",
+          "redPlayer": "Zkyler",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Blue",
+          "redPlayer": "Finloge",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "Zkyler",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Blue",
+          "redPlayer": "Finloge",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": null,
+          "action": "TB",
+          "map": "TB",
+          "winner": "Blue",
+          "redPlayer": "Finloge",
+          "bluePlayer": "Hibiki"
         }
       ]
     },

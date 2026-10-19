@@ -1339,8 +1339,8 @@
       "roundId": "swiss-round-3",
       "team1Acronym": "什麼",
       "team2Acronym": "zjb",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 6,
+      "team2Score": 2,
       "date": "2026-10-18T20:00:00+08:00"
     },
     {
@@ -1357,8 +1357,8 @@
       "roundId": "swiss-round-3",
       "team1Acronym": "zklg",
       "team2Acronym": "0傾",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 6,
       "date": "2026-10-18T22:00:00+08:00"
     },
     {
