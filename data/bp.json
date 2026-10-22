@@ -2306,6 +2306,115 @@
           "bluePlayer": "fuyukiS"
         }
       ]
+    },
+    {
+      "id": 26,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "NM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HR1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Red",
+          "redPlayer": "Barometz",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "Barometz",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "nuthing"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Blue",
+          "redPlayer": "Barometz",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "Barometz",
+          "bluePlayer": "Hibiki"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Red",
+          "redPlayer": "Moonlit111",
+          "bluePlayer": "nuthing"
+        }
+      ]
     }
   ]
 }
