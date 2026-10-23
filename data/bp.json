@@ -2412,7 +2412,132 @@
           "map": "DT3",
           "winner": "Red",
           "redPlayer": "Moonlit111",
-          "bluePlayer": "nuthing"
+          "bluePlayer": "nothing"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "DT3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Blue",
+          "redPlayer": "@yutro 抢老婆",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM5",
+          "winner": "Blue",
+          "redPlayer": "@yutro 抢老婆",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "@yutro 抢老婆",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "@yutro 抢老婆",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Blue",
+          "redPlayer": "@yutro 抢老婆",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": null,
+          "action": "TB",
+          "map": "TB",
+          "winner": "Blue",
+          "redPlayer": "@yutro 抢老婆",
+          "bluePlayer": "Crystal"
         }
       ]
     }
