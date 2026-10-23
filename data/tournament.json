@@ -1384,8 +1384,8 @@
       "roundId": "swiss-round-4",
       "team1Acronym": "WLT",
       "team2Acronym": "什麼",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 6,
+      "team2Score": 3,
       "date": "2026-10-23T22:00:00+08:00"
     },
     {
@@ -1411,8 +1411,8 @@
       "roundId": "swiss-round-4",
       "team1Acronym": "NOUM",
       "team2Acronym": "壓力克絲",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 6,
+      "team2Score": 0,
       "date": "2026-10-23T22:00:00+08:00"
     },
     {
@@ -1436,29 +1436,29 @@
     {
       "id": 31,
       "roundId": "swiss-round-5",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "小初",
+      "team2Acronym": "左右手",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-10-25T20:00:00+08:00"
     },
     {
       "id": 32,
       "roundId": "swiss-round-5",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "什麼",
+      "team2Acronym": "BB",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-10-25T21:00:00+08:00"
     },
     {
       "id": 33,
       "roundId": "swiss-round-5",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "0傾",
+      "team2Acronym": "NOUM",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-10-25T22:00:00+08:00"
     },
     {
       "id": 34,
