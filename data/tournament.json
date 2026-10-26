@@ -1440,7 +1440,7 @@
       "team2Acronym": "左右手",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-25T20:00:00+08:00"
+      "date": "2026-10-26T21:00:00+08:00"
     },
     {
       "id": 32,
@@ -1449,15 +1449,15 @@
       "team2Acronym": "BB",
       "team1Score": null,
       "team2Score": null,
-      "date": "2026-10-25T21:00:00+08:00"
+      "date": "2026-10-27T21:00:00+08:00"
     },
     {
       "id": 33,
       "roundId": "swiss-round-5",
       "team1Acronym": "0傾",
       "team2Acronym": "NOUM",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": -1,
+      "team2Score": 6,
       "date": "2026-10-25T22:00:00+08:00"
     },
     {
