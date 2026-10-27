@@ -2734,6 +2734,91 @@
           "bluePlayer": "Tokirii"
         }
       ]
+    },
+    {
+      "id": 31,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM5",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "NM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "Crystal"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "pr1mary"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM5",
+          "winner": "Red",
+          "redPlayer": "可是小初也.../委屈",
+          "bluePlayer": "Crystal"
+        }
+      ]
     }
   ]
 }
