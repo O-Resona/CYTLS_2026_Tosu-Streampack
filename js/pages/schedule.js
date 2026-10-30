@@ -57,24 +57,29 @@ export function initSchedule({ tournamentData }) {
 
   /* ---------- 找出当前轮次 ---------- */
 
-  function findCurrentRound(rounds, matches) {
-    if (currentMatchId != null) {
-      const cur = matches.find(m => m.id === currentMatchId);
-      if (cur) {
-        const r = rounds.find(x => x.id === cur.roundId);
-        if (r) return r;
+function findCurrentRound(rounds, matches) {
+  // 只有当 currentMatchId 对应轮次还有未结束比赛时，才尊重用户选择
+  if (currentMatchId != null) {
+    const cur = matches.find(m => m.id === currentMatchId);
+    if (cur) {
+      const r = rounds.find(x => x.id === cur.roundId);
+      if (r) {
+        const rm = matches.filter(m => m.roundId === r.id);
+        if (rm.some(m => !isFinished(m, r))) return r;
+        // 该轮次已全部结束 → 不尊重，继续往下找活跃轮次
       }
     }
-
-    for (const round of rounds) {
-      const rm = matches.filter(m => m.roundId === round.id);
-      if (!rm.length) continue;
-      if (rm.some(m => !isFinished(m, round))) return round;
-    }
-
-    const withM = rounds.filter(r => matches.some(m => m.roundId === r.id));
-    return withM[withM.length - 1] || null;
   }
+
+  for (const round of rounds) {
+    const rm = matches.filter(m => m.roundId === round.id);
+    if (!rm.length) continue;
+    if (rm.some(m => !isFinished(m, round))) return round;
+  }
+
+  const withM = rounds.filter(r => matches.some(m => m.roundId === r.id));
+  return withM[withM.length - 1] || null;
+}
 
   /* ---------- 自动选中 ---------- */
 

@@ -2912,6 +2912,147 @@
           "bluePlayer": "aaront"
         }
       ]
+    },
+    {
+      "id": 37,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "NM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "HD3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HR3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM5",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD2",
+          "winner": "Red",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "[SHK]oliwakami"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Blue",
+          "redPlayer": "Flyer",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD3",
+          "winner": "Red",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "[SHK]oliwakami"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "[SHK]oliwakami"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Red",
+          "redPlayer": "Flyer",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM4",
+          "winner": "Blue",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "Flyer",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "GAO HAO",
+          "bluePlayer": "[SHK]oliwakami"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Red",
+          "redPlayer": "Flyer",
+          "bluePlayer": "Ledeau_Fox"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "Flyer",
+          "bluePlayer": "[SHK]oliwakami"
+        }
+      ]
     }
   ]
 }

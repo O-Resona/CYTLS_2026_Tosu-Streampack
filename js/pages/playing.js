@@ -517,20 +517,24 @@ export function initPlaying({
      切页判断
      ========================================= */
 
-  function decideReturnPage() {
-    const activePage = document.querySelector('.page.active');
-    if (activePage?.dataset.page !== 'playing') return;
+function decideReturnPage() {
+  const activePage = document.querySelector('.page.active');
+  if (activePage?.dataset.page !== 'playing') return;
 
-    const match = loadCurrentMatch();
-    if (!match) {
-      playAutoTransition(() => window.app?.router?.show('mappool'));
-      return;
-    }
-
-    if (isMatchFinished(match)) return;
-
+  const match = loadCurrentMatch();
+  if (!match) {
     playAutoTransition(() => window.app?.router?.show('mappool'));
+    return;
   }
+
+  if (isMatchFinished(match)) {
+    // 决胜局：直播员一退出 result 就立刻切 winner（不等 WinnerWatcher）
+    playAutoTransition(() => window.app?.router?.show('winner'));
+    return;
+  }
+
+  playAutoTransition(() => window.app?.router?.show('mappool'));
+}
 
   /* =========================================
      打图状态

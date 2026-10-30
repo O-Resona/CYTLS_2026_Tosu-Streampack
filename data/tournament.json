@@ -1462,8 +1462,8 @@
       "roundId": "swiss-round-5",
       "team1Acronym": "小初",
       "team2Acronym": "左右手",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 6,
+      "team2Score": 0,
       "date": "2026-10-26T21:00:00+08:00"
     },
     {
@@ -1471,8 +1471,8 @@
       "roundId": "swiss-round-5",
       "team1Acronym": "什麼",
       "team2Acronym": "BB",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 6,
+      "team2Score": 1,
       "date": "2026-10-27T21:00:00+08:00"
     },
     {
@@ -1516,8 +1516,8 @@
       "roundId": "semifinals",
       "team1Acronym": "泥土玩家",
       "team2Acronym": "WLT",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 7,
+      "team2Score": 4,
       "date": "2026-10-30T21:00:00+08:00"
     },
     {

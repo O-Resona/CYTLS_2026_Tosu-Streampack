@@ -34,6 +34,14 @@ const GROUPS = [
   },
 ];
 
+const SWISS_ROUND_IDS = [
+  'swiss-round-1',
+  'swiss-round-2',
+  'swiss-round-3',
+  'swiss-round-4',
+  'swiss-round-5',
+];
+
 const TOP_MARKS = {
   'swiss-r1': { 0: 'green' },
   'swiss-r2': { 0: 'green', 4: 'red' },
@@ -249,14 +257,21 @@ function buildBracketStageGroup() {
   grid.appendChild(makeLabel('Finals',       'f-hdr'));
   grid.appendChild(makeLabel('Grand Finals', 'gf-hdr'));
 
+  /* Semifinals 在 matches 数组里的 index 映射：
+       Winners' Bracket → match 36 (id=36), match 37 (id=37) → idx 2, 3
+       Losers'  Bracket → match 34 (id=34), match 35 (id=35) → idx 0, 1
+     （Finals 目前全部为 null，保持原索引 [0,3] / [1,2] 不变） */
+  const SF_WINNER_INDEXES = [2, 3];
+  const SF_LOSER_INDEXES  = [0, 1];
+
   const winnersSub = document.createElement('div');
   winnersSub.className = 'br-bracket-subtitle';
   winnersSub.textContent = "Winners' Bracket";
   winnersSub.style.gridArea = 'win';
   grid.appendChild(winnersSub);
 
-  grid.appendChild(buildBracketPos('semifinals',   0, 'sf1'));
-  grid.appendChild(buildBracketPos('semifinals',   1, 'sf2'));
+  grid.appendChild(buildBracketPos('semifinals',   SF_WINNER_INDEXES[0], 'sf1'));
+  grid.appendChild(buildBracketPos('semifinals',   SF_WINNER_INDEXES[1], 'sf2'));
   grid.appendChild(buildBracketPos('finals',       0, 'f5'));
   grid.appendChild(buildBracketPos('grand-finals', 1, 'gf10'));
 
@@ -266,8 +281,8 @@ function buildBracketStageGroup() {
   losersSub.style.gridArea = 'lose';
   grid.appendChild(losersSub);
 
-  grid.appendChild(buildBracketPos('semifinals',   2, 'sf3'));
-  grid.appendChild(buildBracketPos('semifinals',   3, 'sf4'));
+  grid.appendChild(buildBracketPos('semifinals',   SF_LOSER_INDEXES[0], 'sf3'));
+  grid.appendChild(buildBracketPos('semifinals',   SF_LOSER_INDEXES[1], 'sf4'));
   grid.appendChild(buildBracketPos('finals',       1, 'f6'));
   grid.appendChild(buildBracketPos('finals',       3, 'f7'));
   grid.appendChild(buildBracketPos('finals',       2, 'f8'));
@@ -655,7 +670,10 @@ function buildScoresColumn() {
 function computeStandings() {
   if (!_tournamentData) return [];
   const teams   = _tournamentData.getTeams();
-  const matches = _tournamentData.getMatches();
+
+  /* 只统计 Swiss 轮次，排除 semifinals / finals / grand-finals */
+  const matches = _tournamentData.getMatches()
+    .filter(m => SWISS_ROUND_IDS.includes(m.roundId));
 
   /* ---------- 1. 各队胜负（含 FF） ---------- */
   const stats = new Map();
