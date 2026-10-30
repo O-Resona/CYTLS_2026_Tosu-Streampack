@@ -326,7 +326,7 @@
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2627746/covers/cover.jpg?1790545072"
+              "cover": "https://assets.ppy.sh/beatmaps/2627746/covers/cover.jpg?1792965617"
             }
           }
         },
@@ -787,325 +787,349 @@
     },
     {
       "id": "bracket",
-      "time": "2026-10-26T22:00:00+08:00",
+      "time": null,
       "beatmaps": [
         {
           "mods": "LM1",
           "beatmapInfo": {
-            "onlineId": 986375,
-            "difficultyName": "Ex",
+            "onlineId": 1844019,
+            "difficultyName": "STRIKE THREE",
             "metadata": {
-              "title": "bouquet",
+              "artist": "KASAI HARCORES",
+              "title": "Trinity Homerun",
               "author": {
-                "username": "Kibbleru"
+                "username": "Monstrata"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/460580/covers/cover@2x.jpg?1650642663"
+              "cover": "https://assets.ppy.sh/beatmaps/881996/covers/cover.jpg?1622151185"
             }
           }
         },
         {
           "mods": "LM2",
           "beatmapInfo": {
-            "onlineId": 307410,
-            "difficultyName": "Extra",
+            "onlineId": 2722172,
+            "difficultyName": "Muukeh's Godverdomme",
             "metadata": {
-              "title": "Chi no Iro wa Kiiro",
+              "artist": "Camellia",
+              "title": "Bakamitai (Camellia Eurobeat Remix)",
               "author": {
-                "username": "Hollow Wings"
+                "username": "ZumzertoZan B18"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112"
+              "cover": "https://assets.ppy.sh/beatmaps/1224663/covers/cover.jpg?1663418660"
             }
           }
         },
         {
           "mods": "LM3",
           "beatmapInfo": {
-            "onlineId": 5395611,
-            "difficultyName": "Pastel Prism",
+            "onlineId": 2643101,
+            "difficultyName": "Autumn Blizace",
             "metadata": {
-              "title": "Paradox Palette",
+              "artist": "Co Shu Nie",
+              "title": "Budou",
               "author": {
-                "username": "Mir"
+                "username": "yaspo"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2464948/covers/cover@2x.jpg?1776483012"
+              "cover": "https://assets.ppy.sh/beatmaps/1271926/covers/cover.jpg?1772463299"
             }
           }
         },
         {
           "mods": "LM4",
           "beatmapInfo": {
-            "onlineId": 307410,
-            "difficultyName": "Extra",
+            "onlineId": 5386813,
+            "difficultyName": "gelukkige aal",
             "metadata": {
-              "title": "Chi no Iro wa Kiiro",
+              "artist": "gladde paling",
+              "title": "vleermuis",
               "author": {
-                "username": "Hollow Wings"
+                "username": "Ryuusei Aika"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112"
+              "cover": "https://assets.ppy.sh/beatmaps/2462132/covers/cover.jpg?1765258515"
             }
           }
         },
         {
           "mods": "LM5",
           "beatmapInfo": {
-            "onlineId": 4392073,
-            "difficultyName": "What What",
+            "onlineId": 154988,
+            "difficultyName": "HappyMiX",
             "metadata": {
-              "title": "What What",
+              "artist": "DJ Sharpnel",
+              "title": "IVALTEK",
               "author": {
-                "username": "Teacchyyy"
+                "username": "happy30"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816"
+              "cover": "https://assets.ppy.sh/beatmaps/50429/covers/cover.jpg?1650612096"
             }
           }
         },
         {
           "mods": "LM6",
+          "dtRate": 1.2,
           "beatmapInfo": {
-            "onlineId": 2274038,
-            "difficultyName": "Fragments",
+            "onlineId": 3479744,
+            "difficultyName": "SUNLIGHT+",
             "metadata": {
-              "title": "Kagaribito",
+              "artist": "ELECTROCUTICA",
+              "title": "Chaining Intention [Re:form mix]",
               "author": {
-                "username": "captin1"
+                "username": "Axaptice, sanzu"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205"
+              "cover": "https://assets.ppy.sh/beatmaps/1630578/covers/cover.jpg?1792741374"
             }
           }
         },
         {
           "mods": "NM1",
           "beatmapInfo": {
-            "onlineId": 1166087,
-            "difficultyName": "Milked",
+            "onlineId": 4284780,
+            "difficultyName": "WOAHZA",
             "metadata": {
-              "title": "Milk Crown on Sonnetica",
+              "artist": "Iwami Takeshi",
+              "title": "anoko dokonoko",
               "author": {
-                "username": "Milan-"
+                "username": "melon boy"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/550414/covers/cover@2x.jpg?1650654109"
+              "cover": "https://assets.ppy.sh/beatmaps/2051777/covers/cover.jpg?1695585642"
             }
           }
         },
         {
           "mods": "NM2",
           "beatmapInfo": {
-            "onlineId": 4846755,
-            "difficultyName": "Chaos",
+            "onlineId": 4528633,
+            "difficultyName": "Basherman",
             "metadata": {
-              "title": "Perfect Neglect",
+              "artist": "Her Bright Skies",
+              "title": "The Glorious (Final Sketch Remix)",
               "author": {
-                "username": "Zelq"
+                "username": "Basherman"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2274665/covers/cover@2x.jpg?1774090809"
+              "cover": "https://assets.ppy.sh/beatmaps/2149681/covers/cover.jpg?1717806616"
             }
           }
         },
         {
           "mods": "NM3",
           "beatmapInfo": {
-            "onlineId": 5169485,
-            "difficultyName": "Team USA",
+            "onlineId": 5270873,
+            "difficultyName": "disappeared.",
             "metadata": {
-              "title": "chronos_visionia",
+              "artist": "tosho_aTe",
+              "title": "Futari no Suisou",
               "author": {
-                "username": "6pXgEj3hc7Umj5H"
+                "username": "Alty"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2388832/covers/cover@2x.jpg?1752649215"
+              "cover": "https://assets.ppy.sh/beatmaps/2422426/covers/cover.jpg?1758956422"
             }
           }
         },
         {
           "mods": "NM4",
           "beatmapInfo": {
-            "onlineId": 307410,
-            "difficultyName": "Extra",
+            "onlineId": 5802528,
+            "difficultyName": "MECH PROJECT: 44",
             "metadata": {
-              "title": "Chi no Iro wa Kiiro",
+              "artist": "XenjeS",
+              "title": "GEAR SHIFT",
               "author": {
-                "username": "Hollow Wings"
+                "username": "nooj, 0ppInOsu"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/119779/covers/cover@2x.jpg?1622068112"
+              "cover": "https://assets.ppy.sh/beatmaps/2596926/covers/cover.jpg?1788296457"
             }
           }
         },
         {
           "mods": "HD1",
           "beatmapInfo": {
-            "onlineId": 5157035,
-            "difficultyName": "X",
+            "onlineId": 4278436,
+            "difficultyName": "finale",
             "metadata": {
-              "title": "Onomatomania feat.sekai",
+              "artist": "Hoshimachi Suisei",
+              "title": "soiree",
               "author": {
-                "username": "jj986544591"
+                "username": "Delis"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667"
+              "cover": "https://assets.ppy.sh/beatmaps/2034879/covers/cover.jpg?1699023749"
             }
           }
         },
         {
           "mods": "HD2",
           "beatmapInfo": {
-            "onlineId": 4392073,
-            "difficultyName": "What What",
+            "onlineId": 5572366,
+            "difficultyName": "need advice on getting a wolfcut baddie",
             "metadata": {
-              "title": "What What",
+              "artist": "the pillows",
+              "title": "Advice",
               "author": {
-                "username": "Teacchyyy"
+                "username": "Gibune"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2094662/covers/cover@2x.jpg?1735390816"
+              "cover": "https://assets.ppy.sh/beatmaps/2523360/covers/cover.jpg?1776637832"
             }
           }
         },
         {
           "mods": "HD3",
           "beatmapInfo": {
-            "onlineId": 5157035,
-            "difficultyName": "X",
+            "onlineId": 1817464,
+            "difficultyName": "Extreme",
             "metadata": {
-              "title": "Onomatomania feat.sekai",
+              "artist": "455-38B",
+              "title": "G e n g a o z o - f o o n",
               "author": {
-                "username": "jj986544591"
+                "username": "ktgster"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2384905/covers/cover@2x.jpg?1758891667"
+              "cover": "https://assets.ppy.sh/beatmaps/869649/covers/cover.jpg?1650675617"
             }
           }
         },
         {
           "mods": "HR1",
           "beatmapInfo": {
-            "onlineId": 2274038,
-            "difficultyName": "Fragments",
+            "onlineId": 3238173,
+            "difficultyName": "Holy Shit! It's Remastered!!",
             "metadata": {
-              "title": "Kagaribito",
+              "artist": "Team.Nekokan",
+              "title": "Airman ga Taosenai (10-shuunen version)",
               "author": {
-                "username": "captin1"
+                "username": "Toumei Dragon"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205"
+              "cover": "https://assets.ppy.sh/beatmaps/1585350/covers/cover.jpg?1683754987"
             }
           }
         },
         {
           "mods": "HR2",
           "beatmapInfo": {
-            "onlineId": 5677214,
-            "difficultyName": "Super Saturated Syringing",
+            "onlineId": 5649940,
+            "difficultyName": "Cytusine's Expert",
             "metadata": {
-              "title": "Romari Time!",
+              "artist": "nagiha",
+              "title": "VALDeS",
               "author": {
-                "username": "Flask"
+                "username": "Cytusine"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554"
+              "cover": "https://assets.ppy.sh/beatmaps/2281540/covers/cover.jpg?1792603108"
             }
           }
         },
         {
           "mods": "HR3",
           "beatmapInfo": {
-            "onlineId": 2274038,
-            "difficultyName": "Fragments",
+            "onlineId": 5869878,
+            "difficultyName": "<(@_@)>",
             "metadata": {
-              "title": "Kagaribito",
+              "artist": "OfficialAz3 feat. DawMii",
+              "title": "Ridiculous Rhythmic Tester (osu ver)",
               "author": {
-                "username": "captin1"
+                "username": "Callionet"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205"
+              "cover": "https://assets.ppy.sh/beatmaps/2617012/covers/cover.jpg?1791228632"
             }
           }
         },
         {
           "mods": "DT1",
+          "dtRate": 1.45,
           "beatmapInfo": {
-            "onlineId": 1000684,
-            "difficultyName": "Catharsis",
+            "onlineId": 703584,
+            "difficultyName": "Crazy Night",
             "metadata": {
-              "title": "Back to Marie",
+              "artist": "Sakaue Nachi",
+              "title": "Crazy Hot",
               "author": {
-                "username": "Yunomi"
+                "username": "Rizia, sjoy, Sakaue Nachi"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/467761/covers/cover@2x.jpg?1622104855"
+              "cover": "https://assets.ppy.sh/beatmaps/175671/covers/cover.jpg?1622074198"
             }
           }
         },
         {
           "mods": "DT2",
+          "dtRate": 1.4,
           "beatmapInfo": {
-            "onlineId": 1580739,
-            "difficultyName": "Mirash's Another",
+            "onlineId": 98415,
+            "difficultyName": "0108 style",
             "metadata": {
-              "title": "NEW GENERATION -mou, omae shika mienai-",
+              "artist": "Hatsune Miku",
+              "title": "With a Dance Number",
               "author": {
-                "username": "Yales"
+                "username": "val0108"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/739888/covers/cover@2x.jpg?1650662722"
+              "cover": "https://assets.ppy.sh/beatmaps/29691/covers/cover.jpg?1622046788"
             }
           }
         },
         {
           "mods": "DT3",
+          "dtRate": 1.5,
           "beatmapInfo": {
-            "onlineId": 5677214,
-            "difficultyName": "Super Saturated Syringing",
+            "onlineId": 3722666,
+            "difficultyName": "Insane",
             "metadata": {
-              "title": "Romari Time!",
+              "artist": "my sound life",
+              "title": "AIR",
               "author": {
-                "username": "Flask"
+                "username": "Mirash"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/2555901/covers/cover@2x.jpg?1785678554"
+              "cover": "https://assets.ppy.sh/beatmaps/1814686/covers/cover.jpg?1659265969"
             }
           }
         },
         {
           "mods": "TB",
           "beatmapInfo": {
-            "onlineId": 2274038,
-            "difficultyName": "Fragments",
+            "onlineId": 922172,
+            "difficultyName": "Chrono Collapse",
             "metadata": {
-              "title": "Kagaribito",
+              "artist": "Falcom Sound Team jdk",
+              "title": "The Azure Arbitrator",
               "author": {
-                "username": "captin1"
+                "username": "jonathanlfj"
               }
             },
             "covers": {
-              "cover": "https://assets.ppy.sh/beatmaps/1087452/covers/cover@2x.jpg?1622178205"
+              "cover": "https://assets.ppy.sh/beatmaps/427166/covers/cover.jpg?1622100890"
             }
           }
         }
@@ -1438,8 +1462,8 @@
       "roundId": "swiss-round-5",
       "team1Acronym": "小初",
       "team2Acronym": "左右手",
-      "team1Score": 6,
-      "team2Score": 0,
+      "team1Score": null,
+      "team2Score": null,
       "date": "2026-10-26T21:00:00+08:00"
     },
     {
@@ -1463,38 +1487,38 @@
     {
       "id": 34,
       "roundId": "semifinals",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "NOUM",
+      "team2Acronym": "3125",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-11-01T22:00:00+08:00"
     },
     {
       "id": 35,
       "roundId": "semifinals",
-      "team1Acronym": null,
-      "team2Acronym": null,
-      "team1Score": null,
-      "team2Score": null,
-      "date": null
+      "team1Acronym": "什麼",
+      "team2Acronym": "小初",
+      "team1Score": 7,
+      "team2Score": -1,
+      "date": "2026-10-31T20:00:00+08:00"
     },
     {
       "id": 36,
       "roundId": "semifinals",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "貓鴨",
+      "team2Acronym": "TJQQ",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-11-01T21:00:00+08:00"
     },
     {
       "id": 37,
       "roundId": "semifinals",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "泥土玩家",
+      "team2Acronym": "WLT",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-10-30T21:00:00+08:00"
     },
     {
       "id": 38,
