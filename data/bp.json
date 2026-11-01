@@ -2914,6 +2914,139 @@
       ]
     },
     {
+      "id": 34,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "DT3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM5",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "NM2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "HD3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM5",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM4",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Blue",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM3",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Red",
+          "redPlayer": "Pompeijwag",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Blue",
+          "redPlayer": "MogenNotFound",
+          "bluePlayer": "Moonlit111"
+        }
+      ]
+    },
+    {
       "id": 37,
       "actions": [
         {
