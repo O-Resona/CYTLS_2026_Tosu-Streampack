@@ -260,21 +260,27 @@ function buildBracketStageGroup() {
   /* Semifinals 在 matches 数组里的 index 映射：
        Winners' Bracket → match 36 (id=36), match 37 (id=37) → idx 2, 3
        Losers'  Bracket → match 34 (id=34), match 35 (id=35) → idx 0, 1
-     （Finals 目前全部为 null，保持原索引 [0,3] / [1,2] 不变） */
+     Finals：
+       Winners' Bracket → match 41 → idx 3（f5）
+       Losers'  Bracket → match 38 → idx 0（f6）
+                          match 39 → idx 1（f7）
+                          match 40 → idx 2（f8） */
   const SF_WINNER_INDEXES = [2, 3];
   const SF_LOSER_INDEXES  = [0, 1];
 
+  /* ============ Winners' Bracket ============ */
   const winnersSub = document.createElement('div');
   winnersSub.className = 'br-bracket-subtitle';
   winnersSub.textContent = "Winners' Bracket";
   winnersSub.style.gridArea = 'win';
   grid.appendChild(winnersSub);
 
-  grid.appendChild(buildBracketPos('finals', 3, 'f5'));
-  grid.appendChild(buildBracketPos('finals', 0, 'f6'));
-  grid.appendChild(buildBracketPos('finals', 1, 'f7'));
-  grid.appendChild(buildBracketPos('finals', 2, 'f8'));
+  grid.appendChild(buildBracketPos('semifinals',   SF_WINNER_INDEXES[0], 'sf1'));
+  grid.appendChild(buildBracketPos('semifinals',   SF_WINNER_INDEXES[1], 'sf2'));
+  grid.appendChild(buildBracketPos('finals',       3,                   'f5'));
+  grid.appendChild(buildBracketPos('grand-finals', 1,                   'gf10'));
 
+  /* ============ Losers' Bracket ============ */
   const losersSub = document.createElement('div');
   losersSub.className = 'br-bracket-subtitle';
   losersSub.textContent = "Losers' Bracket";
@@ -283,10 +289,10 @@ function buildBracketStageGroup() {
 
   grid.appendChild(buildBracketPos('semifinals',   SF_LOSER_INDEXES[0], 'sf3'));
   grid.appendChild(buildBracketPos('semifinals',   SF_LOSER_INDEXES[1], 'sf4'));
-  grid.appendChild(buildBracketPos('finals',       1, 'f6'));
-  grid.appendChild(buildBracketPos('finals',       3, 'f7'));
-  grid.appendChild(buildBracketPos('finals',       2, 'f8'));
-  grid.appendChild(buildBracketPos('grand-finals', 0, 'gf9'));
+  grid.appendChild(buildBracketPos('finals',       0,                   'f6'));
+  grid.appendChild(buildBracketPos('finals',       1,                   'f7'));
+  grid.appendChild(buildBracketPos('finals',       2,                   'f8'));
+  grid.appendChild(buildBracketPos('grand-finals', 0,                   'gf9'));
 
   gEl.appendChild(grid);
 

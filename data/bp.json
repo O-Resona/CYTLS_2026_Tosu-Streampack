@@ -3319,6 +3319,139 @@
           "bluePlayer": "[SHK]oliwakami"
         }
       ]
+    },
+    {
+      "id": 38,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "DT2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM5",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "NM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HD3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "NM1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "Name94"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "Name94"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Blue",
+          "redPlayer": "yutro",
+          "bluePlayer": "Name94"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Red",
+          "redPlayer": "yutro",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM6",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "Name94"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR3",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "Qualifiers"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM4",
+          "winner": "Red",
+          "redPlayer": "4k110sh1",
+          "bluePlayer": "Qualifiers"
+        }
+      ]
     }
   ]
 }
