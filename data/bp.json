@@ -3047,6 +3047,139 @@
       ]
     },
     {
+      "id": 36,
+      "actions": [
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "LM4",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "DT3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "DT1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "NM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "HR3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Blue",
+          "redPlayer": "misha awa",
+          "bluePlayer": "4k110sh1"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT2",
+          "winner": "Blue",
+          "redPlayer": "misha awa",
+          "bluePlayer": "4k110sh1"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM5",
+          "winner": "Red",
+          "redPlayer": "misha awa",
+          "bluePlayer": "yutro"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "DT3",
+          "winner": "Red",
+          "redPlayer": "misha awa",
+          "bluePlayer": "4k110sh1"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD3",
+          "winner": "Red",
+          "redPlayer": "misha awa",
+          "bluePlayer": "4k110sh1"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Blue",
+          "redPlayer": "Ruyaya",
+          "bluePlayer": "4k110sh1"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Red",
+          "redPlayer": "Ruyaya",
+          "bluePlayer": "yutro"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "Ruyaya",
+          "bluePlayer": "yutro"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM3",
+          "winner": "Red",
+          "redPlayer": "misha awa",
+          "bluePlayer": "4k110sh1"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "Ruyaya",
+          "bluePlayer": "yutro"
+        }
+      ]
+    },
+    {
       "id": 37,
       "actions": [
         {

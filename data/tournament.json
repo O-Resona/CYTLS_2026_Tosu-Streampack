@@ -1507,8 +1507,8 @@
       "roundId": "semifinals",
       "team1Acronym": "貓鴨",
       "team2Acronym": "TJQQ",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 7,
+      "team2Score": 3,
       "date": "2026-11-02T20:30:00+08:00"
     },
     {
@@ -1523,20 +1523,20 @@
     {
       "id": 38,
       "roundId": "finals",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "TJQQ",
+      "team2Acronym": "什麼",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-11-06T20:00:00+08:00"
     },
     {
       "id": 39,
       "roundId": "finals",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "WLT",
+      "team2Acronym": "3125",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-11-06T22:30:00+08:00"
     },
     {
       "id": 40,
@@ -1550,11 +1550,11 @@
     {
       "id": 41,
       "roundId": "finals",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "貓鴨",
+      "team2Acronym": "泥土玩家",
       "team1Score": null,
       "team2Score": null,
-      "date": null
+      "date": "2026-11-09T22:00:00+08:00"
     },
     {
       "id": 42,
