@@ -270,10 +270,10 @@ function buildBracketStageGroup() {
   winnersSub.style.gridArea = 'win';
   grid.appendChild(winnersSub);
 
-  grid.appendChild(buildBracketPos('semifinals',   SF_WINNER_INDEXES[0], 'sf1'));
-  grid.appendChild(buildBracketPos('semifinals',   SF_WINNER_INDEXES[1], 'sf2'));
-  grid.appendChild(buildBracketPos('finals',       0, 'f5'));
-  grid.appendChild(buildBracketPos('grand-finals', 1, 'gf10'));
+  grid.appendChild(buildBracketPos('finals', 3, 'f5'));
+  grid.appendChild(buildBracketPos('finals', 0, 'f6'));
+  grid.appendChild(buildBracketPos('finals', 1, 'f7'));
+  grid.appendChild(buildBracketPos('finals', 2, 'f8'));
 
   const losersSub = document.createElement('div');
   losersSub.className = 'br-bracket-subtitle';
@@ -377,8 +377,8 @@ function drawBracketLines(groupEl) {
 
   addPathH(sf1, f5, '#ffffff', 3);
   addPathH(sf2, f5, '#ffffff', 3);
-  addPathH(sf3, f6, '#ffffff', 3);
-  addPathH(sf4, f7, '#ffffff', 3);
+  addPathH(sf4, f6, '#ffffff', 3);
+  addPathH(sf3, f7, '#ffffff', 3);
 
   addPathH(sf1, f6, 'rgba(255,255,255,0.35)', 2);
   addPathH(sf2, f7, 'rgba(255,255,255,0.35)', 2);

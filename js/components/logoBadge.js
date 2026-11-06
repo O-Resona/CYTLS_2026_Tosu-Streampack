@@ -61,10 +61,10 @@ const ROUND_TITLE_IMAGES = {
   35: 'SF LB',
   36: 'SF WB',
   37: 'SF WB',
-  38: 'F WB',
+  38: 'F LB',
   39: 'F LB',
   40: 'F LB',
-  41: 'F LB',
+  41: 'F WB',
   42: 'GF LB',
   43: 'GF WB',
 };
