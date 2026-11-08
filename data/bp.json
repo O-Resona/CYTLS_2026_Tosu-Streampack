@@ -3452,6 +3452,155 @@
           "bluePlayer": "Qualifiers"
         }
       ]
+    },
+    {
+      "id": 39,
+      "actions": [
+        {
+          "team": "Blue",
+          "action": "Protect",
+          "map": "LM5",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Protect",
+          "map": "HD1",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "HD2",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "HR3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Blue",
+          "action": "Ban",
+          "map": "LM6",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Ban",
+          "map": "LM3",
+          "winner": null,
+          "redPlayer": null,
+          "bluePlayer": null
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD1",
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM2",
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "HD3",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR2",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM1",
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM5",
+          "winner": "Blue",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "LM4",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "NM4",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "NM2",
+          "winner": "Red",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "LM1",
+          "winner": "Red",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Barometz"
+        },
+        {
+          "team": "Red",
+          "action": "Pick",
+          "map": "DT1",
+          "winner": "Blue",
+          "redPlayer": "Ledeau_Fox",
+          "bluePlayer": "Moonlit111"
+        },
+        {
+          "team": "Blue",
+          "action": "Pick",
+          "map": "HR1",
+          "winner": "Blue",
+          "redPlayer": "[SHK]oliwakami",
+          "bluePlayer": "Moonlit111"
+        }
+      ]
     }
   ]
 }

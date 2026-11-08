@@ -1534,15 +1534,15 @@
       "roundId": "finals",
       "team1Acronym": "WLT",
       "team2Acronym": "3125",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 5,
+      "team2Score": 7,
       "date": "2026-11-06T22:30:00+08:00"
     },
     {
       "id": 40,
       "roundId": "finals",
-      "team1Acronym": null,
-      "team2Acronym": null,
+      "team1Acronym": "3125",
+      "team2Acronym": "TJQQ",
       "team1Score": null,
       "team2Score": null,
       "date": null
@@ -1552,14 +1552,14 @@
       "roundId": "finals",
       "team1Acronym": "貓鴨",
       "team2Acronym": "泥土玩家",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 7,
+      "team2Score": -1,
       "date": "2026-11-09T22:00:00+08:00"
     },
     {
       "id": 42,
       "roundId": "grand-finals",
-      "team1Acronym": null,
+      "team1Acronym": "泥土玩家",
       "team2Acronym": null,
       "team1Score": null,
       "team2Score": null,
@@ -1568,7 +1568,7 @@
     {
       "id": 43,
       "roundId": "grand-finals",
-      "team1Acronym": null,
+      "team1Acronym": "貓鴨",
       "team2Acronym": null,
       "team1Score": null,
       "team2Score": null,
