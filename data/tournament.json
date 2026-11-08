@@ -1118,6 +1118,7 @@
         },
         {
           "mods": "TB",
+          "excludeGrandFinals": true,
           "beatmapInfo": {
             "onlineId": 922172,
             "difficultyName": "Chrono Collapse",
@@ -1135,6 +1136,7 @@
         },
         {
           "mods": "TB2",
+            "grandFinalsOnly": true,
           "beatmapInfo": {
             "onlineId": 4043359,
             "difficultyName": "Echoes of the Forgotten",
