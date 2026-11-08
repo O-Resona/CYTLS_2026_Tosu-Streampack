@@ -51,11 +51,15 @@ export class TournamentData {
       if (!res.ok) throw new Error(`加载 ${SEED_URL} 失败: ${res.status}`);
       this.data = await res.json();
 
-      /* 把 mappools 里的 beatmaps 按 round.mappool 注入到各 round */
+      /* 把 mappools 里的 beatmaps 按 round.mappool 注入到各 round
+         （同一图池在不同轮次可以有 TB 变体，按轮次过滤） */
       const pools = this.data.mappools || [];
       for (const round of (this.data.rounds || [])) {
         const pool = pools.find(p => p.id === round.mappool);
-        round.beatmaps = pool?.beatmaps || [];
+        round.beatmaps = this._filterBeatmaps(
+          pool?.beatmaps,
+          round.id === 'grand-finals'
+        );
       }
 
       /* 2. 加载 bp.json（可选，失败不阻塞） */
@@ -136,6 +140,43 @@ export class TournamentData {
   getMappool(id) {
     if (!id) return null;
     return (this.data?.mappools || []).find(p => p.id === id) || null;
+  }
+
+  /* 按轮次取图池：Grand Finals 会用 TBⅡ 替换原 TB */
+  getMappoolForRound(roundId) {
+    const round = this.getRound(roundId);
+    if (!round) return null;
+    const pool = this.getMappool(round.mappool);
+    if (!pool) return null;
+    return {
+      ...pool,
+      beatmaps: this._filterBeatmaps(pool.beatmaps, roundId === 'grand-finals'),
+    };
+  }
+
+  getMappoolForMatch(matchId) {
+    const match = this.getMatch(matchId);
+    if (!match) return null;
+    return this.getMappoolForRound(match.roundId);
+  }
+
+  /* 非 Grand Finals 语境下的默认图池（排除 grandFinalsOnly 条目） */
+  getMappoolDefault(id) {
+    const pool = this.getMappool(id);
+    if (!pool) return null;
+    return {
+      ...pool,
+      beatmaps: this._filterBeatmaps(pool.beatmaps, false),
+    };
+  }
+
+  _filterBeatmaps(beatmaps, forGrandFinals) {
+    if (!Array.isArray(beatmaps)) return [];
+    return beatmaps.filter(b => {
+      if (b.grandFinalsOnly && !forGrandFinals) return false;
+      if (b.excludeGrandFinals && forGrandFinals) return false;
+      return true;
+    });
   }
 
   /* =========================================

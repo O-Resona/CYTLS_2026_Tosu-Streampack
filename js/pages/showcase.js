@@ -53,7 +53,6 @@ export function initShowcase({ mapInfo, tokenStore, tournamentState, tournamentD
 function findMappoolByTitle(tournamentData, title) {
   if (!title || !tournamentData) return null;
 
-  /* 取「最长匹配」的 stage 名，避免 'Swiss Phase I' 抢走 'Swiss Phase II' */
   let bestStage  = null;
   let bestPoolId = null;
 
@@ -65,13 +64,31 @@ function findMappoolByTitle(tournamentData, title) {
     }
   }
 
-  if (bestPoolId) return tournamentData.getMappool(bestPoolId);
+  if (bestPoolId) {
+    const matchId = readCurrentMatchId();
+    if (matchId != null) {
+      const match = tournamentData.getMatch(matchId);
+      if (match) {
+        const round = tournamentData.getRound(match.roundId);
+        if (round?.mappool === bestPoolId) {
+          const p = tournamentData.getMappoolForRound(match.roundId);
+          if (p) return p;
+        }
+      }
+    }
+    return tournamentData.getMappoolDefault(bestPoolId);
+  }
 
-  /* 兜底：如果标题就是某个 mappool id */
   const pools = tournamentData.getMappools();
   return pools.find(p => title.includes(p.id)) || null;
 }
 
+function readCurrentMatchId() {
+  try {
+    const v = localStorage.getItem('cyt2026.currentMatchId');
+    return v ? Number(v) : null;
+  } catch { return null; }
+}
 /* ---------- Mod 列表 ---------- */
 
 function renderModList(pageEl, pool) {

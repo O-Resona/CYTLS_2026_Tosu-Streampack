@@ -1132,6 +1132,23 @@
               "cover": "https://assets.ppy.sh/beatmaps/427166/covers/cover.jpg?1622100890"
             }
           }
+        },
+        {
+          "mods": "TB2",
+          "beatmapInfo": {
+            "onlineId": 4043359,
+            "difficultyName": "Echoes of the Forgotten",
+            "metadata": {
+              "artist": "katagiri",
+              "title": "Kyuukou",
+              "author": {
+                "username": "9ami"
+              }
+            },
+            "covers": {
+              "cover": "https://assets.ppy.sh/beatmaps/1952542/covers/cover.jpg?1744458373"
+            }
+          }
         }
       ]
     }
@@ -1543,8 +1560,8 @@
       "roundId": "finals",
       "team1Acronym": "3125",
       "team2Acronym": "TJQQ",
-      "team1Score": null,
-      "team2Score": null,
+      "team1Score": 7,
+      "team2Score": -1,
       "date": "2026-11-08T21:30:00+08:00"
     },
     {
@@ -1560,7 +1577,7 @@
       "id": 42,
       "roundId": "grand-finals",
       "team1Acronym": "泥土玩家",
-      "team2Acronym": null,
+      "team2Acronym": "3125",
       "team1Score": null,
       "team2Score": null,
       "date": null

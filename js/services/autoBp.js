@@ -365,8 +365,7 @@ export class AutoBp {
     if (id == null) return null;
     const match = this.tournamentData.getMatch(id);
     if (!match) return null;
-    const round = this.tournamentData.getRound(match.roundId);
-    return this.tournamentData.getMappool(round?.mappool) || null;
+    return this.tournamentData.getMappoolForRound(match.roundId);
   }
 
   getState() {

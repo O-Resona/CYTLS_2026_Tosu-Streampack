@@ -118,6 +118,7 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   let currentMode = 'redProtect';
   let maps        = [];
   let _currentPickMapId = null;
+  let _lastPoolSig = ''; 
 
   const mapStates     = new Map();
   const protectStates = new Map();
@@ -155,22 +156,42 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   /* =========================================
      图池自动同步
      ========================================= */
-
-  function getPoolIdForCurrentMatch() {
+  function getPoolForCurrentMatch() {
     const id = getCurrentMatchId();
     if (id == null) return null;
     const match = tournamentData.getMatch(id);
     if (!match) return null;
-    const round = tournamentData.getRound(match.roundId);
-    return round?.mappool || null;
+    return tournamentData.getMappoolForRound(match.roundId);
+  }
+
+  function poolSignature(pool) {
+    if (!pool) return '';
+    const bms = (pool.beatmaps || [])
+      .map(b => `${b.mods}:${b.beatmapInfo?.onlineId ?? ''}`)
+      .join('|');
+    return `${pool.id}::${bms}`;
   }
 
   function syncPoolWithCurrentMatch() {
-    const poolId = getPoolIdForCurrentMatch();
-    if (!poolId) return;
-    if (currentPool?.id === poolId) return;
-    const p = pools.find(x => x.id === poolId);
-    if (p) switchPool(poolId);
+    const p = getPoolForCurrentMatch();
+    if (!p) return;
+    const sig = poolSignature(p);
+    if (sig === _lastPoolSig) return;
+    _lastPoolSig = sig;
+    applyPool(p);
+  }
+
+  function applyPool(p) {
+    if (!p) return;
+    currentPool = p;
+    loadMapsForPool(p);
+    renderLayout();
+    renderPickOptions();
+
+    const mapId = tokenStore?.get('mapid');
+    setPickMap(mapId ? String(mapId) : null);
+
+    resetAutoBpModeSync();
   }
 
   /* =========================================
@@ -1346,25 +1367,6 @@ export function initMappool({ tournamentData, osuSocket, tokenStore }) {
   }
   function setFirstPickerToStorage(v) {
     try { localStorage.setItem(FIRST_PICKER_KEY, v); } catch {}
-  }
-
-  /* =========================================
-     图池切换
-     ========================================= */
-
-  function switchPool(poolId) {
-    const p = pools.find(x => x.id === poolId);
-    if (!p) return;
-
-    currentPool = p;
-    loadMapsForPool(p);
-    renderLayout();
-    renderPickOptions();
-
-    const id = tokenStore?.get('mapid');
-    setPickMap(id ? String(id) : null);
-
-    resetAutoBpModeSync();
   }
 
   /* =========================================
